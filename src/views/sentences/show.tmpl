@@ -1,0 +1,17 @@
+<%c++ #include "contents/homepage.h" %>
+<% skin %>
+<% view sentences_show uses contents::Homepage extends master %>
+<% template title() %><% gt "Sentence show"  %><% end template %>
+
+<% template main_content() %>
+    <div class="module">
+        <% c++ if (content.shc.tree != NULL) { %>
+            <% c++ sentences_helper sh(out(),content.shc);  %>
+            <% c++ sh.sentences_group() ;%>
+        <% c++ } %>
+    </div>
+<% end %>
+
+
+<% end view %>
+<% end skin %>

@@ -1,0 +1,74 @@
+<% skin %>
+	<% view login_menu uses contents::BaseContent %>
+	
+	<% template displayMenu() %>
+		
+		<% if isAuthenticated %>
+		
+			<span>
+				<a href="/user/index">
+                    <img
+                        src="<% config.img_path %>/profile.png"
+                        alt="<% gt "Profile" %>"
+                        width="14"
+                        height="14" 
+                    >
+                    username
+                </a>
+			</span>
+			<span id="inbox" title="<% gt "Inbox" %>">
+				<a href="/private_messages/folder/Inbox">
+                    <img src="<% config.img_path %>/no_mail.png" alt="<% gt "Inbox" %>" width="16" height="16" >
+                    0
+                </a>
+			</span>
+			<span id="log_out">
+				<!-- TODO: remove or adapt the url if the lang is not here -->
+				<a href="/<% lang %>/users/logout">
+                    <img src="<% config.img_path %>/log_out.png" alt="<% gt "Log out" %>" title="<% gt "Log out" %>" width="14" height="14" />
+                </a>
+			</span>
+		
+		<% else %>
+		
+			<script type="text/javascript">
+			<!--
+				function openLoginForm() {
+					document.getElementById('UserLoginForm_FromBar').style.display = 'block';
+				}
+				function closeLoginForm() {
+					document.getElementById('UserLoginForm_FromBar').style.display = 'none';
+				}
+			-->
+			</script>
+			
+			<a href="/users/register" class="menuItem">
+                <% gt "Register" %>
+            </a>
+			<a href="/users/login" onclick="javascript:openLoginForm(); return false;" class="menuItem">
+                <% gt "Log in" %>
+            </a>
+
+			<!-- TODO: remove or adapt the url if the lang is not here -->
+			<form id="UserLoginForm_FromBar" style="display:none;" method="post" action="/<% lang %>/users/check_login">
+				<!-- TODO: remove inline css -->
+				<fieldset style="text-align:right">
+					<% form as_p login %>
+				</fieldset>
+				<p>
+					<a href="/users/new_password">
+                        <% gt "Password forgotten?" %>
+                    </a>
+					<a href="#" class="menuItem" style="float:right;" onclick="javascript:closeLoginForm();">
+                        <% gt "Close" %>
+                    </a>
+				</p>
+			</form>
+		
+		<% end %>
+		
+	<% end template %>
+	
+	<% end view %>
+
+<% end skin %>

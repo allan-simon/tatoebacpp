@@ -1,0 +1,101 @@
+<% c++ #include "contents/content.h" %>
+<% skin %>
+<% view master uses contents::BaseContent %>
+
+
+<% template body() %>
+    <div id="annexe_content">
+	    <% include annexe_content() %>
+    </div>
+    <div id="main_content">
+        <% include main_content()%>
+    </div>
+<% end %>
+
+
+
+
+
+<% template header() %>
+<title><% include title() %></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="<% config.css_path %>/layouts/default.css" rel="stylesheet" type="text/css" />
+<link href="<% config.css_path %>/style-<% if rtl %>rtl<% else %>ltr<%end%>.css" rel="stylesheet" type="text/css" />
+
+<link href="http://css.tatoeba.org/css/layouts/default.css" rel="stylesheet" type="text/css" />
+<link rel="stylesheet" type="text/css" href="http://css.tatoeba.org/css/pages/index.css" />
+
+<% end template %>
+
+
+<% template render() %>
+<!DOCTYPE HTML>
+<html>
+<head>
+<% include header() %>
+</head>
+<body>
+    <% include top_menu() %>
+	<div id="container1">
+		<div id="header">
+			<a href="/en"><img src="<% config.img_path %>/TatoebaProjectBeta.png" width="72" height="450" alt="TatoebaProjectBeta"></a>
+		</div>
+		<div id="container">
+				<% include body() %>
+		</div>
+		<div id="footer">
+			<ul>
+				<li>plop</li>
+				<li>plop</li>
+			</ul>
+		</div>
+	</div>
+    <div id="footer_container"></div>
+</body>
+</html>
+<% end template %>
+
+<% template top_menu() %>
+<div id="top_menu_container">
+	<div id="top_menu">
+		<div id="languageSelectionContainer">
+			<select id="languageSelection" name="data[languageSelection]" onchange="$(location).attr('href', '/' + this.value);">
+				<option value="0" selected="selected">pouet</option>
+			</select>
+		</div>
+		<div id="user_menu">
+			<% c++ login_menu login(out(),content);  %>
+        	<% c++ login.displayMenu() ;%>
+		</div>
+		<ul id="navigation_menu">
+			<li><a href="<% lang %>/home" class="menuItem show"><% gt "Home" %></a></li>
+			<li><a href="/sentences/show/random" class="menuItem"><% gt "Browse" %></a></li>
+			<li><a href="/contribute" class="menuItem"><% gt "Contribute" %></a></li>
+			<li><a href="/users/all" class="menuItem"><% gt "Members" %></a></li>
+			<li><a href="/wall/index" class="menuItem"><% gt "Wall" %></a></li>
+		</ul>
+	</div>
+</div>
+<% end template %>
+
+<% template title() %>you're not supposed to view this<% end template %>
+
+
+<% template annexe_content() %>
+    <div class="module">
+        you're not supposed to view this
+    </div>
+<% end template %>
+
+
+<% template main_content() %>
+    <div class="module">
+        you're not supposed to view this
+    </div>
+<% end template %>
+
+
+
+<% end view %>
+<% end skin %>
+

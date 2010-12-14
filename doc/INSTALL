@@ -1,0 +1,6 @@
+To compile tatoeba++
+
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make

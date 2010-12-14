@@ -1,0 +1,93 @@
+<%c++ extern "C" { %> 
+<%c++    #include "tato/fetcher_tree.h" %>
+<%c++    #include "tato/item.h" %>
+<%c++ } %>
+<%c++ #include "contents/helpers/sentences.h" %>
+<%c++ typedef TatoFetcherTreeNode *TatoFetcherTreeNode_ptr ; %>
+<%c++ typedef char *char_ptr ; %>
+<%c++ typedef TatoItem *TatoItem_ptr ; %>
+<% skin %>
+<% view sentences_helper uses contents::SentencesHelper %>
+
+    <% template sentences_group() %>
+        <div class="sentences_set" >
+
+        <% c++ generic_sentence(content.tree->root->item, std::string("mainSentence"), 0); %>
+        <% c++ translations(content.tree->root); %>
+
+        </div>
+
+    <% end template %>
+
+
+
+    
+    <% template translations(TatoFetcherTreeNode_ptr root) %>
+       <div class="translations" %> 
+            <% c++ TatoListNode *it; %>
+	        <% c++ TATO_LIST_FOREACH(root->childs, it) { %>
+                <% c++ translation((TatoFetcherTreeNode*) it->data, 1); %>
+            <% c++ } %>
+
+       </div>
+    <% end template %>
+
+
+
+        
+    <% template generic_sentence(TatoItem_ptr sentence, std::string type, int depth) %>
+
+        <div class="sentence <%c++ out() << type ; %>">
+        <% c++ sentence_lang(sentence->lang->code); %>
+        <% c++ sentence_content(sentence, depth); %>
+        </div>
+
+    <% end template %>
+
+
+
+
+    <% template sentence_content(TatoItem_ptr sentence, int depth) %>
+
+        <div class="sentenceContent">
+            <% c++ sentence_text(sentence->str, depth) ;%>
+            <br />
+        </div>
+
+    <% end template %>
+
+
+
+
+    <% template translation( TatoFetcherTreeNode_ptr translationNode , int depth) %>
+
+            <% c++ generic_sentence(translationNode->item, std::string("directTranslation"), depth); %>
+	        <% c++ TatoListNode *it; %>
+	        <% c++ TATO_LIST_FOREACH(translationNode->childs, it) { %>
+                <% c++ translation((TatoFetcherTreeNode*) it->data, depth+1); %>
+            <% c++ } %>
+
+    <% end template %>
+
+
+
+    <% template sentence_text(char_ptr text, int depth) %>
+        <div>
+            <% c++ out() << depth; %>
+            <% c++ for(int i=0; i < depth; i++) out() << "-";%>
+            <% c++ out() << text; %>
+        </div> 
+    <% end template %>
+    
+    <% template sentence_lang(char_ptr lang) %>
+        <img 
+            src="http://flags.tatoeba.org/img/flags/<% c++ out() << lang; %>.png"
+            class="languageFlag "
+            alt="<% c++ out() << lang; %>"
+            width="30"
+            height="20"
+        />
+    <% end template %>
+
+<% end view %>
+<% end skin %>
