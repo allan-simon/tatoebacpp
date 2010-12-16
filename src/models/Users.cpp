@@ -16,6 +16,18 @@ Users::Users(sqlite3* sqliteDb) : SqliteModel(sqliteDb) {
     std::cout << "UsersModel sqliteDb : " << sqliteDb << std::endl;
 }
 
+void Users::check_login(std::string login, std::string pass) {
+    char *zErrMsg = 0;
+    int rc;
+    std::string sql = "SELECT * FROM users WHERE username LIKE '"+login+"' AND password LIKE '"+pass+"'";
+    
+    rc = sqlite3_exec(sqliteDb, sql.c_str(), callback, 0, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cout << "SQL erro: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+}
+
 void Users::test() {
     char *zErrMsg = 0;
     int rc;

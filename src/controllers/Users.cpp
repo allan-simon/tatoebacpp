@@ -15,7 +15,6 @@ void Users::check_login() {
 	std::cout << "=> login checking..." << std::endl;
     // :TODO: delete this init
     userModel = models::Users(tatoapp.sqliteDb);    
-    userModel.test();	
     contents::BaseContent c;
     c.login.load(context());
     std::cout << "Hello " << c.login.username.value() << std::endl;
@@ -24,6 +23,7 @@ void Users::check_login() {
 		std::cout <<request().post() << std::endl;
 	}*/
 
+    userModel.check_login(c.login.username.value(), c.login.password.value());
     session()["name"] = "toto";
     response().set_redirect_header("/en");
 }
