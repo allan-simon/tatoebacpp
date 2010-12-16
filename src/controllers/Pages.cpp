@@ -9,6 +9,7 @@ Pages::Pages(apps::tatoeba& tatoapp) : controllers::Controller(tatoapp) {
 	std::cout << "i dans pages vaut " << this->i << std::endl;
   	tatoapp.dispatcher().assign("", &Pages::homepage, this);
   	tatoapp.dispatcher().assign("/contribute", &Pages::contribute, this);
+  	tatoapp.dispatcher().assign("/terms_of_use", &Pages::termsOfUse, this);
 }
 
 void Pages::homepage() {
@@ -30,5 +31,14 @@ void Pages::contribute() {
     initContent(c);
 	render("contribute", c);
 }
+
+/**
+ * Terms of use page
+ */
+ void Pages::termsOfUse() {
+ 	contents::Homepage c;
+ 	initContent(c);
+ 	render("termsofuse", c);
+ }
 
 } // End namespace
