@@ -10,6 +10,8 @@ class Pages : public Controller {
 		Pages(apps::tatoeba& tatoapp);
 		void homepage();
 		void contribute();
+		 void termsOfUse();
+		 void teamAndCredits();
 };
 
 } // End namespace
