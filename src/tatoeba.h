@@ -8,6 +8,8 @@
 #include "controllers/Sentences.h"
 #include "controllers/Users.h"
 
+#include "sqlite3.h"
+
 extern "C" {
 #include "tato/db.h"
 }
@@ -19,7 +21,6 @@ namespace content {
 namespace apps {
 
 
-static int callback(void *NotUsed, int argc, char **argv, char **azColName);
 class tatoeba : public cppcms::application {
 
 private:
@@ -30,7 +31,8 @@ private:
 
 public:
     TatoDb *tatoDb;
-	tatoeba(cppcms::service &w, TatoDb* db);
+    sqlite3 *sqliteDb;
+	tatoeba(cppcms::service &w, TatoDb* db, sqlite3* sqliteDb);
 	void main(std::string url);
 };
 }

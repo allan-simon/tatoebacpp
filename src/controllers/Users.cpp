@@ -5,14 +5,17 @@
 
 namespace controllers {
 
-Users::Users(apps::tatoeba& tatoapp) : Controller(tatoapp) {
+Users::Users(apps::tatoeba& tatoapp) : Controller(tatoapp), userModel(tatoapp.sqliteDb) {
+    std::cout << "UserController sqliteDb : " << tatoapp.sqliteDb << std::endl;
   	tatoapp.dispatcher().assign("/users/check_login", &Users::check_login, this);
   	tatoapp.dispatcher().assign("/users/logout", &Users::logout, this);
 }
 
 void Users::check_login() {
 	std::cout << "=> login checking..." << std::endl;
-	
+    // :TODO: delete this init
+    userModel = models::Users(tatoapp.sqliteDb);    
+    userModel.test();	
     contents::BaseContent c;
     c.login.load(context());
     std::cout << "Hello " << c.login.username.value() << std::endl;

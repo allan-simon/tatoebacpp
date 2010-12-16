@@ -8,50 +8,24 @@
 
 #include <booster/regex.h>
 
-#include <sqlite3.h>
 #include <iostream>
 namespace apps {
 
-static int callback(void *NotUsed, int argc, char **argv, char **azColName){
-  int i;
-  for(i=0; i<argc; i++){
-    printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-  }
-  printf("\n");
-  return 0;
-}
 
-tatoeba::tatoeba(cppcms::service &w, TatoDb *db) : 
+tatoeba::tatoeba(cppcms::service &w, TatoDb *db, sqlite3* sqliteDb) : 
 	cppcms::application(w),
+    sqliteDb(sqliteDb),
 	pc(*this),
 	sc(*this),
 	uc(*this),
     tatoDb(db)
-    
-{	
+{
+    std::cout << "tato DB " <<	sqliteDb << std::endl;
 	add(pc);
 	add(sc);
+
+
 	add(uc);
-
-    // Base sqlite3
-    sqlite3 *sqlitedb;
-    char *zErrMsg = 0;
-    int rc;
-    char* sql = (char*) "SELECT * FROM tbl1";
-
-    rc = sqlite3_open("../doc/sqlite3.db", &sqlitedb);
-    if (rc) {
-        std::cout << "Can't open database: " << sqlite3_errmsg(sqlitedb) << std::endl;
-        sqlite3_close(sqlitedb);
-    }
-
-    rc = sqlite3_exec(sqlitedb, sql, callback, 0, &zErrMsg);
-    if (rc != SQLITE_OK) {
-        std::cout << "SQL erro: " << zErrMsg << std::endl;
-        sqlite3_free(zErrMsg);
-    }
-    sqlite3_close(sqlitedb);
-    
 
     cppcms::json::object langs = settings().at("tatoeba.languages").object();
     for(cppcms::json::object::const_iterator p=langs.begin();p!=langs.end();++p) {

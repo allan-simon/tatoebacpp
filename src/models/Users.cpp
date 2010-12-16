@@ -13,6 +13,7 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName){
 }
 
 Users::Users(sqlite3* sqliteDb) : SqliteModel(sqliteDb) {
+    std::cout << "UsersModel sqliteDb : " << sqliteDb << std::endl;
 }
 
 void Users::test() {
@@ -20,11 +21,11 @@ void Users::test() {
     int rc;
     char* sql = (char*) "SELECT * FROM tbl1";
     
-    /*rc = sqlite3_exec(sqliteDb, sql, callback, 0, &zErrMsg);
+    rc = sqlite3_exec(sqliteDb, sql, callback, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
         std::cout << "SQL erro: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
-    }*/
+    }
 }
 
 }
