@@ -11,6 +11,7 @@ class Pages : public Controller {
 		void homepage();
 		void contribute();
 		 void termsOfUse();
+		 void teamAndCredits();
 };
 
 } // End namespace
