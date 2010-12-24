@@ -30,6 +30,7 @@ target_link_libraries(
     tatoeba
     tato
     cppcms
+    cppdb
     booster
     sqlite3
 )

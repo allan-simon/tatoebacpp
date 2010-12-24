@@ -1,43 +1,49 @@
-#include "models/Users.h"
 #include <iostream>
+#include <sstream>
+#include <cppcms/crypto.h>
+#include <cppdb/frontend.h>
+#include "models/Users.h"
 
 namespace models {
 
-static int callback(void *NotUsed, int argc, char **argv, char **azColName){
-  int i;
-  for(i=0; i<argc; i++){
-    printf("%s = %s\n", azColName[i], argv[i] ? argv[i] : "NULL");
-  }
-  printf("\n");
-  return 0;
+
+/**
+ *
+ */
+Users::Users(cppdb::session sqliteDb) : SqliteModel(sqliteDb) {
+    // TODO ADD check for the username 
+    check_passwd_state = sqliteDb.create_prepared_statement("SELECT 1 FROM users2 WHERE password = ?");
 }
 
-Users::Users(sqlite3* sqliteDb) : SqliteModel(sqliteDb) {
-    std::cout << "UsersModel sqliteDb : " << sqliteDb << std::endl;
-}
-
+/**
+ *
+ */
 void Users::check_login(std::string login, std::string pass) {
-    char *zErrMsg = 0;
-    int rc;
-    std::string sql = "SELECT * FROM users WHERE username LIKE '"+login+"' AND password LIKE '"+pass+"'";
+    std::auto_ptr<cppcms::message_digest> d(cppcms::message_digest::md5());
     
-    rc = sqlite3_exec(sqliteDb, sql.c_str(), callback, 0, &zErrMsg);
-    if (rc != SQLITE_OK) {
-        std::cout << "SQL erro: " << zErrMsg << std::endl;
-        sqlite3_free(zErrMsg);
+    char buf[16];
+    d->append(pass.c_str(), pass.size());
+    d->readout(buf);
+
+    std::stringstream in(buf);
+
+    check_passwd_state.bind(login);
+    check_passwd_state.bind(in);
+    cppdb::res = check_passwd_state.row();
+   
+   
+    // TODO replace me by a real piece of code 
+    std::cout <<buf <<  std::endl;
+    int checkresult = 0;
+    res.fetch(0,checkresult);
+    if (checkresult != 1 ) {
+        std::cout << "wrong password" << std::endl; 
+    } else {
+        std::cout << "right one" << std::endl; 
     }
+
+
 }
 
-void Users::test() {
-    char *zErrMsg = 0;
-    int rc;
-    char* sql = (char*) "SELECT * FROM tbl1";
-    
-    rc = sqlite3_exec(sqliteDb, sql, callback, 0, &zErrMsg);
-    if (rc != SQLITE_OK) {
-        std::cout << "SQL erro: " << zErrMsg << std::endl;
-        sqlite3_free(zErrMsg);
-    }
-}
 
 }

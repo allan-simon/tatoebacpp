@@ -12,19 +12,17 @@
 namespace apps {
 
 
-tatoeba::tatoeba(cppcms::service &w, TatoDb *db, sqlite3* sqliteDb) : 
+tatoeba::tatoeba(cppcms::service &w, TatoDb* db) : 
 	cppcms::application(w),
-    sqliteDb(sqliteDb),
+    //sqliteDb("sqlite3:db=../sqlite3.db"),
 	pc(*this),
 	sc(*this),
 	uc(*this),
     tatoDb(db)
 {
-    std::cout << "tato DB " <<	sqliteDb << std::endl;
+
 	add(pc);
 	add(sc);
-
-
 	add(uc);
 
     cppcms::json::object langs = settings().at("tatoeba.languages").object();

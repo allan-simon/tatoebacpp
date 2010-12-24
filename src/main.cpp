@@ -4,8 +4,9 @@
 
 #include <cppcms/service.h>
 #include <cppcms/applications_pool.h>
+#include <cppdb/frontend.h>
 
-#include <sqlite3.h>
+
 
 using namespace std;
 using namespace cppcms;
@@ -21,21 +22,15 @@ int main(int argc,char ** argv)
         // in order to have the pointer shared by every thread
         // :TODO: remember to free tatoDB
         TatoDb *tatoDb = tato_db_new();
-        std::string tatodbPath = app.settings().get<std::string>("tatoeba.tatodbxml");
+        string tatodbPath = app.settings().get<string>("tatoeba.tatodbxml");
         tato_db_load(tatoDb, tatodbPath.c_str());
-        std::cout << "[NOTICE] database loaded" << std::endl;
+        cout << "[NOTICE] database loaded" << endl;
 
         // Base sqlite3
-        int rc;
-        sqlite3* sqliteDb;
-        rc = sqlite3_open("../doc/sqlite3.db", &sqliteDb);
-        if (rc) {
-            std::cout << "Can't open database: " << sqlite3_errmsg(sqliteDb) << std::endl;
-            sqlite3_close(sqliteDb);
-        }
+        // TODO: replace this by a path set in the configuration settings
         //sqlite3_close(sqliteDb);
 
-        app.applications_pool().mount(applications_factory<apps::tatoeba>(tatoDb, sqliteDb));
+        app.applications_pool().mount(applications_factory<apps::tatoeba>(tatoDb));
         app.run();
     } catch(std::exception const &e) {
         cerr<<e.what()<<endl;

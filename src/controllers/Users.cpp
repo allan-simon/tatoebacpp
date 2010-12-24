@@ -5,23 +5,17 @@
 
 namespace controllers {
 
-Users::Users(apps::tatoeba& tatoapp) : Controller(tatoapp), userModel(tatoapp.sqliteDb) {
-    std::cout << "UserController sqliteDb : " << tatoapp.sqliteDb << std::endl;
+Users::Users(apps::tatoeba& tatoapp) : Controller(tatoapp), userModel(cppdb::session("sqlite3:db=../doc/sqlite3.db")) {
   	tatoapp.dispatcher().assign("/users/check_login", &Users::check_login, this);
   	tatoapp.dispatcher().assign("/users/logout", &Users::logout, this);
 }
 
 void Users::check_login() {
-	std::cout << "=> login checking..." << std::endl;
-    // :TODO: delete this init
-    userModel = models::Users(tatoapp.sqliteDb);    
     contents::BaseContent c;
     c.login.load(context());
+
     std::cout << "Hello " << c.login.username.value() << std::endl;
-	// test for the login form
-	/*if (request().request_method() == "POST") {
-		std::cout <<request().post() << std::endl;
-	}*/
+    std::cout << "password : " << c.login.password.value() << std::endl;
 
     userModel.check_login(c.login.username.value(), c.login.password.value());
     session()["name"] = "toto";

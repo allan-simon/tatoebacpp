@@ -2,13 +2,16 @@
 #define TATOEBA_H
 
 #include <cppcms/application.h>
+#include <cppdb/frontend.h>
+
+
 #include <contents/content.h>
 
 #include "controllers/Pages.h"
 #include "controllers/Sentences.h"
 #include "controllers/Users.h"
 
-#include "sqlite3.h"
+
 
 extern "C" {
 #include "tato/db.h"
@@ -31,8 +34,8 @@ private:
 
 public:
     TatoDb *tatoDb;
-    sqlite3 *sqliteDb;
-	tatoeba(cppcms::service &w, TatoDb* db, sqlite3* sqliteDb);
+    //cppdb::session sqliteDb;
+	tatoeba(cppcms::service &w, TatoDb* db);
 	void main(std::string url);
 };
 }

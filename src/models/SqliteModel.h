@@ -1,15 +1,15 @@
 #ifndef MODELS_SQLITE_H
 #define MODELS_SQLITE_H
 
-#include <sqlite3.h>
+#include <cppdb/frontend.h>
 
 namespace models {
 
 class SqliteModel {
     protected:
-        sqlite3* sqliteDb;
+        cppdb::session sqliteDb;
     public:
-        SqliteModel(sqlite3* sqliteDb);
+        SqliteModel(cppdb::session sqliteDb);
 };
 
 }
