@@ -17,12 +17,23 @@ file(
     src/models/*
 )
 
+
+file(
+    GLOB
+    generics_files
+    src/generics/*
+)
+
+
+
+
 add_executable(
     tatoeba
     src/main.cpp
     src/tatoeba.cpp
     ${controllers_files}
     ${models_files}
+    ${generics_files}
     simple.cpp
 )
 

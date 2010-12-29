@@ -29,7 +29,7 @@ void Users::check_login(std::string login, std::string pass) {
 
     check_passwd_state.bind(login);
     check_passwd_state.bind(in);
-    cppdb::res = check_passwd_state.row();
+    cppdb::result res = check_passwd_state.row();
    
    
     // TODO replace me by a real piece of code 

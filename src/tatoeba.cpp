@@ -12,13 +12,12 @@
 namespace apps {
 
 
-tatoeba::tatoeba(cppcms::service &w, TatoDb* db) : 
+tatoeba::tatoeba(cppcms::service &w) : 
 	cppcms::application(w),
-    //sqliteDb("sqlite3:db=../sqlite3.db"),
+
 	pc(*this),
 	sc(*this),
-	uc(*this),
-    tatoDb(db)
+	uc(*this)
 {
 
 	add(pc);

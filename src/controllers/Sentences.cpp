@@ -3,6 +3,7 @@
 #include "tatoeba.h"
 #include "contents/homepage.h"
 
+#include "models/TatoDB.h"
 
 namespace controllers {
 
@@ -25,8 +26,8 @@ void Sentences::show(std::string sentence_id) {
     // TODO it's only for the proof of concept 
     // it should be moved in the model
     //
-
-    TatoItem *sentence = tato_db_item_find(tatoapp.tatoDb, id);
+    TatoDb *tatoDb = TatoDB::getInstance("")->getDatabasePointer(); 
+    TatoItem *sentence = tato_db_item_find(tatoDb, id);
     shc.tree = NULL;
     if (sentence != NULL) {
         TatoFetcherTree *tree = tato_fetcher_tree_new();
@@ -46,8 +47,8 @@ void Sentences::show(std::string sentence_id) {
  */
 
 void Sentences::show_random() {
-
-    TatoItem *randSentence = tato_db_item_rand(tatoapp.tatoDb);
+    TatoDb *tatoDb = TatoDB::getInstance("")->getDatabasePointer(); 
+    TatoItem *randSentence = tato_db_item_rand(tatoDb);
 
     std::ostringstream oss;
     oss << randSentence->id;

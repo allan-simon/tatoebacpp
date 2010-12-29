@@ -13,10 +13,6 @@
 
 
 
-extern "C" {
-#include "tato/db.h"
-}
-
 namespace content {
 	class homepage;
 }
@@ -33,9 +29,7 @@ private:
     std::map<std::string,std::string> lang_map;
 
 public:
-    TatoDb *tatoDb;
-    //cppdb::session sqliteDb;
-	tatoeba(cppcms::service &w, TatoDb* db);
+	tatoeba(cppcms::service &w);
 	void main(std::string url);
 };
 }
