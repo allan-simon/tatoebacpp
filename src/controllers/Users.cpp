@@ -17,9 +17,14 @@ void Users::check_login() {
     std::cout << "Hello " << c.login.username.value() << std::endl;
     std::cout << "password : " << c.login.password.value() << std::endl;
 
-    userModel.check_login(c.login.username.value(), c.login.password.value());
-    session()["name"] = "toto";
-    response().set_redirect_header("/en");
+    if (userModel.check_login(c.login.username.value(), c.login.password.value())) {
+        session()["name"] = "toto";
+        response().set_redirect_header("/en");
+    }
+    else {
+        response().set_redirect_header("/fr");
+    }
+    
 }
 
 void Users::logout() {

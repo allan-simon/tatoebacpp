@@ -14,7 +14,7 @@ class Users : public SqliteModel {
 
     public:
         Users(cppdb::session sqliteDb);
-        void check_login(std::string login, std::string pass);
+        bool check_login(std::string login, std::string pass);
 };
 
 }
