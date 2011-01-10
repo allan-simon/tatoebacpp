@@ -1,0 +1,58 @@
+<% c++ #include "contents/register.h" %>
+<% skin %>
+<% view registeruser uses contents::Register extends master %>
+<% template title() %>
+    <% gt "Register" %>
+<% end template %>
+
+<% template header() %>
+    <% include master::header() %>
+    <link href="<% config.css_path %>/users/register.css" rel="stylesheet" type="text/css" />
+<% end template %>
+
+<% template main_content() %>
+<form id="UserRegisterForm" method="post" action="/en/users/register">
+    <table id="userInformation">
+        <tr>
+            <td class="field">
+                <label for="registrationUsername"><% gt "Username:" %></label>
+            </td>
+            <td>
+                <% form as_space registerForm.username %>
+            </td>
+        </tr>
+        <tr>
+            <td class="field">
+                <label for="registrationPassword"><% gt "Password:" %></label>
+            </td>
+                <% form as_space registerForm.password %>
+            <td>
+            </td>
+        </tr>
+        <tr>
+            <td class="field">
+                <label for="registrationEmail"><% gt "Email:"%></label>
+            </td>
+            <td>
+                <% form as_space registerForm.email %>
+            </td>
+        </tr>
+    </table>
+
+    <div id="quiz">
+        <% gt "We need to make sure you are human." %>
+        <% form as_space registerForm.quiz %>
+    </div>
+
+    <div id="termOfUse">
+        <% form as_space registerForm.termOfUse %>
+    </div>
+
+    <div class="submit>">
+        <% form as_space registerForm.submit %>
+    </div>
+</form>
+<% end template %>
+
+<% end view %>
+<% end skin %>

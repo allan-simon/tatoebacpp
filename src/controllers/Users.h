@@ -11,6 +11,7 @@ class Users : public Controller {
         models::Users userModel;
 	public:
 		Users(apps::tatoeba& tatoapp);
+        void registerUser();
 		void check_login();
         void logout();
 };

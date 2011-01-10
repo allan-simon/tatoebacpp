@@ -2,12 +2,20 @@
 #include "controllers/Users.h"
 #include "tatoeba.h"
 #include <cppcms/session_interface.h>
+#include "contents/register.h"
 
 namespace controllers {
 
 Users::Users(apps::tatoeba& tatoapp) : Controller(tatoapp), userModel(cppdb::session("sqlite3:db=../doc/sqlite3.db")) {
+    tatoapp.dispatcher().assign("/users/register", &Users::registerUser, this);
   	tatoapp.dispatcher().assign("/users/check_login", &Users::check_login, this);
   	tatoapp.dispatcher().assign("/users/logout", &Users::logout, this);
+}
+
+void Users::registerUser() {
+    contents::Register c;
+    initContent(c);
+    render("registeruser", c);
 }
 
 void Users::check_login() {
