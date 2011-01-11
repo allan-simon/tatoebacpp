@@ -14,6 +14,17 @@ Users::Users(apps::tatoeba& tatoapp) : Controller(tatoapp), userModel(cppdb::ses
 
 void Users::registerUser() {
     contents::Register c;
+    if (request().request_method() == "POST") {
+        c.registerForm.load(context());
+        if(c.registerForm.validate()) {
+            userModel.addUser(
+                c.registerForm.username.value(),
+                c.registerForm.password.value()
+            );
+            response().set_redirect_header("/en");
+        }
+    }
+
     initContent(c);
     render("registeruser", c);
 }

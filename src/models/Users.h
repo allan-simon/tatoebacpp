@@ -10,11 +10,12 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName);
 class Users : public SqliteModel {
     private:
         cppdb::statement check_passwd_state; 
-
+        cppdb::statement add_user_state;
 
     public:
         Users(cppdb::session sqliteDb);
         bool check_login(std::string login, std::string pass);
+        void addUser(std::string login, std::string pass);
 };
 
 }
