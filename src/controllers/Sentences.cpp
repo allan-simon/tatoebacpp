@@ -23,18 +23,8 @@ void Sentences::show(std::string sentence_id) {
 	contents::Homepage c;
 	contents::SentencesHelper shc;
     initContent(c);
-    // TODO it's only for the proof of concept 
-    // it should be moved in the model
-    //
-    TatoDb *tatoDb = TatoDB::getInstance("")->getDatabasePointer(); 
-    TatoItem *sentence = tato_db_item_find(tatoDb, id);
-    shc.tree = NULL;
-    if (sentence != NULL) {
-        TatoFetcherTree *tree = tato_fetcher_tree_new();
-        tato_fetcher_tree_bfs(tree, sentence, 20, NULL);
-        shc.tree = tree;
 
-    }
+    shc.tree = sentenceModel.getSentenceWithId(id);
 
     c.shc = shc;
     //test_ouput(tree->root);	

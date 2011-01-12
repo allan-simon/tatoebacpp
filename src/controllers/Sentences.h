@@ -2,6 +2,7 @@
 #define CONTROLLERS_SENTENCES_H
 
 #include "Controller.h"
+#include "models/Sentences.h"
 
 extern "C" {
 #include "tato/db.h"
@@ -14,6 +15,8 @@ extern "C" {
 namespace controllers {
 
 class Sentences : public Controller {
+    private:
+        models::Sentences sentenceModel;
 	public:
 		Sentences(apps::tatoeba& tatoapp);
 		void show(std::string sentence_id);
