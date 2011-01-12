@@ -12,8 +12,8 @@ namespace models {
  */
 Users::Users(cppdb::session sqliteDb) : SqliteModel(sqliteDb) {
     // TODO ADD check for the username 
-    check_passwd_state = sqliteDb.create_prepared_statement("SELECT 1 FROM users2 WHERE username = ? AND password = ?");
-    add_user_state = sqliteDb.create_prepared_statement("INSERT INTO users2(username, password) VALUES(?,?)");
+    check_passwd_state = sqliteDb.create_prepared_statement("SELECT 1 FROM users WHERE username = ? AND password = ?");
+    add_user_state = sqliteDb.create_prepared_statement("INSERT INTO users(username, password) VALUES(?,?)");
 }
 
 /**
