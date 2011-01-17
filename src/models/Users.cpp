@@ -20,7 +20,7 @@ Users::Users(cppdb::session sqliteDb) : SqliteModel(sqliteDb) {
  *
  */
 bool Users::check_login(std::string login, std::string pass) {
-    std::auto_ptr<cppcms::message_digest> d(cppcms::message_digest::md5());
+    std::auto_ptr<cppcms::crypto::message_digest> d(cppcms::crypto::message_digest::md5());
     
     char buf[16];
     d->append(pass.c_str(), pass.size());
@@ -48,7 +48,7 @@ bool Users::check_login(std::string login, std::string pass) {
 }
 
 void Users::addUser(std::string login, std::string pass) {
-    std::auto_ptr<cppcms::message_digest> d(cppcms::message_digest::md5());
+    std::auto_ptr<cppcms::crypto::message_digest> d(cppcms::crypto::message_digest::md5());
 
     char buf[16];
     d->append(pass.c_str(), pass.size());

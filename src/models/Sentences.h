@@ -1,7 +1,7 @@
 #ifndef MODELS_SENTENCES_H
 #define MODELS_SENTENCES_H
 
-#include "models/tatoDB.h"
+#include "models/TatoDB.h"
 
 extern "C" {
 #include "tato/fetcher_tree.h"
