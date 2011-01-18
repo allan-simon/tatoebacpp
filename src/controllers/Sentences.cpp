@@ -37,11 +37,8 @@ void Sentences::show(std::string sentence_id) {
  */
 
 void Sentences::show_random() {
-    TatoDb *tatoDb = TatoDB::getInstance("")->getDatabasePointer(); 
-    TatoItem *randSentence = tato_db_item_rand(tatoDb);
-
     std::ostringstream oss;
-    oss << randSentence->id;
+    oss << sentenceModel.getRandomSentenceId();
 
     response().set_redirect_header("/en/sentences/show/" + oss.str() );
 

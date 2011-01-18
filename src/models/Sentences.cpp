@@ -1,3 +1,4 @@
+#include <sstream>
 #include "models/Sentences.h"
 
 namespace models {
@@ -16,6 +17,18 @@ TatoFetcherTree* Sentences::getSentenceWithId(int id) {
     }
 
     return NULL;
+}
+
+int Sentences::getRandomSentenceId() {
+    int id = 0;
+    TatoDb *tatoDb = TatoDB::getInstance("")->getDatabasePointer();
+    TatoItem *randSentence = tato_db_item_rand(tatoDb);
+
+    std::stringstream ss;
+    ss << randSentence->id;
+    ss >> id;
+
+    return id;
 }
 
 }

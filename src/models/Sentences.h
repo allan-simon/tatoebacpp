@@ -13,6 +13,7 @@ class Sentences {
     public:
         Sentences();
         TatoFetcherTree* getSentenceWithId(int id);
+        int getRandomSentenceId();
 };
 
 }
