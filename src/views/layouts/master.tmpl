@@ -38,7 +38,7 @@
     <% include top_menu() %>
 	<div id="container1">
 		<div id="header">
-			<a href="/en"><img src="<% config.img_path %>/TatoebaProjectBeta.png" width="72" height="450" alt="TatoebaProjectBeta"></a>
+			<a href="<% url "/" %>"><img src="<% config.img_path %>/TatoebaProjectBeta.png" width="72" height="450" alt="TatoebaProjectBeta"></a>
 		</div>
 		<div id="container">
 				<% include body() %>
@@ -68,11 +68,11 @@
         	<% c++ login.displayMenu() ;%>
 		</div>
 		<ul id="navigation_menu">
-			<li><a href="<% lang %>/home" class="menuItem show"><% gt "Home" %></a></li>
-			<li><a href="/sentences/show/random" class="menuItem"><% gt "Browse" %></a></li>
-			<li><a href="/contribute" class="menuItem"><% gt "Contribute" %></a></li>
-			<li><a href="/users/all" class="menuItem"><% gt "Members" %></a></li>
-			<li><a href="/wall/index" class="menuItem"><% gt "Wall" %></a></li>
+			<li><a href="<% url "/home" %>" class="menuItem show"><% gt "Home" %></a></li>
+			<li><a href="<% url "/sentences/show/random" %>" class="menuItem"><% gt "Browse" %></a></li>
+			<li><a href="<% url "/contribute" %>" class="menuItem"><% gt "Contribute" %></a></li>
+			<li><a href="<% url "/users/all" %>" class="menuItem"><% gt "Members" %></a></li>
+			<li><a href="<% url "/wall/index" %>" class="menuItem"><% gt "Wall" %></a></li>
 		</ul>
 	</div>
 </div>

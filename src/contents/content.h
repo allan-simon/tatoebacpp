@@ -10,6 +10,7 @@ namespace contents {
 struct ConfigContent {
     std::string css_path;
     std::string img_path;
+    std::string web_path;
 };
 
 struct BaseContent : public cppcms::base_content {

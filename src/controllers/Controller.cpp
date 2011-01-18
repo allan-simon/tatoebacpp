@@ -10,6 +10,7 @@ Controller::Controller(apps::tatoeba &tatoapp) :
 	i = 5553;    
 	configContent.css_path = settings().get<std::string>("tatoeba.css");
 	configContent.img_path = settings().get<std::string>("tatoeba.img");
+    configContent.web_path = settings().get<std::string>("tatoeba.web");
 	std::cout << "i vaut " << i << std::endl;
 }
 

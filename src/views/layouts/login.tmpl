@@ -6,7 +6,7 @@
 		<% if isAuthenticated %>
 		
 			<span>
-				<a href="/user/index">
+				<a href="<% url "/user/index" %>">
                     <img
                         src="<% config.img_path %>/profile.png"
                         alt="<% gt "Profile" %>"
@@ -17,14 +17,14 @@
                 </a>
 			</span>
 			<span id="inbox" title="<% gt "Inbox" %>">
-				<a href="/private_messages/folder/Inbox">
+				<a href="<% url "/private_messages/folder/Inbox" %>">
                     <img src="<% config.img_path %>/no_mail.png" alt="<% gt "Inbox" %>" width="16" height="16" >
                     0
                 </a>
 			</span>
 			<span id="log_out">
 				<!-- TODO: remove or adapt the url if the lang is not here -->
-				<a href="/<% lang %>/users/logout">
+				<a href="<% url "/users/logout" %>">
                     <img src="<% config.img_path %>/log_out.png" alt="<% gt "Log out" %>" title="<% gt "Log out" %>" width="14" height="14" />
                 </a>
 			</span>
@@ -42,10 +42,10 @@
 			-->
 			</script>
 			
-			<a href="/users/register" class="menuItem">
+			<a href="<% url "/users/register" %>" class="menuItem">
                 <% gt "Register" %>
             </a>
-			<a href="/users/login" onclick="javascript:openLoginForm(); return false;" class="menuItem">
+			<a href="<% url "/users/login" %>" onclick="javascript:openLoginForm(); return false;" class="menuItem">
                 <% gt "Log in" %>
             </a>
 
@@ -56,7 +56,7 @@
 					<% form as_p login %>
 				</fieldset>
 				<p>
-					<a href="/users/new_password">
+					<a href="<% url "/users/new_password" %>">
                         <% gt "Password forgotten?" %>
                     </a>
 					<a href="#" class="menuItem" style="float:right;" onclick="javascript:closeLoginForm();">
