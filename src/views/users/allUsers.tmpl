@@ -1,0 +1,60 @@
+<% c++ #include "contents/allUsers.h" %>
+<% skin %>
+<% view allusers uses contents::AllUsers extends master %>
+<% template title() %>
+    <% gt "Tatoeba - Members" %>
+<% end template %>
+
+<% template header() %>
+    <% include master::header() %>
+    <link href="<% config.css_path %>/users/all.css" rel="stylesheet" type="text/css" />
+<% end template %>
+
+<% template main_content() %>
+    <div class="module">
+        <h2>Members (total <% listOfMembers.size() %>)</h2>
+        <p>
+        <strong>Sort by:</strong>
+            <a href="/eng/users/all/page:1/sort:username/direction:asc">Username</a> |
+            <a href="/eng/users/all/page:1/sort:since/direction:asc">Member since</a> |
+            <a href="/eng/users/all/page:1/sort:group_id/direction:desc">Member status</a>
+        </p>
+
+        <div class="users">
+
+        </div>
+        <% foreach user in listOfMembers %>
+            <% item %>
+            <div class="user">
+                <div class="image">
+                    <a href="<% url "/users/profile/{1}" using user.username %>"><img src=
+                    "http://flags.tatoeba.org/img/profiles_36/668a84cb40b678a3b1616849c378b74c.png"
+                    alt="<% user.username %>" /></a>
+                </div>
+
+                <div class="username">
+                    <a href="<% url "/users/profile/{1}" using user.username %>"><% user.username %></a>
+                </div>
+
+                <div class="memberSince" title="Member since">
+                    <span class="date"><% user.since %></span>
+                </div>
+
+                <div class="status">
+                    <div class="power"><img src="/img/crown.png?1290370294" alt=
+                    "" /><img src="/img/crown.png?1290370294" alt="" /><img src=
+                    "/img/crown.png?1290370294" alt="" /></div>
+
+                    <div class="name">
+                        admin
+                    </div>
+                </div>
+            </div>
+            <% end %>
+        <% end %>
+    </div><!-- class module -->
+
+<% end template %>
+
+<% end view %>
+<% end skin %>

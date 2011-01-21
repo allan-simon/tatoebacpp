@@ -3,6 +3,9 @@
 #include "tatoeba.h"
 #include <cppcms/session_interface.h>
 #include "contents/register.h"
+#include "contents/allUsers.h"
+#include <vector>
+#include "models/Users.h"
 
 namespace controllers {
 
@@ -10,6 +13,7 @@ Users::Users(apps::tatoeba& tatoapp) : Controller(tatoapp), userModel(cppdb::ses
     tatoapp.dispatcher().assign("/users/register", &Users::registerUser, this);
   	tatoapp.dispatcher().assign("/users/check_login", &Users::check_login, this);
   	tatoapp.dispatcher().assign("/users/logout", &Users::logout, this);
+    tatoapp.dispatcher().assign("/users/all((/\\d+)?)", &Users::listMembers, this, 1);
 }
 
 void Users::registerUser() {
@@ -49,6 +53,25 @@ void Users::check_login() {
 void Users::logout() {
     session().clear();
     response().set_redirect_header("/en");
+}
+
+void Users::listMembers(std::string page) {
+    int intPage;
+
+    // check if there is a page in argument
+    if (page.compare("") == 0) {
+        intPage = 1;
+    }
+    else {
+        // convert page from string to integer
+        std::string realPage = page.substr(1);  // remove the slash in "/pageNumber"
+        intPage = atoi(realPage.c_str());
+    }
+
+    contents::AllUsers c;
+    initContent(c);
+    c.listOfMembers = userModel.getAllUsers();
+    render("allusers", c);
 }
 
 } // End namespace

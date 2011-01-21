@@ -14,6 +14,7 @@ class Users : public Controller {
         void registerUser();
 		void check_login();
         void logout();
+        void listMembers(std::string page);
 };
 
 } // End namespace

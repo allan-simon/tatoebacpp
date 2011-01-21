@@ -1,5 +1,6 @@
 #include <iostream>
 #include <sstream>
+#include <vector>
 #include <cppcms/crypto.h>
 #include <cppdb/frontend.h>
 #include "models/Users.h"
@@ -14,6 +15,7 @@ Users::Users(cppdb::session sqliteDb) : SqliteModel(sqliteDb) {
     // TODO ADD check for the username 
     check_passwd_state = sqliteDb.create_prepared_statement("SELECT 1 FROM users WHERE username = ? AND password = ?");
     add_user_state = sqliteDb.create_prepared_statement("INSERT INTO users(username, password) VALUES(?,?)");
+    get_all_users_state = sqliteDb.create_prepared_statement("SELECT * FROM users");
 }
 
 /**
@@ -62,6 +64,24 @@ void Users::addUser(std::string login, std::string pass) {
 
     add_user_state.exec();    
     add_user_state.reset();
+}
+
+std::vector<UserResult> Users::getAllUsers() {
+    cppdb::result res = get_all_users_state.query();
+
+    std::vector<UserResult> listOfUsers;
+
+    while (res.next()) {
+        UserResult user;
+        user.id = res.get<int>("id");
+        user.username = res.get<std::string>("username");
+        user.email = res.get<std::string>("email");
+        std::tm sinceTime = res.get<std::tm>("since");
+        user.since = asctime(&sinceTime);
+        listOfUsers.push_back(user);
+    }
+
+    return listOfUsers;
 }
 
 
