@@ -81,6 +81,8 @@ std::vector<UserResult> Users::getAllUsers() {
         listOfUsers.push_back(user);
     }
 
+    get_all_users_state.reset();
+
     return listOfUsers;
 }
 
