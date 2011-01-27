@@ -48,7 +48,7 @@ target_link_libraries(
 
 add_custom_command(
     OUTPUT simple.cpp
-    COMMAND cppcms_tmpl_cc 
+    COMMAND ./../tools/cppcms_tmpl_cc 
         ${CMAKE_CURRENT_SOURCE_DIR}/src/views/*/*.tmpl 
         ${CMAKE_CURRENT_SOURCE_DIR}/src/views/*.tmpl
         -o simple.cpp
