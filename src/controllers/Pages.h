@@ -7,7 +7,7 @@ namespace controllers {
 
 class Pages : public Controller {
 	public:
-		Pages(apps::tatoeba& tatoapp);
+		Pages(apps::Tatoeba& tatoapp);
 		void homepage();
 		void contribute();
 		 void termsOfUse();

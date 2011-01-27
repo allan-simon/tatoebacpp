@@ -12,17 +12,17 @@
 namespace apps {
 
 
-tatoeba::tatoeba(cppcms::service &w) : 
+Tatoeba::Tatoeba(cppcms::service &w) : 
 	cppcms::application(w),
 
-	pc(*this),
-	sc(*this),
-	uc(*this)
+	pagesController(*this),
+	sentencesController(*this),
+	usersController(*this)
 {
 
-	add(pc);
-	add(sc);
-	add(uc);
+	add(pagesController);
+	add(sentencesController);
+	add(usersController);
 
     cppcms::json::object langs = settings().at("tatoeba.languages").object();
     for(cppcms::json::object::const_iterator p=langs.begin();p!=langs.end();++p) {
@@ -31,7 +31,7 @@ tatoeba::tatoeba(cppcms::service &w) :
 }
 static const booster::regex lang_regex("^/(\\w+)(/.*)?$");
 
-void tatoeba::main(std::string url) {
+void Tatoeba::main(std::string url) {
 	booster::smatch res;
 	booster::regex_match(url, res, lang_regex);
     std::map<std::string,std::string>::const_iterator p = lang_map.find(std::string(res[1]));

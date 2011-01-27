@@ -4,7 +4,7 @@
 
 namespace controllers {
 
-Controller::Controller(apps::tatoeba &tatoapp) :
+Controller::Controller(apps::Tatoeba &tatoapp) :
 	cppcms::application(tatoapp.service()),
 	tatoapp(tatoapp) {
 	i = 5553;    

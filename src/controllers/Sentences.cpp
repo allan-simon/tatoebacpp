@@ -7,7 +7,7 @@
 
 namespace controllers {
 
-Sentences::Sentences(apps::tatoeba& tatoapp) : Controller(tatoapp) {
+Sentences::Sentences(apps::Tatoeba& tatoapp) : Controller(tatoapp) {
 	std::cout << "i dans sentences vaut " << this->i << std::endl;
   	tatoapp.dispatcher().assign("/sentences/show/(\\d+)", &Sentences::show, this, 1);
   	tatoapp.dispatcher().assign("/sentences/show/random", &Sentences::show_random, this);

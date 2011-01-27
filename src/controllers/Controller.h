@@ -8,18 +8,18 @@
 #include "contents/content.h"
 
 namespace apps {
-class tatoeba;
+class Tatoeba;
 }
 namespace controllers {
 
 class Controller : public cppcms::application {
 	protected:
 		contents::ConfigContent configContent;
-		apps::tatoeba &tatoapp;
+		apps::Tatoeba &tatoapp;
 		int i;
         void initContent(contents::BaseContent& content);
 	public:
-		Controller(apps::tatoeba &tatoapp);
+		Controller(apps::Tatoeba &tatoapp);
 };
 
 } // End namespace

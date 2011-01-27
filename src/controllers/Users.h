@@ -10,7 +10,7 @@ class Users : public Controller {
     private:
         models::Users userModel;
 	public:
-		Users(apps::tatoeba& tatoapp);
+		Users(apps::Tatoeba& tatoapp);
         void registerUser();
 		void check_login();
         void logout();

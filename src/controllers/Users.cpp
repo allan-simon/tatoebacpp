@@ -9,7 +9,7 @@
 
 namespace controllers {
 
-Users::Users(apps::tatoeba& tatoapp) : Controller(tatoapp), userModel(cppdb::session("sqlite3:db=../doc/sqlite3.db")) {
+Users::Users(apps::Tatoeba& tatoapp) : Controller(tatoapp), userModel(cppdb::session("sqlite3:db=../doc/sqlite3.db")) {
     tatoapp.dispatcher().assign("/users/register", &Users::registerUser, this);
   	tatoapp.dispatcher().assign("/users/check_login", &Users::check_login, this);
   	tatoapp.dispatcher().assign("/users/logout", &Users::logout, this);

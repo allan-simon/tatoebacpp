@@ -18,7 +18,7 @@ class Sentences : public Controller {
     private:
         models::Sentences sentenceModel;
 	public:
-		Sentences(apps::tatoeba& tatoapp);
+		Sentences(apps::Tatoeba& tatoapp);
 		void show(std::string sentence_id);
         void show_random();
 };

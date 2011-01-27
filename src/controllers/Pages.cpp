@@ -5,7 +5,7 @@
 
 namespace controllers {
 
-Pages::Pages(apps::tatoeba& tatoapp) : controllers::Controller(tatoapp) {
+Pages::Pages(apps::Tatoeba& tatoapp) : controllers::Controller(tatoapp) {
 	std::cout << "i dans pages vaut " << this->i << std::endl;
   	tatoapp.dispatcher().assign("", &Pages::homepage, this);
   	tatoapp.dispatcher().assign("/contribute", &Pages::contribute, this);
