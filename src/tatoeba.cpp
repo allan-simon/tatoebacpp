@@ -12,17 +12,15 @@
 namespace apps {
 
 
-Tatoeba::Tatoeba(cppcms::service &w) : 
-	cppcms::application(w),
-
-	pagesController(*this),
-	sentencesController(*this),
-	usersController(*this)
+Tatoeba::Tatoeba(cppcms::service &w) :
+    cppcms::application(w),
+    pagesController(*this),
+    sentencesController(*this),
+    usersController(*this)
 {
-
-	add(pagesController);
-	add(sentencesController);
-	add(usersController);
+    add(pagesController);
+    add(sentencesController);
+    add(usersController);
 
     cppcms::json::object langs = settings().at("tatoeba.languages").object();
     for(cppcms::json::object::const_iterator p=langs.begin();p!=langs.end();++p) {
@@ -32,17 +30,22 @@ Tatoeba::Tatoeba(cppcms::service &w) :
 static const booster::regex lang_regex("^/(\\w+)(/.*)?$");
 
 void Tatoeba::main(std::string url) {
-	booster::smatch res;
-	booster::regex_match(url, res, lang_regex);
+    /**
+     * @todo Choose how we write the languague in the url and implement it
+     * @todo implement the default language in order check the session, coockie
+     * navigator
+     */
+    booster::smatch res;
+    booster::regex_match(url, res, lang_regex);
     std::map<std::string,std::string>::const_iterator p = lang_map.find(std::string(res[1]));
     if (p == lang_map.end()) {
         response().set_redirect_header("/en");
     }
     else {
-	    context().locale(p->second);
-	    if (!dispatcher().dispatch(res[2])) {
-		    response().make_error_response(cppcms::http::response::not_found);
-	    }
+        context().locale(p->second);
+        if (!dispatcher().dispatch(res[2])) {
+            response().make_error_response(cppcms::http::response::not_found);
+        }
     }
 }
 

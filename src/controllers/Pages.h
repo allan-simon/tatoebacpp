@@ -5,13 +5,32 @@
 
 namespace controllers {
 
+/**
+ * @class Pages
+ * contains all functions to generate all independant pages
+ */
 class Pages : public Controller {
-	public:
-		Pages(apps::Tatoeba& tatoapp);
-		void homepage();
-		void contribute();
-		 void termsOfUse();
-		 void teamAndCredits();
+    public:
+        /**
+         * Constructor
+         */
+        Pages(apps::Tatoeba& tatoapp);
+        /**
+         * generate home page
+         */
+        void homepage();
+        /**
+         * Main page to add sentences and so
+         */
+        void contribute();
+        /**
+         * Terms of use page
+         */
+        void termsOfUse();
+        /**
+         * Team and Credits page
+         */
+        void teamAndCredits();
 };
 
 } // End namespace

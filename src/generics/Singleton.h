@@ -12,7 +12,7 @@ class Singleton
 
     public:
         /**
-         * Return a singleton instance, create it if it doesn't exist yet
+         * @return a singleton instance, create it if it doesn't exist yet
          */
         static T *getInstance () {
             if (_singleton == NULL) {

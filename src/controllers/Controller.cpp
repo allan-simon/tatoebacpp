@@ -5,13 +5,13 @@
 namespace controllers {
 
 Controller::Controller(apps::Tatoeba &tatoapp) :
-	cppcms::application(tatoapp.service()),
-	tatoapp(tatoapp) {
-	i = 5553;    
-	configContent.css_path = settings().get<std::string>("tatoeba.css");
-	configContent.img_path = settings().get<std::string>("tatoeba.img");
+    cppcms::application(tatoapp.service()),
+    tatoapp(tatoapp) {
+    i = 5553;
+    configContent.css_path = settings().get<std::string>("tatoeba.css");
+    configContent.img_path = settings().get<std::string>("tatoeba.img");
     configContent.web_path = settings().get<std::string>("tatoeba.web");
-	std::cout << "i vaut " << i << std::endl;
+    std::cout << "i vaut " << i << std::endl;
 }
 
 void Controller::initContent(contents::BaseContent& content) {

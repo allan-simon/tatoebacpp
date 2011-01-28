@@ -10,16 +10,28 @@
 namespace apps {
 class Tatoeba;
 }
+
+/** @namespace controllers
+ * regroup all controllers of the application
+ */
 namespace controllers {
 
+/**
+ * @class Controller
+ * it's a generic which is herited by all controllers
+ */
 class Controller : public cppcms::application {
-	protected:
-		contents::ConfigContent configContent;
-		apps::Tatoeba &tatoapp;
-		int i;
+    protected:
+        contents::ConfigContent configContent;
+        apps::Tatoeba &tatoapp;
+        int i;
         void initContent(contents::BaseContent& content);
 	public:
-		Controller(apps::Tatoeba &tatoapp);
+        /**
+         * Contructor
+         * @param tatoapp
+         */
+        Controller(apps::Tatoeba &tatoapp);
 };
 
 } // End namespace
