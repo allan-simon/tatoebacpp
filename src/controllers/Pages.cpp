@@ -11,6 +11,7 @@ Pages::Pages(apps::Tatoeba& tatoapp) : controllers::Controller(tatoapp) {
   	tatoapp.dispatcher().assign("/contribute", &Pages::contribute, this);
   	tatoapp.dispatcher().assign("/terms_of_use", &Pages::termsOfUse, this);
   	tatoapp.dispatcher().assign("/tatoeba_team_and_credits", &Pages::teamAndCredits, this);
+}
 
 
 void Pages::homepage() {
