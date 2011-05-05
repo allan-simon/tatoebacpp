@@ -1,31 +1,125 @@
+/**
+ * Tatoeba Project, free collaborative creation of multilingual corpuses project
+ * Copyright (C) 2011 Allan SIMON <allan.simon@supinfo.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * @category Tatoebacpp
+ * @package  Controllers
+ * @author   Allan SIMON <allan.simon@supinfo.com>
+ * @license  Affero General Public License
+ * @link     http://tatoeba.org
+ */
+
+
 #include "Controller.h"
-#include "tatoeba.h"
 #include <cppcms/session_interface.h>
+
+#include "contents/content.h"
 
 namespace controllers {
 
-Controller::Controller(apps::Tatoeba &tatoapp) :
-    cppcms::application(tatoapp.service()),
-    tatoapp(tatoapp) {
-    i = 5553;
-    configContent.css_path = settings().get<std::string>("tatoeba.css");
-    configContent.img_path = settings().get<std::string>("tatoeba.img");
-    configContent.web_path = settings().get<std::string>("tatoeba.web");
-    std::cout << "i vaut " << i << std::endl;
+/**
+ *
+ */
+Controller::Controller(cppcms::service &serv) : cppcms::application(serv) {
+
+
 }
 
-void Controller::initContent(contents::BaseContent& content) {
+/**
+ *
+ */
+void Controller::init_content(contents::BaseContent& content) {
+    
     response().content_encoding("UTF-8");
-    response().set_content_header("text/html; charset=utf-8");
-    content.config = configContent;
-    std::locale current_locale = context().locale();
-    booster::locale::info const &inf = std::use_facet<booster::locale::info>(current_locale);
-    content.lang = inf.language();
+    response().set_content_header("text/html; charset=UTF-8");
+
+    content.lang = get_interface_lang();
+    //std::cout << "user name: " << session()["name"] << std::endl;
     if (session().is_set("name")) {
-        content.isAuthenticated = true;
-    } else {
-        content.isAuthenticated = false;
+        content.usersHelperContent.username = session()["name"];
     }
 }
+
+/**
+ *
+ */
+std::string Controller::get_interface_lang() {
+    // TODO seems context.locale return always a 2 letter code
+    // TODO also need to check the locale send by the user navigator
+    // without forgetting the navigator always send more than one locale
+    // in order to have some fallbacks
+    if (session().is_set("lang")) {
+
+        return session()["lang"];
+    } else {
+
+        return "eng";
+    }
+}
+
+
+/**
+ *
+ */
+inline bool Controller::is_logged() {
+    return !session()["name"].empty();
+}
+
+
+/**
+ *
+ */
+void Controller::go_back_to_previous_page() {
+    //std::cout << "referer : " << request().http_referer() << std::endl;
+    
+    //TODO we do not handle the case where the referer is not a valid page
+    // "*_check" page, or page that require a priviledge that the user does
+    // not have anymore (if session has expired etc.)
+    response().set_redirect_header(
+        request().http_referer()
+    );
+}
+
+
+/**
+ *
+ */
+bool Controller::check_permission() {
+
+    //TODO for the moment we do not handle case
+    // when you're logged but you're current group has not
+    // enough priviledges
+    if (!is_logged()) {
+
+        response().set_redirect_header(
+            "/" + get_interface_lang() +"/users/login"
+        );
+        return false;
+    }
+    return true;
+}
+
+/**
+ *
+ */
+int Controller::get_current_user_id() {
+    //std::cout << "[NOTICE] current id:" << session()["userId"] << std::endl;
+    return atoi(session()["userId"].c_str());
+}
+
 
 } // End namespace

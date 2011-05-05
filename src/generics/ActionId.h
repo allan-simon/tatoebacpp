@@ -17,47 +17,51 @@
  *
  *
  * @category Tatoebacpp
- * @package  Controllers
+ * @package  Singletons
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
+#ifndef YADICT_GENERICS_ACTIONID_H
+#define YADICT_GENERICS_ACTIONID_H
 
-#ifndef CONTROLLERS_PAGES_H
-#define CONTROLLERS_PAGES_H
+#include "Singleton.h"
 
-#include "Controller.h"
-
-namespace controllers {
-
+namespace singletons {
 /**
- * @class Pages
- * contains all functions to generate all independant pages
+ * Singleton class used to centralise the action id (used for logs)
  */
-class Pages : public Controller {
+class ActionId : public Singleton<ActionId> {
+    friend class Singleton<ActionId>;
+    private:
+
+        /**
+         * Defaut constructor, will init the value of lastActionId
+         * for the moment it is stored in a sqlite3 database
+         */
+        ActionId();
+
+        /**
+         * last action id, will be incremented each time a logged action
+         * occurs 
+         */
+        unsigned int lastActionId;
     public:
         /**
-         * Constructor
+         * The destructor will save the value of lastActionid
+         * inside a database so that we can retrieve it even if
+         * we restart the server
          */
-        Pages(cppcms::service &serv);
+        ~ActionId();
         /**
-         * generate home page
+         * return the last action id + 1
+         * and update lastactionId accordingly
+         * so several consecutiv calls will not give the same result 
          */
-        void homepage();
-        /**
-         * Main page to add sentences and so
-         */
-        void contribute();
-        /**
-         * Terms of use page
-         */
-        void terms_of_use();
-        /**
-         * Team and Credits page
-         */
-        void team_and_credits();
+        unsigned int get_action_id();
+
+
 };
 
-} // End namespace
-
+}; //end namespace singletons
 #endif

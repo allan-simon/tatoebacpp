@@ -17,62 +17,57 @@
  *
  *
  * @category Tatoebacpp
- * @package  Apps
+ * @package  Contents
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
 
 
-#ifndef TATOEBA_H
-#define TATOEBA_H
+#ifndef TATOEBACPP_CONTENTS_PAGES_H
+#define TATOEBACPP_CONTENTS_PAGES_H
+
+#include "contents/content.h"
+#include "contents/helpers/sentences.h"
+
+namespace contents {
 
 /**
- * @file tatoeba.h
+ * Base content for every action of Pages controller
+ *
  */
-#include <map>
-
-#include <cppcms/application.h>
-#include <cppdb/frontend.h>
-#include "controllers/Sentences.h"
-#include "controllers/Pages.h"
-
-
-/** 
- * @namespace apps
- */
-namespace apps {
-
-/** 
- * @class Tatoeba
- * Application class representing the website
- * All http request will be dispatched by this class
- */
-class Tatoeba : public cppcms::application {
-
-private:
-    controllers::Sentences sentences;
-    controllers::Pages pages;
-    /**
-     * map containing aviable language of tatoeba
-     * @TODO move this in Languages singleton
-     */
-    std::map<std::string,std::string> lang_map; 
-
-public:
-    /**
-     * Constructor
-     * Will connect every controllers to their respective paths
-     * @param serv
-     */
-	Tatoeba(cppcms::service &serv);
-
-    /**
-     * Method who receive all web requests
-     * get the user language of interface from url
-     * @param url : url asked by user
-     */
-	void main(std::string url);
+struct Pages : public BaseContent {
 };
-}
+
+/**
+ * @struct PagesHomepage
+ * Content used by the homepage
+ */
+struct PagesHomepage : public Pages {
+    helpers::Sentences shc;
+};
+
+/**
+ * @struct PagesContribute
+ * Content used by page Contribute
+ */
+struct PagesContribute : public Pages {
+};
+
+/**
+ * @struct PagesTermsOfUse
+ * Content used by page Terms of use
+ */
+struct PagesTermsOfUse : public Pages {
+};
+
+/**
+ * Content used by page Team and credits
+ */
+struct PagesTeamAndCredits : public Pages {
+
+};
+
+} //end of namespace
+
 #endif

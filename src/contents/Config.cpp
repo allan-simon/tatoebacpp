@@ -17,47 +17,13 @@
  *
  *
  * @category Tatoebacpp
- * @package  Controllers
+ * @package  Singletons
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
 
-#ifndef CONTROLLERS_PAGES_H
-#define CONTROLLERS_PAGES_H
+#include "Config.h"
 
-#include "Controller.h"
+Config::Config(){};
 
-namespace controllers {
-
-/**
- * @class Pages
- * contains all functions to generate all independant pages
- */
-class Pages : public Controller {
-    public:
-        /**
-         * Constructor
-         */
-        Pages(cppcms::service &serv);
-        /**
-         * generate home page
-         */
-        void homepage();
-        /**
-         * Main page to add sentences and so
-         */
-        void contribute();
-        /**
-         * Terms of use page
-         */
-        void terms_of_use();
-        /**
-         * Team and Credits page
-         */
-        void team_and_credits();
-};
-
-} // End namespace
-
-#endif

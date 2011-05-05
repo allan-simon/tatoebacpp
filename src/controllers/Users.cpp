@@ -1,61 +1,150 @@
-#include "Controller.h"
+/**
+ * Tatoeba Project, free collaborative creation of multilingual corpuses project
+ * Copyright (C) 2011 Allan SIMON <allan.simon@supinfo.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * @category Tatoebacpp
+ * @package  Controllers
+ * @author   Allan SIMON <allan.simon@supinfo.com>
+ * @license  Affero General Public License
+ * @link     http://tatoeba.org
+ */
 #include "controllers/Users.h"
-#include "tatoeba.h"
 #include <cppcms/session_interface.h>
-#include "contents/register.h"
-#include "contents/allUsers.h"
-#include <vector>
+#include "contents/users.h"
 #include "models/Users.h"
 
 namespace controllers {
 
-Users::Users(apps::Tatoeba& tatoapp) : Controller(tatoapp), userModel(cppdb::session("sqlite3:db=../doc/sqlite3.db")) {
-    tatoapp.dispatcher().assign("/users/register", &Users::registerUser, this);
-  	tatoapp.dispatcher().assign("/users/check_login", &Users::check_login, this);
-  	tatoapp.dispatcher().assign("/users/logout", &Users::logout, this);
-    tatoapp.dispatcher().assign("/users/all((/\\d+)?)", &Users::listMembers, this, 1);
+/**
+ *
+ */
+Users::Users(cppcms::service &serv) : Controller(serv) {
+
+    //TODO use a constant for this
+    usersModel = new models::Users(cppdb::session("sqlite3:db=../doc/sqlite3.db"));
+    cppcms::url_dispatcher* d = &dispatcher();
+    d->assign("/register-new", &Users::register_new, this);
+    d->assign("/register-new-treat", &Users::register_new_treat, this);
+  	d->assign("/login", &Users::login, this);
+  	d->assign("/login-treat", &Users::login_treat, this);
+  	d->assign("/logout", &Users::logout, this);
+    //tatoapp.dispatcher().assign("/users/all((/\\d+)?)", &Users::listMembers, this, 1);
 }
 
-void Users::registerUser() {
-    contents::Register c;
-    if (request().request_method() == "POST") {
-        c.registerForm.load(context());
-        if(c.registerForm.validate()) {
-            userModel.addUser(
-                c.registerForm.username.value(),
-                c.registerForm.password.value()
-            );
-            response().set_redirect_header("/en");
+/**
+ *
+ */
+Users::~Users() {
+    delete usersModel;
+}
+
+/**
+ *
+ */
+void Users::register_new() {
+    contents::UsersRegisterNew c;
+    init_content(c);
+    
+
+    render("users_register_new", c);
+}
+
+/**
+ *
+ */
+void Users::register_new_treat() {
+    contents::UsersRegisterNew c;
+    init_content(c);
+    c.registerNewUser.load(context());
+
+    if(c.registerNewUser.validate()) {
+        if (
+            usersModel->add_user(
+                c.registerNewUser.username.value(),
+                c.registerNewUser.password.value(),
+                c.registerNewUser.email.value()
+            )
+        ) {
+            response().set_redirect_header("/" + c.lang);
+            session()["name"] = c.registerNewUser.username.value();
+            session().save();
+            //std::cout << "user name: " << session()["name"] << std::endl;
+            return;
         }
     }
-
-    initContent(c);
-    render("registeruser", c);
-}
-
-void Users::check_login() {
-    contents::BaseContent c;
-    c.login.load(context());
-
-    std::cout << "Hello " << c.login.username.value() << std::endl;
-    std::cout << "password : " << c.login.password.value() << std::endl;
-
-    if (userModel.check_login(c.login.username.value(), c.login.password.value())) {
-        session()["name"] = "toto";
-        response().set_redirect_header("/en");
-    }
-    else {
-        response().set_redirect_header("/fr");
-    }
     
+    go_back_to_previous_page();
 }
 
+/**
+ *
+ */
+void Users::login() {
+    contents::UsersLogin c;
+    init_content(c);
+    c.loginUser.previousUrl.value(
+        request().http_referer()
+    );
+
+    render("users_login", c);
+}
+
+/**
+ *
+ */
+void Users::login_treat() {
+
+    forms::LoginUser loginUser;
+    loginUser.load(context());
+
+    std::string username = loginUser.username.value();
+
+    if (
+        // TODO move that in the validate function of the form
+
+        usersModel->is_login_correct(
+            username,
+            loginUser.password.value()
+        )
+    ) {
+        session()["name"] = username;
+        session()["userId"] = usersModel->get_id_from_name<std::string>(username);
+        session().save();
+
+        response().set_redirect_header(
+            loginUser.previousUrl.value()
+        );
+
+    } else {
+        go_back_to_previous_page();
+    }
+}
+
+/**
+ *
+ */
 void Users::logout() {
     session().clear();
-    response().set_redirect_header("/en");
+    response().set_redirect_header(
+        request().http_referer()
+    );
 }
-
-void Users::listMembers(std::string page) {
+/*
+void Users::list_members(std::string page) {
     int intPage;
 
     // check if there is a page in argument
@@ -69,9 +158,9 @@ void Users::listMembers(std::string page) {
     }
 
     contents::AllUsers c;
-    initContent(c);
+    init_content(c);
     c.listOfMembers = userModel.getAllUsers();
     render("allusers", c);
 }
-
+*/
 } // End namespace

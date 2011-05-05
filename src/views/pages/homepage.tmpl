@@ -1,0 +1,43 @@
+<% c++ #include "contents/pages.h" %>
+<% skin %>
+<% view homepage uses contents::PagesHomepage extends master %>
+<% template title() %><% gt "Tatoeba homepage"  %><% end template %>
+
+<% template annexe_content() %>
+    <% c++ homepage_modules hm(out(), content); %>
+    <% c++ hm.join_us() ;%>
+<% end template %>
+
+
+
+<% template main_content() %> 
+    <div class="module">
+        <h2>Disclaimer</h2>
+        This website is an alpha version of the new Tatoeba, it based on a
+        totally new architecture (C++/TatoDB instead of PHP/Mysql), so it may
+        contains a lot of bug, be unstable, kills panda etc.
+
+        Please repport any bugs/suggestions to "team @t tatoeba dOt org" 
+    </div>
+    <div class="module">
+        <h2>Random Sentence</h2>
+        
+        <p>
+            Show another
+            <a href="<% url "/sentences/show-random" %>" >
+                sentence
+            </a>
+        </p>
+
+        <% c++ sentences_helper sh(out(), content.shc); %>
+        <% if not shc.empty() %>
+            <% c++ sh.sentences_group(content.shc.sentences[0]) ;%>
+        <% else %>
+            This sentence does not exist
+        <% end %>
+    </div>
+<% end template %>
+
+
+<% end view %>
+<% end skin %>

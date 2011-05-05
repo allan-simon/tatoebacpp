@@ -1,44 +1,100 @@
-<%c++ extern "C" { %> 
-<%c++    #include "tato/fetcher_tree.h" %>
-<%c++    #include "tato/item.h" %>
-<%c++ } %>
 <%c++ #include "contents/helpers/sentences.h" %>
-<%c++ typedef TatoFetcherTreeNode *TatoFetcherTreeNode_ptr ; %>
-<%c++ typedef char *char_ptr ; %>
-<%c++ typedef TatoItem *TatoItem_ptr ; %>
+<%c++ #include "results/sentences.h" %>
+<%c++ using namespace contents; %>
 <% skin %>
-<% view sentences_helper uses contents::SentencesHelper %>
+<% view sentences_helper uses helpers::Sentences %>
 
-    <% template sentences_group() %>
+    <% template sentences_group(results::Sentence mainSentence) %>
         <div class="sentences_set" >
-
-        <% c++ generic_sentence(content.tree->root->item, std::string("mainSentence"), 0); %>
-        <% c++ translations(content.tree->root); %>
+        <% include menu(mainSentence.id) %>
+        <% include main_sentence(mainSentence) %>
+        <% include all_translations(mainSentence.translations) %>
 
         </div>
 
     <% end template %>
 
+    <% template menu(int sentenceId) %>
+        <ul class="menu" >
+            <li class="belongsTo"></li>
+            <li class="option translateLink">
+                <a href="<% url "/sentences/translate/{1}" using sentenceId%>" >
+                <img
+                    title="Translate"
+                    alt="Translate"
+                    src="http://flags.tatoeba.org/img/translate.png"
+                > 
+                </a>
+           
+            </li>
+            <!-- TODO reimplement add to list/favorite/belongs to etc. -->
+            <li class="option delete">
+                <a href="<% url "/sentences/delete/{1}" using sentenceId%>" >
+                <img
+                    title="Delete"
+                    alt="Delete"
+                    src="http://flags.tatoeba.org/img/delete.png"
+                > 
+                </a>
+            </li>
+        </ul>
+    <% end template %>
+
+    <% template main_sentence(results::Sentence sentence) %>
+        <div class="sentence mainSentence">
+            <% include sentence_lang(sentence.lang) %>
+
+            <div class="sentenceContent">
+                <div><% sentence.text %></div>
+            </div>
+        </div>
+    <% end template%>
 
 
     
-    <% template translations(TatoFetcherTreeNode_ptr root) %>
-       <div class="translations" %> 
-            <% c++ TatoListNode *it; %>
-	        <% c++ TATO_LIST_FOREACH(root->childs, it) { %>
-                <% c++ translation((TatoFetcherTreeNode*) it->data, 1); %>
-            <% c++ } %>
-
-       </div>
+    <% template all_translations(TransVector translations) %>
+        <% foreach transOfDepthN in translations %>
+            <div class="translations" %>
+            <% c++ int depth = 1; %>
+            <% item %>
+                <% c++ translations_of_same_depth(transOfDepthN, depth); %>
+                <% c++ depth++; %>
+            <% end %>
+            </div>
+        <% end foreach%>
     <% end template %>
 
 
+    <% template translations_of_same_depth(SentencesVector translations, int depth) %>
+        <% foreach translation in translations %>
+            <% if (depth == 1) %>
+            <h3>
+                Direct Translations
+            </h3>
+            <% end %>
 
+            <% if (depth == 2) %>
+            <h3>
+                Translations of Translations
+            </h3>
+            <% end %>
+
+            <% if (depth > 2) %>
+                <br />
+                <br />
+            <% end %>
+
+            <% item %>
+                <% c++ generic_sentence(translation, "directTranslation", depth); %>
+            <% end %>
+        <% end foreach%>
+
+    <% end template %>
         
-    <% template generic_sentence(TatoItem_ptr sentence, std::string type, int depth) %>
+    <% template generic_sentence(results::Sentence sentence, std::string type, int depth) %>
 
-        <div class="sentence <%c++ out() << type ; %>">
-        <% c++ sentence_lang(sentence->lang->code); %>
+        <div class="sentence <% type %>">
+        <% include sentence_lang(sentence.lang) %>
         <% c++ sentence_content(sentence, depth); %>
         </div>
 
@@ -47,10 +103,10 @@
 
 
 
-    <% template sentence_content(TatoItem_ptr sentence, int depth) %>
+    <% template sentence_content(results::Sentence sentence, int depth) %>
 
         <div class="sentenceContent">
-            <% c++ sentence_text(sentence->str, depth) ;%>
+            <% c++ sentence_text(sentence.text, depth); %>
             <br />
         </div>
 
@@ -58,30 +114,17 @@
 
 
 
-
-    <% template translation( TatoFetcherTreeNode_ptr translationNode , int depth) %>
-
-            <% c++ generic_sentence(translationNode->item, std::string("directTranslation"), depth); %>
-	        <% c++ TatoListNode *it; %>
-	        <% c++ TATO_LIST_FOREACH(translationNode->childs, it) { %>
-                <% c++ translation((TatoFetcherTreeNode*) it->data, depth+1); %>
-            <% c++ } %>
-
-    <% end template %>
-
-
-
-    <% template sentence_text(char_ptr text, int depth) %>
+    <% template sentence_text(std::string text, int depth) %>
         <div>
-            <% c++ out() << depth; %>
-            <% c++ for(int i=0; i < depth; i++) out() << "-";%>
-            <% c++ out() << text; %>
+            <% depth %>
+            -
+            <% text %>
         </div> 
     <% end template %>
     
-    <% template sentence_lang(char_ptr lang) %>
+    <% template sentence_lang(std::string lang) %>
         <img 
-            src="http://flags.tatoeba.org/img/flags/<% c++ out() << lang; %>.png"
+            src="http://flags.tatoeba.org/img/flags/<% lang %>.png"
             class="languageFlag "
             alt="<% c++ out() << lang; %>"
             width="30"

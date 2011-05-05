@@ -1,17 +1,48 @@
-<%c++ #include "contents/homepage.h" %>
+<%c++ #include "contents/sentences.h" %>
 <% skin %>
-<% view sentences_show uses contents::Homepage extends master %>
+<% view sentences_show uses contents::SentencesShow extends master %>
 <% template title() %><% gt "Sentence show"  %><% end template %>
 
 <% template main_content() %>
+    <% c++ navigation(content.shc.sentences[0].id - 1, content.shc.sentences[0].id + 1); %>
     <div class="module">
-        <% c++ if (content.shc.tree != NULL) { %>
-            <% c++ sentences_helper sh(out(),content.shc);  %>
-            <% c++ sh.sentences_group() ;%>
-        <% c++ } %>
+        <h2>Sentence nº <% shc.sentences[0].id %></h2>
+        <% c++ sentences_helper sh(out(), content.shc); %>
+        <% if not shc.empty() %>
+            <% c++ sh.sentences_group(content.shc.sentences[0]) ;%>
+        <% else %>
+            This sentence does not exist
+        <% end %>
     </div>
-<% end %>
+<% end template %>
 
+
+<% template navigation(int prev, int next) %>
+    <div class="module">
+    <div class="navigation">
+    <ul>
+        <li id="prevSentence" class="active">
+            <a href="<% url "/sentences/show/{1}" using prev %>">
+                « previous
+            </a>
+        </li>
+ 
+        <li id="nextSentence" class="active">
+            <a href="<% url "/sentences/show/{1}" using next %>">
+                next »
+            </a>
+        </li>
+    
+        <li id="randomLink" class="active">
+            <a href="<% url "/sentences/show-random"%>" >
+                random
+            </a>
+        </li>        
+    </ul>
+    </div>
+    </div>
+
+<% end template %>
 
 <% end view %>
 <% end skin %>

@@ -17,47 +17,44 @@
  *
  *
  * @category Tatoebacpp
- * @package  Controllers
+ * @package  Singletons
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
 
-#ifndef CONTROLLERS_PAGES_H
-#define CONTROLLERS_PAGES_H
+#include "ActionId.h"
+#include <cppdb/frontend.h>
 
-#include "Controller.h"
-
-namespace controllers {
+namespace singletons {
 
 /**
- * @class Pages
- * contains all functions to generate all independant pages
+ *
  */
-class Pages : public Controller {
-    public:
-        /**
-         * Constructor
-         */
-        Pages(cppcms::service &serv);
-        /**
-         * generate home page
-         */
-        void homepage();
-        /**
-         * Main page to add sentences and so
-         */
-        void contribute();
-        /**
-         * Terms of use page
-         */
-        void terms_of_use();
-        /**
-         * Team and Credits page
-         */
-        void team_and_credits();
-};
+ActionId::ActionId() {
+    //TODO replace the hardcodedpath by something in config.js
+    cppdb::session sqliteDb("sqlite3:db=../doc/sqlite3.db");
+    sqliteDb << "SELECT last_id FROM action_id LIMIT 1;" <<
+        cppdb::row >> lastActionId;
+}
 
-} // End namespace
+/**
+ *
+ */
+unsigned int ActionId::get_action_id() {
+    unsigned int tempId = lastActionId;
+    lastActionId++;
+    return tempId;
+}
 
-#endif
+
+/**
+ *
+ */
+ActionId::~ActionId() {
+    cppdb::session sqliteDb("sqlite3:db=../doc/sqlite3.db");
+    sqliteDb << "UPDATE action_id SET last_id = ?;" << lastActionId << cppdb::exec;
+}
+
+};//end namespace singletons
+

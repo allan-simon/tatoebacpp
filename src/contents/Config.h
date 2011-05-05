@@ -17,47 +17,50 @@
  *
  *
  * @category Tatoebacpp
- * @package  Controllers
+ * @package  Singletons
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
 
-#ifndef CONTROLLERS_PAGES_H
-#define CONTROLLERS_PAGES_H
+#ifndef SHDICT_CONTENT_CONFIG_H
+#define SHDICT_CONTENT_CONFIG_H
 
-#include "Controller.h"
-
-namespace controllers {
+#include <map>
+#include "generics/Singleton.h"
 
 /**
- * @class Pages
- * contains all functions to generate all independant pages
- */
-class Pages : public Controller {
+ * Singleton class that store some value used in html generation
+ * such as the path for css files etc.
+ */ 
+class Config : public Singleton<Config> {
+    friend class Singleton<Config>;
+
+    private:
+
+        /**
+         * Default constructor, do nothing for the moment
+         */
+        Config();
+
     public:
         /**
-         * Constructor
+         * Store the path for css files
          */
-        Pages(cppcms::service &serv);
+        std::string cssPath;
+
         /**
-         * generate home page
+         * Store the path for images files
          */
-        void homepage();
+        std::string imgPath;
+
         /**
-         * Main page to add sentences and so
+         * Store the root URL of the website
          */
-        void contribute();
-        /**
-         * Terms of use page
-         */
-        void terms_of_use();
-        /**
-         * Team and Credits page
-         */
-        void team_and_credits();
+        std::string webPath;
+
 };
 
-} // End namespace
-
 #endif
+
+

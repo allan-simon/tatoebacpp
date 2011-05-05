@@ -1,19 +1,109 @@
-#ifndef MODELS_SENTENCES_H
-#define MODELS_SENTENCES_H
+/**
+ * Tatoeba Project, free collaborative creation of multilingual corpuses project
+ * Copyright (C) 2011 Allan SIMON <allan.simon@supinfo.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * @category Tatoebacpp
+ * @package  Models
+ * @author   Allan SIMON <allan.simon@supinfo.com>
+ * @license  Affero General Public License
+ * @link     http://tatoeba.org
+ */
+
+
+
+#ifndef TATOEBACPP_MODELS_SENTENCES_H
+#define TATOEBACPP_MODELS_SENTENCES_H
 
 #include "models/TatoDB.h"
+#include "results/sentences.h"
 
 extern "C" {
-#include "tato/fetcher_tree.h"
+#include "tato/fetcher.h"
+#include "tato/item.h"
 }
 
 namespace models {
 
+
+/**
+ * @class Sentences
+ * class represente an abstract way to get the sentences stored in
+ * the abstracted database (here tatodb)
+ */
 class Sentences {
+
+
     public:
+        /**
+         * Default constructor
+         */
         Sentences();
-        TatoFetcherTree* getSentenceWithId(int id);
-        int getRandomSentenceId();
+
+        /**
+         * get a sentence with a given ID and all its translations
+         */
+        results::Sentence get_by_id(int id);
+        /**
+         * Return the id of a random existing sentence
+         */
+        int get_random_id();
+
+        /**
+         * get a random sentence and all its translations
+         */
+        results::Sentence get_random();
+
+        /*
+        results::SentencesPagiVector get_all();
+        results::SentencesPagiVector get_all(
+            int offset,
+            int windowsize
+        );
+
+        results::SentencesPagiVector get_all_in(std::string lang);
+        results::SentencesPagiVector get_all_in(
+            std::string lang,
+            int offset,
+            int windowsize
+        );
+
+
+        */
+
+    private :
+        //TODO reintroduce logs
+        /**
+         * return the results::Sentence object constructed with a given
+         * TatoItem struct
+         */
+        results::Sentence sentence_from_item(TatoItem* item);
+
+        /**
+         * Will traverse the graph of translations starting from
+         * the node item until ,maxDepth and will pack linked item
+         * in translations according to their distance from the start
+         *
+         * @TODO add something to filter the languages that are kept
+         */
+        void pack_translations(
+            TatoItem* item,
+            TransVector &translations,
+            int maxDepth
+        );
 };
 
 }

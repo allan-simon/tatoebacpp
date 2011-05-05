@@ -19,11 +19,28 @@
 <% template header() %>
 <title><% include title() %></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link href="<% config.css_path %>/layouts/default.css" rel="stylesheet" type="text/css" />
-<link href="<% config.css_path %>/style-<% if rtl %>rtl<% else %>ltr<%end%>.css" rel="stylesheet" type="text/css" />
+<link 
+    href="http://css.tatoeba.org/css/layouts/default.css"
+    rel="stylesheet"
+    type="text/css"
+/>
+<link
+    rel="stylesheet"
+    type="text/css"
+    href="http://css.tatoeba.org/css/pages/index.css"
+/>
+<link
+    rel="stylesheet"
+    type="text/css"
+    href="http://css.tatoeba.org/css/elements/sentences_group.css"
+/>
+<link
+    rel="stylesheet"
+    type="text/css"
+    href="http://css.tatoeba.org/css/elements/navigation.css"
+/>
 
-<link href="http://css.tatoeba.org/css/layouts/default.css" rel="stylesheet" type="text/css" />
-<link rel="stylesheet" type="text/css" href="http://css.tatoeba.org/css/pages/index.css" />
+
 
 <% end template %>
 
@@ -38,23 +55,20 @@
     <% include top_menu() %>
 	<div id="container1">
 		<div id="header">
-			<a href="<% url "/" %>"><img src="<% config.img_path %>/TatoebaProjectBeta.png" width="72" height="450" alt="TatoebaProjectBeta"></a>
+			<a href="<% url "" %>">
+                <img
+                    src="http://flags.tatoeba.org/img/TatoebaProjectBeta.png"
+                    width="72"
+                    height="450"
+                    alt="TatoebaProjectBeta"
+                />
+            </a>
 		</div>
 		<div id="container">
 				<% include body() %>
+
 		</div>
-		<div id="footer">
-			<ul>
-				<li><% gt "Online visitor(s) : "%>X</li>
-				<li><a href="<% url "/terms_of_use" %>"><% gt "Terms of use" %></a></li>
-                <li><a href="<% url "/contact" %>"><% gt "Feedback" %></a></li>
-                <li><a href="<% url "/download_tatoeba_example_sentences" %>"><% gt "Downloads" %></a></li>
-                <li><a href="<% url "/tools/index" %>"><% gt "Tools" %></a></li>
-                <li><a href="<% url "/tatoeba_team_and_credits" %>"><% gt "Team & Credits" %></a></li>
-                <li><a href="<% url "/faq" %>"><% gt "FAQ" %></a></li>
-                <li><a href="<% url "/help" %>"><% gt "Help" %></a></li>
-			</ul>
-		</div>
+        <% include footer() %>
 	</div>
     <div id="footer_container"></div>
 </body>
@@ -65,21 +79,12 @@
 <div id="top_menu_container">
 	<div id="top_menu">
 		<div id="languageSelectionContainer">
-			<select id="languageSelection" name="data[languageSelection]" onchange="$(location).attr('href', '/' + this.value);">
-				<option value="0" selected="selected">pouet</option>
-			</select>
+            <!-- TODO put here the interface langs select -->
 		</div>
 		<div id="user_menu">
-			<% c++ login_menu login(out(),content);  %>
-        	<% c++ login.displayMenu() ;%>
+            <!-- TODO put here the fancy login box -->
 		</div>
-		<ul id="navigation_menu">
-			<li><a href="<% url "/home" %>" class="menuItem show"><% gt "Home" %></a></li>
-			<li><a href="<% url "/sentences/show/random" %>" class="menuItem"><% gt "Browse" %></a></li>
-			<li><a href="<% url "/contribute" %>" class="menuItem"><% gt "Contribute" %></a></li>
-			<li><a href="<% url "/users/all" %>" class="menuItem"><% gt "Members" %></a></li>
-			<li><a href="<% url "/wall/index" %>" class="menuItem"><% gt "Wall" %></a></li>
-		</ul>
+        <% include navigation_menu() %>
 	</div>
 </div>
 <% end template %>
@@ -101,6 +106,79 @@
 <% end template %>
 
 
+<% template navigation_menu() %>
+    <ul id="navigation_menu">
+        <li class="menuItem">
+            <a href="<% url "/home" %>" class="menuSection show">
+                <% gt "Home" %>
+            </a>
+        </li>
+        <li class="menuItem">
+            <a href="<% url "/sentences/show-random" %>" class="menuSection">
+                <% gt "Browse" %>
+            </a>
+        </li>
+        <li class="menuItem">
+            <a href="<% url "/contribute" %>" class="menuSection">
+                <% gt "Contribute" %>
+            </a>
+        </li>
+        <li class="menuItem">
+            <a href="<% url "/users/all" %>" class="menuSection">
+                <% gt "Members" %>
+            </a>
+        </li>
+        <li class="menuItem">
+            <a href="<% url "/wall/index" %>" class="menuSection">
+                <% gt "Wall" %>
+            </a>
+        </li>
+    </ul>
+
+<% end template %>
+
+<% template footer() %>
+    <div id="footer">
+        <ul>
+            <li><% gt "Online visitor(s) : "%>X</li>
+            <li>
+                <a href="<% url "/terms_of_use" %>">
+                    <% gt "Terms of use" %>
+                </a>
+            </li>
+            <li>
+                <a href="<% url "/contact" %>">
+                    <% gt "Feedback" %>
+                </a>
+            </li>
+            <li>
+                <a href="<% url "/download-tatoeba-example-sentences" %>">
+                    <% gt "Downloads" %>
+                </a>
+            </li>
+            <li>
+                <a href="<% url "/tools/index" %>">
+                    <% gt "Tools" %>
+                </a>
+            </li>
+            <li>
+                <a href="<% url "/team-and-credits" %>">
+                    <% gt "Team & Credits" %>
+                </a>
+            </li>
+            <li>
+                <a href="<% url "/faq" %>">
+                    <% gt "FAQ" %>
+                </a>
+            </li>
+            <li>
+                <a href="<% url "/help" %>">
+                    <% gt "Help" %>
+                </a>
+            </li>
+        </ul>
+    </div>
+<% end template %>
 
 <% end view %>
 <% end skin %>

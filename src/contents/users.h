@@ -17,47 +17,40 @@
  *
  *
  * @category Tatoebacpp
- * @package  Controllers
+ * @package  Contents
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
 
-#ifndef CONTROLLERS_PAGES_H
-#define CONTROLLERS_PAGES_H
+#ifndef TATOEBA_CONTENTS_USERS_H
+#define TATOEBA_CONTENTS_USERS_H
 
-#include "Controller.h"
+#include "contents/content.h"
+#include "contents/forms/register.h"
+#include "contents/forms/login.h"
 
-namespace controllers {
+namespace contents {
 
 /**
- * @class Pages
- * contains all functions to generate all independant pages
+ * @struct UsersRegisterNew
+ * content used by the Users::register_new
+ * contain the info for the register new user page
  */
-class Pages : public Controller {
-    public:
-        /**
-         * Constructor
-         */
-        Pages(cppcms::service &serv);
-        /**
-         * generate home page
-         */
-        void homepage();
-        /**
-         * Main page to add sentences and so
-         */
-        void contribute();
-        /**
-         * Terms of use page
-         */
-        void terms_of_use();
-        /**
-         * Team and Credits page
-         */
-        void team_and_credits();
+struct UsersRegisterNew : public BaseContent {
+    forms::RegisterNewUser registerNewUser;
 };
 
-} // End namespace
+/**
+ * @struct UsersLogin
+ * content used by Users::login
+ * contain the info for the login page
+ */
+struct UsersLogin : public BaseContent {
+    forms::LoginUser loginUser;
+};
+
+}
 
 #endif
+

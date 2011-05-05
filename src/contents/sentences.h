@@ -17,62 +17,35 @@
  *
  *
  * @category Tatoebacpp
- * @package  Apps
+ * @package  Contents
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
 
+#ifndef TATOEBACPP_CONTENTS_SENTENCES_H
+#define TATOEBACPP_CONTENTS_SENTENCES_H
 
-#ifndef TATOEBA_H
-#define TATOEBA_H
+#include "contents/content.h"
+#include "contents/helpers/sentences.h"
 
-/**
- * @file tatoeba.h
- */
-#include <map>
-
-#include <cppcms/application.h>
-#include <cppdb/frontend.h>
-#include "controllers/Sentences.h"
-#include "controllers/Pages.h"
-
-
-/** 
- * @namespace apps
- */
-namespace apps {
-
-/** 
- * @class Tatoeba
- * Application class representing the website
- * All http request will be dispatched by this class
- */
-class Tatoeba : public cppcms::application {
-
-private:
-    controllers::Sentences sentences;
-    controllers::Pages pages;
+namespace contents {
+    
     /**
-     * map containing aviable language of tatoeba
-     * @TODO move this in Languages singleton
+     * Base content for every action of the Sentences controller
      */
-    std::map<std::string,std::string> lang_map; 
-
-public:
-    /**
-     * Constructor
-     * Will connect every controllers to their respective paths
-     * @param serv
-     */
-	Tatoeba(cppcms::service &serv);
+    struct Sentences : public BaseContent {
+        helpers::Sentences shc;
+    };
 
     /**
-     * Method who receive all web requests
-     * get the user language of interface from url
-     * @param url : url asked by user
+     * Content used by Sentences::show
      */
-	void main(std::string url);
-};
+    struct SentencesShow : public Sentences {
+
+    };
+
 }
+
+
 #endif

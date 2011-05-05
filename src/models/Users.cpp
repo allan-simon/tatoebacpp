@@ -1,3 +1,28 @@
+/**
+ * Tatoeba Project, free collaborative creation of multilingual corpuses project
+ * Copyright (C) 2011 Allan SIMON <allan.simon@supinfo.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * @category Tatoebacpp
+ * @package  Models
+ * @author   Allan SIMON <allan.simon@supinfo.com>
+ * @license  Affero General Public License
+ * @link     http://tatoeba.org
+ */
+
 #include <iostream>
 #include <sstream>
 #include <vector>
@@ -5,24 +30,40 @@
 #include <cppdb/frontend.h>
 #include "models/Users.h"
 
+using namespace cppcms::crypto;
 namespace models {
-
 
 /**
  *
  */
 Users::Users(cppdb::session sqliteDb) : SqliteModel(sqliteDb) {
     // TODO ADD check for the username 
-    check_passwd_state = sqliteDb.create_prepared_statement("SELECT 1 FROM users WHERE username = ? AND password = ?");
-    add_user_state = sqliteDb.create_prepared_statement("INSERT INTO users(username, password) VALUES(?,?)");
-    get_all_users_state = sqliteDb.create_prepared_statement("SELECT * FROM users");
+    checkPasswdState = sqliteDb.create_prepared_statement(
+        "SELECT 1 FROM users "
+        "WHERE username = ? AND password = ? LIMIT 1"
+    );
+    addState = sqliteDb.create_prepared_statement(
+        "INSERT INTO users(username, password, email)"
+        "VALUES(?,?,?)"
+    );
+    getAllState = sqliteDb.create_prepared_statement(
+        "SELECT * FROM users"
+    );
+
+    getIdFromName = sqliteDb.create_prepared_statement(
+        "SELECT id FROM users WHERE username = ? LIMIT 1"
+    );
 }
+
 
 /**
  *
  */
-bool Users::check_login(std::string login, std::string pass) {
-    std::auto_ptr<cppcms::crypto::message_digest> d(cppcms::crypto::message_digest::md5());
+bool Users::is_login_correct(
+    std::string login,
+    std::string pass
+) {
+    std::auto_ptr<message_digest> d(message_digest::md5());
     
     char buf[16];
     d->append(pass.c_str(), pass.size());
@@ -32,16 +73,16 @@ bool Users::check_login(std::string login, std::string pass) {
     in.write(buf, 16);
     
 
-    check_passwd_state.bind(login);
-    check_passwd_state.bind(in);
-    cppdb::result res = check_passwd_state.row();
+    checkPasswdState.bind(login);
+    checkPasswdState.bind(in);
+    cppdb::result res = checkPasswdState.row();
    
    
     int checkresult = 0;
     res.fetch(0,checkresult);
 
     // Don't forget to reset statement
-    check_passwd_state.reset();
+    checkPasswdState.reset();
 
     if (checkresult == 1 ) {
         return true;
@@ -49,27 +90,45 @@ bool Users::check_login(std::string login, std::string pass) {
     return false;
 }
 
-void Users::addUser(std::string login, std::string pass) {
-    std::auto_ptr<cppcms::crypto::message_digest> d(cppcms::crypto::message_digest::md5());
+/**
+ *
+ */
+bool Users::add_user(
+    std::string login,
+    std::string pass,
+    std::string email
+) {
+
+    std::auto_ptr<message_digest> d(message_digest::md5());
 
     char buf[16];
     d->append(pass.c_str(), pass.size());
     d->readout(buf);
 
-    std::stringstream in;
-    in.write(buf, 16);
+    std::stringstream binaryHash;
+    binaryHash.write(buf, 16);
     
-    add_user_state.bind(login);
-    add_user_state.bind(in);
+    addState.bind(login);
+    addState.bind(binaryHash);
+    addState.bind(email);
 
-    add_user_state.exec();    
-    add_user_state.reset();
+    try {
+        addState.exec();    
+    } catch (cppdb::cppdb_error const &e) {
+
+        return false;
+    }
+    addState.reset();
+    return true;
 }
 
-std::vector<UserResult> Users::getAllUsers() {
-    cppdb::result res = get_all_users_state.query();
+/**
+ *
+ */
+ListOfUsers Users::get_all_users() {
+    cppdb::result res = getAllState.query();
 
-    std::vector<UserResult> listOfUsers;
+    ListOfUsers listOfUsers;
 
     while (res.next()) {
         UserResult user;
@@ -81,7 +140,7 @@ std::vector<UserResult> Users::getAllUsers() {
         listOfUsers.push_back(user);
     }
 
-    get_all_users_state.reset();
+    getAllState.reset();
 
     return listOfUsers;
 }

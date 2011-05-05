@@ -23,13 +23,27 @@
         }
     },
 	"tatoeba" : {
-        "tatodbxml" : "../doc/tatodb.xml",
+        "tatodbxml" : "../doc/tatodb.xml.huge",
 		"css" : "http://css.tatoeba.org/css",
 		"img" : "http://flags.tatoeba.org/img",
         "web" : "http://127.0.0.1:4242/",
+        "interfacelangs" : {
+            "eng" : "en_GB.UTF-8",
+            "fra" : "fr_FR.UTF-8"
+        },
         "languages" : {
-            "en" : "en_GB.UTF-8",
-            "fr" : "fr_FR.UTF-8"
+            "wuu" : ["Shanghainese", 61],
+            "eng" : ["English",      17],
+            "fra" : ["French",       23],
+            "rus" : ["Russian",      46],
+            "deu" : ["German",       15],
+            "cmn" : ["Chinese",      12],
+            "yue" : ["Cantonese",    63],
+            "jpn" : ["Japanese",     32]
+        },
+        "indexedMetas" : {
+            "jpn" : [ "reading" , "alternative writing" ],
+            "cmn" : [ "pinyin"  ,          "traditional"]
         }
 	}
 }

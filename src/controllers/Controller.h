@@ -1,3 +1,29 @@
+/**
+ * Tatoeba Project, free collaborative creation of multilingual corpuses project
+ * Copyright (C) 2011 Allan SIMON <allan.simon@supinfo.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ *
+ * @category Tatoebacpp
+ * @package  Controllers
+ * @author   Allan SIMON <allan.simon@supinfo.com>
+ * @license  Affero General Public License
+ * @link     http://tatoeba.org
+ */
+
+
 #ifndef CONTROLLERS_CONTROLLER_H
 #define CONTROLLERS_CONTROLLER_H
 
@@ -5,10 +31,15 @@
 #include <cppcms/application.h>
 #include <cppcms/url_dispatcher.h>
 
-#include "contents/content.h"
+//#include "contents/content.h"
 
-namespace apps {
-class Tatoeba;
+#define CHECK_PERMISSION_OR_GO_TO_LOGIN() \
+    if (!check_permission()) {\
+       return;\
+    }
+
+namespace contents {
+    class BaseContent;
 }
 
 /** @namespace controllers
@@ -21,17 +52,50 @@ namespace controllers {
  * it's a generic which is herited by all controllers
  */
 class Controller : public cppcms::application {
-    protected:
-        contents::ConfigContent configContent;
-        apps::Tatoeba &tatoapp;
-        int i;
-        void initContent(contents::BaseContent& content);
-	public:
+	protected:
+
         /**
-         * Contructor
-         * @param tatoapp
+         * Wrapping function that will initialize content send to the
+         * view with common values (such as interface language etc.)
          */
-        Controller(apps::Tatoeba &tatoapp);
+
+        void init_content(contents::BaseContent& content);
+    
+        /**
+         * Return if the current visitor is a logged user or not
+         * @TODO maybe move this in a dedicated class that would
+         * represent the current user
+         */
+        bool is_logged();
+        /**
+         * Check if the current user as the permission to do this action,
+         * view this page
+         * @TODO : maybe add a parameter to precising which action
+         * @TODO maybe move this in a dedicated class that would
+         * represent the current user
+         * 
+         */
+        bool check_permission();
+
+        /**
+         * Convenience function to make an http redirection to the 
+         * referer
+         */
+        void go_back_to_previous_page();
+
+        /**
+         * Return the code of the language in which we should generate the
+         * interface for the requested page
+         */
+        std::string get_interface_lang();
+        /* 
+         * Return the id of the current user 
+         * @TODO maybe move this in a dedicated class that would
+         * represent the current user
+         */
+        int get_current_user_id();
+	public:
+		Controller(cppcms::service &serv);
 };
 
 } // End namespace

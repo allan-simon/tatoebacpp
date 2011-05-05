@@ -4,7 +4,7 @@ import os
 import re
 import sys
 
-variable_match=r"\*?([a-zA-Z][a-zA-Z0-9_]*\(?\)?)(((\.|->)([a-zA-Z][a-zA-Z0-9_]*\(?\)?))*)"
+variable_match=r"\*?([a-zA-Z][a-zA-Z0-9_\[\]]*\(?\)?)(((\.|->)([a-zA-Z][a-zA-Z0-9_\[\]]*\(?\)?))*)"
 str_match=r'"([^"\\]|\\[^"]|\\")*"'
 
 def interleave(*args):
@@ -20,7 +20,10 @@ def output(s):
     global file_name
     global line_number
     global output_fd
-    output_fd.write('\t' * len(stack) + '#line %d "%s"' % (line_number,file_name)+'\n' + \
+    output_fd.write(
+        # comment the line below if you want no gcc preprocessing directive
+        # so that you can debug template.cpp directly
+        '\t' * len(stack) + '#line %d "%s"' % (line_number,file_name)+'\n' +
         '\t'*len(stack) + s + '\n')
 
 class tmpl_descr:
@@ -58,8 +61,12 @@ def write_class_loader():
     output("  loader() { ")
     output("    cppcms::views_pool::mapping_type mapping;" )
     for class_def in class_list:
-        output( '   mapping["%s"]=&cppcms::views_pool::view_builder<%s::%s,%s>;' \
+        if (class_def.content_name != ""):
+            output( '   mapping["%s"]=&cppcms::views_pool::view_builder<%s::%s,%s>;' \
                 % (class_def.name,class_def.namespace,class_def.name,class_def.content_name))
+        else:
+            output( '   mapping["%s"]=&cppcms::views_pool::view_builder<%s::%s>;' \
+                % (class_def.name,class_def.namespace,class_def.name))
     output('    cppcms::views_pool::static_instance().add_view("%s",mapping); ' % namespace_name)
     output(' }')
     output(' ~loader() {  cppcms::views_pool::static_instance().remove_view("%s"); }' % namespace_name)
@@ -185,7 +192,9 @@ class template_block:
 def inline_content(s):
     global ignore_inline
     if not ignore_inline:
-        output( 'out()<<"%s";' % to_string(s))
+        toto = to_string(s);
+        if not re.match('^(\s|\n)*$',s):
+            output( 'out()<<"%s";' % to_string(s))
 
 def error_exit(x):
     global exit_flag
@@ -560,9 +569,18 @@ class url_block:
         if m.group(3):
             params=make_format_params(m.group(4))
         if not params:
-            output("out()<<cppcms::filters::escape(content.config.web_path)<<cppcms::filters::escape(content.lang)<<%s;"% s)
+            output("out()"+
+                "<<cppcms::filters::escape(Config::get_instance()->webPath)"+
+                "<<cppcms::filters::escape(content.lang)<<%s;"% s)
         else:
-            output('out()<<cppcms::filters::escape(content.config.web_path)<<cppcms::filters::escape(content.lang)<<cppcms::locale::format(%s) %% (%s);' % (s, ') % ('.join(params)))
+            output('out()'+
+                "<<cppcms::filters::escape(Config::get_instance()->webPath)"+
+                "<<cppcms::filters::escape(content.lang)"+
+                '<<cppcms::locale::format(%s) %% (%s);' % (s, ') % ('.join(params)))
+
+
+class cpp_block:
+    pattern = r'<%\s*cppblock \s*%>'
 
 def fetch_content(content):
     tmp=''

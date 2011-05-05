@@ -17,47 +17,41 @@
  *
  *
  * @category Tatoebacpp
- * @package  Controllers
+ * @package  Helpers
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
 
-#ifndef CONTROLLERS_PAGES_H
-#define CONTROLLERS_PAGES_H
 
-#include "Controller.h"
+#ifndef CONTENTS_HELPER_USERS_H
+#define CONTENTS_HELPER_USERS_H
 
-namespace controllers {
+#include "helpers.h"
 
-/**
- * @class Pages
- * contains all functions to generate all independant pages
- */
-class Pages : public Controller {
-    public:
+namespace contents {
+    namespace helpers {
         /**
-         * Constructor
+         * @struct Users
+         * Used everywhere we need to send current user information
+         * to the view
          */
-        Pages(cppcms::service &serv);
-        /**
-         * generate home page
-         */
-        void homepage();
-        /**
-         * Main page to add sentences and so
-         */
-        void contribute();
-        /**
-         * Terms of use page
-         */
-        void terms_of_use();
-        /**
-         * Team and Credits page
-         */
-        void team_and_credits();
+        struct Users : public Helper {
+    
+            /**
+             * Name of the user, empty for visitor
+             */
+            std::string username;
+
+            public:
+                /**
+                 * To know if the current user is logged or not
+                 */
+                bool is_logged() {
+                    return !username.empty();
+                }
+        };
+    }
 };
-
-} // End namespace
-
 #endif
+
