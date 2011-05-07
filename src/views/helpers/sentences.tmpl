@@ -54,7 +54,7 @@
     
     <% template all_translations(TransVector translations) %>
         <% foreach transOfDepthN in translations %>
-            <div class="translations" %>
+            <div class="translations" >
             <% c++ int depth = 1; %>
             <% item %>
                 <% c++ translations_of_same_depth(transOfDepthN, depth); %>
