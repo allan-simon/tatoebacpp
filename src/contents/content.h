@@ -39,7 +39,7 @@ namespace contents {
 struct BaseContent : public cppcms::base_content {
     std::string lang;
     forms::SearchesSimple searchesSimple;
-    helpers::Users usersHelperContent;
+    helpers::Users usersHelper;
     
 };
 

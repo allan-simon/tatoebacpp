@@ -49,13 +49,14 @@ namespace apps {
 Tatoeba::Tatoeba(cppcms::service &serv) :
     cppcms::application(serv),
     sentences(serv),
+    users(serv),
     pages(serv)
 {
 
     //controllers::Pages pages(serv);
     //controllers::Sentences sentences(serv);
     add(sentences, "^/sentences(.*)", 1);
-    //add(controllers::Users(serv), "^/users(.*)", 1);
+    add(users, "^/users(.*)", 1);
     //NOTE important to add the page controller at the end
     //as its regexp is more global
     add(pages, "(.*)", 1);

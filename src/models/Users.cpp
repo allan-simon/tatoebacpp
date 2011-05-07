@@ -63,8 +63,10 @@ bool Users::is_login_correct(
     std::string login,
     std::string pass
 ) {
-    std::auto_ptr<message_digest> d(message_digest::md5());
     
+    // we generate the md5 of the password
+    std::auto_ptr<message_digest> d(message_digest::md5());
+
     char buf[16];
     d->append(pass.c_str(), pass.size());
     d->readout(buf);
@@ -101,10 +103,10 @@ bool Users::add_user(
 
     std::auto_ptr<message_digest> d(message_digest::md5());
 
+    // we generate the md5 of the password
     char buf[16];
     d->append(pass.c_str(), pass.size());
     d->readout(buf);
-
     std::stringstream binaryHash;
     binaryHash.write(buf, 16);
     

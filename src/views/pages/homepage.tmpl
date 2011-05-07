@@ -4,8 +4,10 @@
 <% template title() %><% gt "Tatoeba homepage"  %><% end template %>
 
 <% template annexe_content() %>
-    <% c++ homepage_modules hm(out(), content); %>
-    <% c++ hm.join_us() ;%>
+    <% if not usersHelper.is_logged() %>
+        <% c++ homepage_modules hm(out(), content); %>
+        <% c++ hm.join_us() ;%>
+    <% end if %>
 <% end template %>
 
 

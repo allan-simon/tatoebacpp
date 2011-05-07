@@ -1,24 +1,27 @@
-<% c++ #include "contents/register.h" %>
+<% c++ #include "contents/users.h" %>
 <% skin %>
-<% view registeruser uses contents::Register extends master %>
+<% view users_register_new uses contents::UsersRegisterNew extends master %>
 <% template title() %>
     <% gt "Register" %>
 <% end template %>
 
 <% template header() %>
     <% include master::header() %>
-    <link href="<% config.css_path %>/users/register.css" rel="stylesheet" type="text/css" />
+    <link href="http://css.tatoeba.org/css/users/register.css" rel="stylesheet" type="text/css" />
 <% end template %>
 
+
 <% template main_content() %>
-<form id="UserRegisterForm" method="post" action="/en/users/register">
+<!-- TODO maybe clean this ? -->
+<div class="module" >
+<form id="UserRegisterForm" method="post" action="<% url "/users/register-new-treat" %>">
     <table id="userInformation">
         <tr>
             <td class="field">
                 <label for="registrationUsername"><% gt "Username:" %></label>
             </td>
             <td>
-                <% form as_space registerForm.username %>
+                <% form as_space registerNewUser.username %>
             </td>
         </tr>
         <tr>
@@ -26,7 +29,7 @@
                 <label for="registrationPassword"><% gt "Password:" %></label>
             </td>
             <td>
-                <% form as_space registerForm.password %>
+                <% form as_space registerNewUser.password %>
             </td>
         </tr>
         <tr>
@@ -34,7 +37,7 @@
                 <label for="registrationEmail"><% gt "Email:"%></label>
             </td>
             <td>
-                <% form as_space registerForm.email %>
+                <% form as_space registerNewUser.email %>
             </td>
         </tr>
     </table>
@@ -43,20 +46,21 @@
         <% gt "We need to make sure you are human." %>
         <div class="input text">
             <label for="UserQuiz"><%gt "What are the five first letters of your email?" %></label>
-            <% form as_space registerForm.quiz %>
+            <% form as_space registerNewUser.quiz %>
         </div>
         <% gt "For instance, if your email is me12345@example.com, the answer is \"me123\"." %>
     </div>
 
     <div id="termsOfUse">
-        <% form as_space registerForm.termsOfUse %>
+        <% form as_space registerNewUser.termsOfUse %>
         <% gt "I accept the <a href=\"%s\">terms of use</a>" %>
     </div>
 
     <div class="submit>">
-        <% form as_space registerForm.submit %>
+        <% form as_space registerNewUser.submit %>
     </div>
 </form>
+</div>
 <% end template %>
 
 <% end view %>

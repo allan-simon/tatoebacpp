@@ -39,8 +39,12 @@
     type="text/css"
     href="http://css.tatoeba.org/css/elements/navigation.css"
 />
+    <% include css() %>
 
 
+<% end template %>
+
+<% template css() %>
 
 <% end template %>
 
@@ -81,9 +85,7 @@
 		<div id="languageSelectionContainer">
             <!-- TODO put here the interface langs select -->
 		</div>
-		<div id="user_menu">
-            <!-- TODO put here the fancy login box -->
-		</div>
+        <% include user_menu() %>
         <% include navigation_menu() %>
 	</div>
 </div>
@@ -105,6 +107,48 @@
     </div>
 <% end template %>
 
+<% template user_menu() %>
+		<div id="user_menu">
+            <% if usersHelper.is_logged() %>
+                <!-- TODO reintegrate link to user page and PM box -->
+                <ul>
+                    <li class="menuSection" >
+                        <a href="<% url "/users/profile/{1}" using usersHelper.username %>" >
+                            <img
+                                 width="14"
+                                 height="14"
+                                 alt="Profile"
+                                 src="http://flags.tatoeba.org/img/profile.png"
+                            >
+                            <% usersHelper.username %> 
+                        </a>
+                    </li>
+
+                    <li class="menuSection" >
+                        <a href="<% url "/users/logout" %>" >
+                            <% gt "Log out" %>
+                        </a>
+                    </li>
+                </ul>
+
+            <% else %>
+                <!-- TODO put here the fancy login box -->
+                <ul>
+                    <li class="menuSection" >
+                        <a href="<% url "/users/register-new" %>" >
+                            <% gt "Register" %>
+                        </a>
+                    </li>
+
+                    <li class="menuSection" >
+                        <a href="<% url "/users/login" %>" >
+                            <% gt "Login" %>
+                        </a>
+                    </li>
+                </ul>
+            <% end %>
+		</div>
+<% end template %>
 
 <% template navigation_menu() %>
     <ul id="navigation_menu">

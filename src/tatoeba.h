@@ -35,6 +35,7 @@
 #include <cppcms/application.h>
 #include <cppdb/frontend.h>
 #include "controllers/Sentences.h"
+#include "controllers/Users.h"
 #include "controllers/Pages.h"
 
 
@@ -53,6 +54,7 @@ class Tatoeba : public cppcms::application {
 private:
     controllers::Sentences sentences;
     controllers::Pages pages;
+    controllers::Users users;
     /**
      * map containing aviable language of tatoeba
      * @TODO move this in Languages singleton

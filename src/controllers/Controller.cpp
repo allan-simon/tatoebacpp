@@ -50,7 +50,7 @@ void Controller::init_content(contents::BaseContent& content) {
     content.lang = get_interface_lang();
     //std::cout << "user name: " << session()["name"] << std::endl;
     if (session().is_set("name")) {
-        content.usersHelperContent.username = session()["name"];
+        content.usersHelper.username = session()["name"];
     }
 }
 

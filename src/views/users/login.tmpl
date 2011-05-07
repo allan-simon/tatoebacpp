@@ -1,0 +1,31 @@
+<%c++ #include "contents/users.h" %>
+<% skin %>
+<% view users_login uses contents::UsersLogin extends master %>
+<% template title() %><% gt "Log in" %><% end %>
+
+<% template css() %>
+    <link
+        rel="stylesheet"
+        type="text/css"
+        href="http://css.tatoeba.org/css/users/login.css"
+    />
+<% end template %>
+
+<% template main_content() %>
+    <div class="module">
+        <h3><% gt "Log in" %></h3> 
+        <form method="POST" action="<% url "/users/login-treat" %>" >
+            <% form as_p loginUser %>
+        </form>
+    </div>
+<% end %>
+
+
+<% template annexe_content() %>
+
+<% end %>
+
+<% end view %>
+<% end skin %>
+
+
