@@ -42,7 +42,12 @@ namespace contents {
      * Content used by Sentences::show
      */
     struct SentencesShow : public Sentences {
-
+        /**
+         * Id of the sentence we want to show
+         * we store it there because maybe the id refers to a non existing
+         * sentence
+         */
+        int id;
     };
 
 }

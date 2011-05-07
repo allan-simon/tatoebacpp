@@ -63,6 +63,7 @@ void Sentences::show(std::string sentence_id) {
 	contents::helpers::Sentences shc(
         sentencesModel->get_by_id(id)
     );
+    c.id = id;
     shc.lang = c.lang;
     c.shc = shc;
     
