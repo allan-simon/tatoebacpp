@@ -39,7 +39,10 @@ Sentences::Sentences(cppcms::service &serv) : Controller(serv) {
     // as cburgmer pointed out, some people do navigate by crafting url
     cppcms::url_dispatcher* disp = &dispatcher();
 
+    
   	disp->assign("/show/(\\d+)", &Sentences::show, this, 1);
+  	disp->assign("/add", &Sentences::add, this);
+  	disp->assign("/add_treat", &Sentences::add_treat, this);
   	disp->assign("/show-random", &Sentences::show_random, this);
 
     sentencesModel = new models::Sentences();
@@ -85,6 +88,67 @@ void Sentences::show_random() {
         "/" + oss.str()
     );
 
+}
+
+/**
+ *
+ */
+void Sentences::add() {
+    CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
+
+	contents::SentencesAdd c;
+    init_content(c);
+
+    render("sentences_add",c);
+
+}
+
+/**
+ *
+ */
+void Sentences::add_treat() {
+    CHECK_PERMISSION_OR_GO_TO_LOGIN();
+
+	forms::AddSentence addSentence;
+    addSentence.load(context());
+
+    results::Sentence sentence;
+    if (addSentence.validate()) {
+        // TODO : handle if something wrong happen while saving
+        try {
+            sentence = sentencesModel->add(
+                addSentence.sentenceLang.selected_id(),
+                addSentence.sentenceString.value(),
+                get_current_user_id()
+            );
+        } catch (const models::SentDupliException & e) {
+            //TODO display the message to the user
+            std::ostringstream oss;
+            oss << e.get_original_id();
+
+            response().set_redirect_header(
+                "/" + get_interface_lang() +
+                "/sentences/show"
+                "/" + oss.str()
+            );
+            return; 
+
+        }
+
+        if (sentence.exists()) {
+            std::ostringstream oss;
+            oss << sentence.id;
+
+            response().set_redirect_header(
+                "/" + get_interface_lang() +
+                "/sentences/show"
+                "/" + oss.str()
+            );
+            return; 
+        }
+    }
+
+    go_back_to_previous_page();
 }
 
 

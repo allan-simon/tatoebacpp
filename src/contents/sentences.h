@@ -28,6 +28,7 @@
 
 #include "contents/content.h"
 #include "contents/helpers/sentences.h"
+#include "contents/forms/add_sentence.h"
 
 namespace contents {
     
@@ -50,6 +51,15 @@ namespace contents {
         int id;
     };
 
+    /**
+     * Content used by Sentences::add
+     */
+    struct SentencesAdd : public Sentences {
+        /**
+         * Form to add a sentece
+         */
+        forms::AddSentence addSentence;
+    };
 }
 
 

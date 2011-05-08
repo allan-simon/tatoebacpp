@@ -28,6 +28,8 @@
 #ifndef TATOEBACPP_MODELS_SENTENCES_H
 #define TATOEBACPP_MODELS_SENTENCES_H
 
+#include <exception>
+
 #include "models/TatoDB.h"
 #include "results/sentences.h"
 
@@ -67,6 +69,27 @@ class Sentences {
          */
         results::Sentence get_random();
 
+        /**
+         * Will add the given sentence in the database
+         * and return it or thrown an exception if duplicate
+         */
+        results::Sentence add(
+            std::string lang,
+            std::string str,
+            int userId
+        );
+
+        /**
+         * Will add the given sentence in the database
+         * and return it or thrown an exception if duplicate
+         */
+        results::Sentence add(
+            std::string lang,
+            std::string str,
+            TatoItemFlags flags,
+            int userId
+        );
+
         /*
         results::SentencesPagiVector get_all();
         results::SentencesPagiVector get_all(
@@ -105,6 +128,37 @@ class Sentences {
             int maxDepth
         );
 };
+
+
+/**
+ * @class SentDupliException
+ * Exception class that is thrown when a duplicate is added
+ * it will store the id of the original sentence
+ */
+class SentDupliException : public std::exception {
+    public:
+        SentDupliException(int originalId);
+
+        virtual const char* what() const throw();
+
+        /**
+         * Return the id of the original sentence
+         */
+        int get_original_id() const throw();
+
+        /**
+         * Destructor
+         */
+        virtual ~SentDupliException() throw();
+
+    private:
+        /**
+         * Store the id of the original sentence
+         */
+        int originalId;
+
+};
+
 
 }
 

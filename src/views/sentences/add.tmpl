@@ -1,0 +1,16 @@
+<%c++ #include "contents/sentences.h" %>
+<% skin %>
+<% view sentences_add uses contents::SentencesAdd extends master %>
+<% template title() %><% gt "Add sentences"  %><% end template %>
+
+<% template main_content() %>
+    <div class="module">
+        <form method="POST" action="<% url "/sentences/add_treat" %>" >
+            <% form as_p addSentence %>
+        </form>
+    </div>
+<% end %>
+
+
+<% end view %>
+<% end skin %>

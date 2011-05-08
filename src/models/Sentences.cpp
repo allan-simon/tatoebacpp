@@ -28,8 +28,35 @@
 #include <sstream>
 #include <queue>
 #include <set>
+#include <exception>
 #include "models/Sentences.h"
 namespace models {
+
+/**
+ * 
+ */
+SentDupliException::SentDupliException(int originalId)
+    : originalId(originalId) {};
+
+/**
+ * 
+ */
+const char* SentDupliException::what() const throw() {
+    return "The sentnece already exists";
+}
+
+/**
+ * 
+ */
+int SentDupliException::get_original_id() const throw() {
+    return originalId;
+}
+
+/**
+ *
+ */
+SentDupliException::~SentDupliException() throw() {};
+
 
 /**
  *
@@ -76,6 +103,77 @@ results::Sentence Sentences::get_random() {
     return sentence_from_item(randItem);
 
 }
+
+/**
+ *
+ */
+results::Sentence Sentences::add(
+    std::string lang,
+    std::string str,
+    int userId
+) {
+    return add(lang, str, 0, userId);
+}
+
+results::Sentence Sentences::add(
+    std::string lang,
+    std::string str,
+    TatoItemFlags flags,
+    int userId
+) {
+    TatoDb *tatoDb = GET_DB_POINTER(); 
+
+    TatoItem *item = tato_item_new(
+        tato_tree_int_max(tatoDb->items) + 1,
+        tato_db_lang_find_or_create(tatoDb, lang.c_str()),
+        str.c_str(),
+        flags
+    );
+    //TODO find a cleaner solution, we should not touch at the internal
+    // indexes of tatodb here
+    int originalId = tato_item_lang_item_can_add(item->lang, item->str);
+    if (originalId >= 0) {
+        tato_item_free(item);
+        throw SentDupliException(originalId);         
+    } 
+
+    if (!tato_tree_int_insert_unique(
+        tatoDb->items,
+        item->id,
+        (void *) item)
+    ) {
+        return results::Sentence();
+    }
+
+    tato_item_lang_item_add(item->lang, item);
+
+
+ 
+    if (item != NULL) {
+        /*
+        logs.insert_add_word(
+            newItem->id,
+            lang,
+            str,
+            userId
+        );
+
+        SearchEngine::get_instance()->add_word(
+            newItem->id,
+            str,
+            lang
+        );
+        */
+    }
+    return results::Sentence(
+        item->id,
+        item->str,
+        item->lang->code,
+        item->flags
+    );
+}
+
+
 
 /**
  *

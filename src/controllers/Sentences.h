@@ -74,6 +74,16 @@ class Sentences : public Controller {
          * Display a random sentence
          */
         void show_random();
+
+        /**
+         * Display a form to add a new sentence
+         */
+        void add();
+
+        /**
+         * Treat the result sent by a form to add a new sentence
+         */
+        void add_treat();
 };
 
 } // End namespace
