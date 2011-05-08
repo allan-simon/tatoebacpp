@@ -96,6 +96,10 @@ void Users::register_new_treat() {
 void Users::login() {
     contents::UsersLogin c;
     init_content(c);
+
+    // we store in the hidden field the previous page
+    // in order to be able to redirect on it after login
+    //TODO maybe rather use a value store in session
     c.loginUser.previousUrl.value(
         request().http_referer()
     );
@@ -125,6 +129,8 @@ void Users::login_treat() {
         session()["userId"] = usersModel->get_id_from_name<std::string>(username);
         session().save();
 
+        // we redirect to the page the user was before going
+        // on the login page
         response().set_redirect_header(
             loginUser.previousUrl.value()
         );
