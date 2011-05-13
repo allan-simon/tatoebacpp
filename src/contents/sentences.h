@@ -29,6 +29,7 @@
 #include "contents/content.h"
 #include "contents/helpers/sentences.h"
 #include "contents/forms/add_sentence.h"
+#include "contents/forms/edit_text_sentence.h"
 
 namespace contents {
     
@@ -60,6 +61,33 @@ namespace contents {
          */
         forms::AddSentence addSentence;
     };
+
+    /**
+     * Content used by Sentences::edit_text
+     */
+    struct SentencesEditText : public Sentences {
+        /**
+         * Form to add a sentece
+         */
+        forms::EditTextSentence editText;
+        /**
+         * Id of the sentence we want to edit
+         * we store it there because maybe the id refers to a non existing
+         * sentence
+         */
+        int id;
+
+        /**
+         * Constructor
+         */
+        SentencesEditText(std::string idStr, std::string text) :
+            editText(idStr, text)
+        {
+            id = atoi(idStr.c_str());
+
+        }
+    };
+
 }
 
 

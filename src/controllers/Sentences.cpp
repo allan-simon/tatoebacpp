@@ -45,6 +45,12 @@ Sentences::Sentences(cppcms::service &serv) : Controller(serv) {
   	disp->assign("/add_treat", &Sentences::add_treat, this);
   	disp->assign("/show-random", &Sentences::show_random, this);
 
+  	disp->assign("/edit-text/(\\d+)", &Sentences::edit_text, this, 1);
+  	disp->assign("/edit-text_treat", &Sentences::edit_text_treat, this);
+
+  	disp->assign("/edit-lang/(\\d+)", &Sentences::edit_lang, this, 1);
+  	disp->assign("/edit-lang_treat", &Sentences::edit_lang_treat, this);
+
     sentencesModel = new models::Sentences();
 }
 
@@ -150,6 +156,100 @@ void Sentences::add_treat() {
 
     go_back_to_previous_page();
 }
+
+
+/**
+ *
+ */
+void Sentences::edit_text(std::string sentenceId) {
+	int id = atoi(sentenceId.c_str());
+
+    // TODO add a check so taht only moderator or owner can modify it
+    CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
+	contents::helpers::Sentences shc(
+        sentencesModel->get_by_id(id)
+    );
+
+    if (!shc.empty()) {
+        //we set the value of the input field to the current
+        //value of the sentence
+        contents::SentencesEditText c(
+            sentenceId,
+            shc.sentences[0].text  
+        );
+        init_content(c);
+    
+        shc.lang = c.lang;
+        c.shc = shc;
+
+        render("sentences_edit_text",c);
+
+
+    } else {
+        go_back_to_previous_page();
+    }
+}
+
+/**
+ *
+ */
+void Sentences::edit_text_treat() {
+    CHECK_PERMISSION_OR_GO_TO_LOGIN();
+
+	forms::EditTextSentence editText;
+    editText.load(context());
+
+    if (!editText.validate()) {
+        go_back_to_previous_page();
+        return;
+    }
+    std::string idStr = editText.sentenceId.value();
+    int id = atoi(idStr.c_str());
+    // TODO : handle if something wrong happen while saving
+    try {
+
+        sentencesModel->edit_text(
+            id,
+            editText.newString.value(),
+            get_current_user_id()
+        );
+    } catch (const models::SentDupliException & e) {
+        //TODO display the message to the user
+        std::ostringstream oss;
+        oss << e.get_original_id();
+
+        response().set_redirect_header(
+            "/" + get_interface_lang() +
+            "/sentences/show"
+            "/" + oss.str()
+        );
+        return; 
+
+    }
+
+    response().set_redirect_header(
+        "/" + get_interface_lang() +
+        "/sentences/show"
+        "/" + idStr 
+    );
+
+}
+
+/**
+ * TODO
+ */
+void Sentences::edit_lang(std::string sentenceId) {
+
+}
+
+/**
+ * TODO
+ */
+void Sentences::edit_lang_treat() {
+
+}
+
+
 
 
 } // End namespace

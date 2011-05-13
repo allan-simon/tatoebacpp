@@ -29,6 +29,7 @@
 #include <queue>
 #include <set>
 #include <exception>
+#include <cstring>
 #include "models/Sentences.h"
 namespace models {
 
@@ -111,7 +112,7 @@ results::Sentence Sentences::add(
     std::string lang,
     std::string str,
     int userId
-) {
+) throw(SentDupliException) {
     return add(lang, str, 0, userId);
 }
 
@@ -120,7 +121,7 @@ results::Sentence Sentences::add(
     std::string str,
     TatoItemFlags flags,
     int userId
-) {
+) throw(SentDupliException) {
     TatoDb *tatoDb = GET_DB_POINTER(); 
 
     TatoItem *item = tato_item_new(
@@ -173,7 +174,49 @@ results::Sentence Sentences::add(
     );
 }
 
+/**
+ *
+ */
+void Sentences::edit_text(
+    int id,
+    std::string newString,
+    int userId
+) throw(SentDupliException) {
 
+    TatoDb *tatoDb = GET_DB_POINTER(); 
+    TatoItem *item = tato_db_item_find(tatoDb, id);
+
+    if (item == NULL) {
+        return;
+    }
+
+    int origId = tato_item_lang_item_can_add(
+        item->lang,
+        newString.c_str()
+    ); 
+	
+    // if the new text was already present then we merge the sentence
+    // with the already existing one
+    if (origId >= 0) {
+        TatoItem *origItem = tato_db_item_find(tatoDb, origId);
+        tato_db_item_merge_into(
+            tatoDb,
+            id,
+            origItem
+        );
+        throw SentDupliException(origItem->id);         
+    } 
+
+	tato_item_lang_item_remove(item->lang, item);
+	free(item->str);
+
+	item->str = strdup(newString.c_str());
+	tato_item_lang_item_add(item->lang, item);
+
+    //TODO readd log and search engine update
+    return;
+
+}
 
 /**
  *

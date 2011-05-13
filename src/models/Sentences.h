@@ -40,6 +40,38 @@ extern "C" {
 
 namespace models {
 
+/**
+ * @class SentDupliException
+ * Exception class that is thrown when a duplicate is added
+ * it will store the id of the original sentence
+ */
+class SentDupliException : public std::exception {
+    public:
+        SentDupliException(int originalId);
+
+        virtual const char* what() const throw();
+
+        /**
+         * Return the id of the original sentence
+         */
+        int get_original_id() const throw();
+
+        /**
+         * Destructor
+         */
+        virtual ~SentDupliException() throw();
+
+    private:
+        /**
+         * Store the id of the original sentence
+         */
+        int originalId;
+
+};
+
+
+
+
 
 /**
  * @class Sentences
@@ -77,7 +109,7 @@ class Sentences {
             std::string lang,
             std::string str,
             int userId
-        );
+        ) throw(SentDupliException);
 
         /**
          * Will add the given sentence in the database
@@ -88,7 +120,19 @@ class Sentences {
             std::string str,
             TatoItemFlags flags,
             int userId
-        );
+        ) throw(SentDupliException);
+
+        /**
+         * Change the text of the sentence with the given id
+         * by the one send as parameter, if the pair (newText,lang) already
+         * exists an exception is thrown
+         */
+
+        void edit_text(
+            int id,
+            std::string newString,
+            int userId
+        ) throw(SentDupliException);
 
         /*
         results::SentencesPagiVector get_all();
@@ -127,36 +171,6 @@ class Sentences {
             TransVector &translations,
             int maxDepth
         );
-};
-
-
-/**
- * @class SentDupliException
- * Exception class that is thrown when a duplicate is added
- * it will store the id of the original sentence
- */
-class SentDupliException : public std::exception {
-    public:
-        SentDupliException(int originalId);
-
-        virtual const char* what() const throw();
-
-        /**
-         * Return the id of the original sentence
-         */
-        int get_original_id() const throw();
-
-        /**
-         * Destructor
-         */
-        virtual ~SentDupliException() throw();
-
-    private:
-        /**
-         * Store the id of the original sentence
-         */
-        int originalId;
-
 };
 
 

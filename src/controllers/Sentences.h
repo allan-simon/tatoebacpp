@@ -84,6 +84,28 @@ class Sentences : public Controller {
          * Treat the result sent by a form to add a new sentence
          */
         void add_treat();
+
+        /**
+         * Display a form to change the text of the sentence with the
+         * given id
+         */
+        void edit_text(std::string sentenceId);
+
+        /**
+         * Treat the result sent by a form to edit the text of a sentence
+         */ 
+        void edit_text_treat();
+
+        /**
+         * Display a form to change the lang of the sentence with the
+         * given id
+         */
+        void edit_lang(std::string sentenceId);
+
+        /**
+         * Treat the result sent by a form to edit the lang of a sentence
+         */ 
+        void edit_lang_treat();
 };
 
 } // End namespace
