@@ -177,6 +177,30 @@ results::Sentence Sentences::add(
 /**
  *
  */
+void Sentences::link(
+    int xId,
+    int yId,
+    int userId
+) {
+
+    TatoDb *tatoDb = GET_DB_POINTER(); 
+    TatoRelation* relation = tato_db_relation_add(
+        tatoDb,
+        xId,
+        yId,
+        0,
+        0
+    );
+    // TODO thrown an exception in that case
+    if (relation == NULL) {
+        return;
+    }
+    // TODO add it to the logs
+}
+
+/**
+ *
+ */
 void Sentences::edit_text(
     int id,
     std::string newString,

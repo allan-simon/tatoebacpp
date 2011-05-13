@@ -41,9 +41,13 @@ Sentences::Sentences(cppcms::service &serv) : Controller(serv) {
 
     
   	disp->assign("/show/(\\d+)", &Sentences::show, this, 1);
+  	disp->assign("/show-random", &Sentences::show_random, this);
+
   	disp->assign("/add", &Sentences::add, this);
   	disp->assign("/add_treat", &Sentences::add_treat, this);
-  	disp->assign("/show-random", &Sentences::show_random, this);
+
+  	disp->assign("/translate/(\\d+)", &Sentences::translate, this, 1);
+  	disp->assign("/translate_treat", &Sentences::translate_treat, this);
 
   	disp->assign("/edit-text/(\\d+)", &Sentences::edit_text, this, 1);
   	disp->assign("/edit-text_treat", &Sentences::edit_text_treat, this);
@@ -156,6 +160,88 @@ void Sentences::add_treat() {
 
     go_back_to_previous_page();
 }
+
+
+/**
+ *
+ */
+void Sentences::translate(std::string toTranslateId) {
+
+	int id = atoi(toTranslateId.c_str());
+
+    CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
+	contents::helpers::Sentences shc(
+        sentencesModel->get_by_id(id)
+    );
+
+    if (!shc.empty()) {
+        //we set the value of the hidden field to the id
+        //of the sentence we're going to translate 
+        contents::SentencesTrans c(
+            toTranslateId
+        );
+        init_content(c);
+    
+        shc.lang = c.lang;
+        c.shc = shc;
+
+        render("sentences_translate",c);
+
+
+    } else {
+        go_back_to_previous_page();
+    }
+
+}
+
+/**
+ *
+ */
+void Sentences::translate_treat() {
+    CHECK_PERMISSION_OR_GO_TO_LOGIN();
+
+	forms::TransSentence transSentence;
+    transSentence.load(context());
+
+
+    if (!transSentence.validate()) {
+        go_back_to_previous_page();
+        return;
+    }
+    int translationId = 0;
+    std::string translatedIdStr = transSentence.translatedId.value();
+    int translatedId = atoi(translatedIdStr.c_str());
+
+    int userId = get_current_user_id();     
+
+    // TODO : handle if something wrong happen while saving
+    try {
+        results::Sentence sentence = sentencesModel->add(
+            transSentence.transLang.selected_id(),
+            transSentence.transString.value(),
+            userId
+        );
+
+        translationId = sentence.id;
+
+    } catch (const models::SentDupliException & e) {
+        //TODO display the message to the user
+        translationId = e.get_original_id();
+    }
+
+    sentencesModel->link(
+        translatedId,
+        translationId,
+        get_current_user_id()
+    );
+
+    response().set_redirect_header(
+        "/" + get_interface_lang() +
+        "/sentences/show"
+        "/" + translatedIdStr
+    );
+}
+
 
 
 /**

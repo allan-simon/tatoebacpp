@@ -123,6 +123,15 @@ class Sentences {
         ) throw(SentDupliException);
 
         /**
+         * Will link the sentence X and Y together
+         */
+        void link(
+            int xId,
+            int yId,
+            int userId
+        );
+
+        /**
          * Change the text of the sentence with the given id
          * by the one send as parameter, if the pair (newText,lang) already
          * exists an exception is thrown

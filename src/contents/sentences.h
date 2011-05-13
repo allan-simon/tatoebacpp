@@ -31,6 +31,7 @@
 #include "contents/forms/add_sentence.h"
 #include "contents/forms/edit_text_sentence.h"
 #include "contents/forms/edit_lang_sentence.h"
+#include "contents/forms/translate_sentence.h"
 
 namespace contents {
     
@@ -98,7 +99,7 @@ namespace contents {
          */
         forms::EditLangSentence editLang;
         /**
-         * Id of the sentence we want to edit
+         * Id of the sentence we want to change the language of
          * we store it there because maybe the id refers to a non existing
          * sentence
          */
@@ -108,12 +109,39 @@ namespace contents {
          * Constructor
          */
         SentencesEditLang(std::string idStr, std::string lang) :
-            editLang(idStr, lang)
+            editLang(idStr)
         {
             id = atoi(idStr.c_str());
 
         }
     };
+
+    /**
+     * Content used by Sentences::translate
+     */
+    struct SentencesTrans : public Sentences {
+        /**
+         * Form to add a translation
+         */
+        forms::TransSentence transSentence;
+        /**
+         * Id of the sentence we want to translate
+         * we store it there because maybe the id refers to a non existing
+         * sentence
+         */
+        int id;
+
+        /**
+         * Constructor
+         */
+        SentencesTrans(std::string translatedId) :
+            transSentence(translatedId)
+        {
+            id = atoi(translatedId.c_str());
+
+        }
+    };
+
 
 
 }

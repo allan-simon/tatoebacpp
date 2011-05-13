@@ -106,6 +106,18 @@ class Sentences : public Controller {
          * Treat the result sent by a form to edit the lang of a sentence
          */ 
         void edit_lang_treat();
+
+        /**
+         * Display a form to add a translation to the sentence with the
+         * given id
+         */
+        void translate(std::string sentenceId);
+
+        /**
+         * Treat the result sent by a form to translate a sentence
+         */ 
+        void translate_treat();
+
 };
 
 } // End namespace
