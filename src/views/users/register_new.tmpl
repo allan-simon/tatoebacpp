@@ -53,7 +53,9 @@
 
     <div id="termsOfUse">
         <% form as_space registerNewUser.termsOfUse %>
-        <% gt "I accept the <a href=\"%s\">terms of use</a>" %>
+        <a href="<% url "/terms-of-use" %>">
+            <% gt "I accept the terms of use" %>
+        </a>
     </div>
 
     <div class="submit>">
