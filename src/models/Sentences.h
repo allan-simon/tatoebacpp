@@ -134,6 +134,19 @@ class Sentences {
             int userId
         ) throw(SentDupliException);
 
+        /**
+         * Change the lang of the sentence with the given id
+         * by the one send as parameter, if the pair (text,newLang) already
+         * exists an exception is thrown
+         */
+
+        void edit_lang(
+            int id,
+            std::string newLang,
+            int userId
+        ) throw(SentDupliException);
+
+
         /*
         results::SentencesPagiVector get_all();
         results::SentencesPagiVector get_all(

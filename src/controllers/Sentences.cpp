@@ -239,13 +239,77 @@ void Sentences::edit_text_treat() {
  * TODO
  */
 void Sentences::edit_lang(std::string sentenceId) {
+	int id = atoi(sentenceId.c_str());
 
+    // TODO add a check so that only moderator or owner can modify it
+    CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
+	contents::helpers::Sentences shc(
+        sentencesModel->get_by_id(id)
+    );
+
+    if (!shc.empty()) {
+        //we set the value of the select to the current
+        //language of the sentence
+        contents::SentencesEditLang c(
+            sentenceId,
+            shc.sentences[0].lang 
+        );
+        init_content(c);
+    
+        shc.lang = c.lang;
+        c.shc = shc;
+
+        render("sentences_edit_lang",c);
+
+
+    } else {
+        go_back_to_previous_page();
+    }
 }
 
 /**
  * TODO
  */
 void Sentences::edit_lang_treat() {
+    CHECK_PERMISSION_OR_GO_TO_LOGIN();
+
+	forms::EditLangSentence editLang;
+    editLang.load(context());
+
+    if (!editLang.validate()) {
+        go_back_to_previous_page();
+        return;
+    }
+    std::string idStr = editLang.sentenceId.value();
+    int id = atoi(idStr.c_str());
+    // TODO : handle if something wrong happen while saving
+    try {
+
+        sentencesModel->edit_lang(
+            id,
+            editLang.newLang.selected_id(),
+            get_current_user_id()
+        );
+    } catch (const models::SentDupliException & e) {
+        //TODO display the message to the user
+        std::ostringstream oss;
+        oss << e.get_original_id();
+
+        response().set_redirect_header(
+            "/" + get_interface_lang() +
+            "/sentences/show"
+            "/" + oss.str()
+        );
+        return; 
+
+    }
+
+    response().set_redirect_header(
+        "/" + get_interface_lang() +
+        "/sentences/show"
+        "/" + idStr 
+    );
+
 
 }
 

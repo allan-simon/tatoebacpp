@@ -47,8 +47,12 @@
 
     <% template main_sentence(results::Sentence sentence) %>
         <div class="sentence mainSentence">
-            <% include sentence_lang(sentence.lang) %>
-
+            <a
+                class="languageFlag"
+                href="<% url "/sentences/edit-lang/{1}" using sentence.id %>"
+            >
+                <% include sentence_lang(sentence.lang) %>
+            </a>
             <div class="sentenceContent">
                 <div><% sentence.text %></div>
             </div>
@@ -99,6 +103,7 @@
     <% template generic_sentence(results::Sentence sentence, std::string type, int depth) %>
 
         <div class="sentence <% type %>">
+
         <% include sentence_lang(sentence.lang) %>
         <% c++ sentence_content(sentence, depth); %>
         </div>

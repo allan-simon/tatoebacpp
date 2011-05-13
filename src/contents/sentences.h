@@ -30,6 +30,7 @@
 #include "contents/helpers/sentences.h"
 #include "contents/forms/add_sentence.h"
 #include "contents/forms/edit_text_sentence.h"
+#include "contents/forms/edit_lang_sentence.h"
 
 namespace contents {
     
@@ -57,7 +58,7 @@ namespace contents {
      */
     struct SentencesAdd : public Sentences {
         /**
-         * Form to add a sentece
+         * Form to add a sentence
          */
         forms::AddSentence addSentence;
     };
@@ -67,7 +68,7 @@ namespace contents {
      */
     struct SentencesEditText : public Sentences {
         /**
-         * Form to add a sentece
+         * Form to edit the text of a sentence
          */
         forms::EditTextSentence editText;
         /**
@@ -87,6 +88,33 @@ namespace contents {
 
         }
     };
+
+    /**
+     * Content used by Sentences::edit_lang
+     */
+    struct SentencesEditLang : public Sentences {
+        /**
+         * Form to change the language of a sentence
+         */
+        forms::EditLangSentence editLang;
+        /**
+         * Id of the sentence we want to edit
+         * we store it there because maybe the id refers to a non existing
+         * sentence
+         */
+        int id;
+
+        /**
+         * Constructor
+         */
+        SentencesEditLang(std::string idStr, std::string lang) :
+            editLang(idStr, lang)
+        {
+            id = atoi(idStr.c_str());
+
+        }
+    };
+
 
 }
 

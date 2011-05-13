@@ -218,6 +218,58 @@ void Sentences::edit_text(
 
 }
 
+
+/**
+ *
+ */
+void Sentences::edit_lang(
+    int id,
+    std::string newLang,
+    int userId
+) throw(SentDupliException) {
+
+    TatoDb *tatoDb = GET_DB_POINTER(); 
+    TatoItem *item = tato_db_item_find(tatoDb, id);
+
+    if (item == NULL) {
+        return;
+    }
+
+    TatoItemLang* newTatoLang = tato_db_lang_find_or_create(
+        tatoDb,
+        newLang.c_str()
+    );
+
+    int origId = tato_item_lang_item_can_add(
+        newTatoLang,
+        item->str
+    ); 
+	
+    // if the new text was already present then we merge the sentence
+    // with the already existing one
+    if (origId >= 0) {
+        TatoItem *origItem = tato_db_item_find(tatoDb, origId);
+        tato_db_item_merge_into(
+            tatoDb,
+            id,
+            origItem
+        );
+        throw SentDupliException(origItem->id);         
+    } 
+
+	tato_item_lang_item_remove(item->lang, item);
+    item->lang = newTatoLang;
+
+	tato_item_lang_item_add(newTatoLang, item);
+
+    //TODO readd log and search engine update
+    return;
+
+}
+
+
+
+
 /**
  *
  */

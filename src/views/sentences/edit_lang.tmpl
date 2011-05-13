@@ -1,0 +1,25 @@
+<%c++ #include "contents/sentences.h" %>
+<% skin %>
+<% view sentences_edit_lang uses contents::SentencesEditLang extends master %>
+<% template title() %><% gt "Edit lang"  %><% end template %>
+
+<% template main_content() %>
+    <div class="module">
+    <% if not shc.empty() %>
+        <h3><% gt "Edit the language of this sentence" %></h3>
+        <% c++ sentences_helper sh(out(), content.shc); %>
+        <% c++ sh.main_sentence(content.shc.sentences[0]) ;%>
+        <form method="POST" action="<% url "/sentences/edit-lang_treat" %>" >
+            <% form as_p editLang %>
+        </form>
+        <% c++ sh.all_translations(content.shc.sentences[0].translations) ;%>
+    <% else %>
+        This sentence does not exist
+    <% end %>
+    </div>
+<% end %>
+
+
+<% end view %>
+<% end skin %>
+
