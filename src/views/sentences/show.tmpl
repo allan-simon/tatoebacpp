@@ -5,15 +5,15 @@
 
 <% template main_content() %>
     <% c++ navigation(content.id - 1, content.id + 1); %>
-    <% if not shc.empty() %>
         <div class="module">
+        <% if not shc.empty() %>
             <h2>Sentence nº <% shc.sentences[0].id %></h2>
             <% c++ sentences_helper sh(out(), content.shc); %>
             <% c++ sh.sentences_group(content.shc.sentences[0]) ;%>
+        <% else %>
+            This sentence does not exist
+        <% end %>
         </div>
-    <% else %>
-        This sentence does not exist
-    <% end %>
 <% end template %>
 
 
