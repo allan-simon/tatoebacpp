@@ -97,11 +97,20 @@ void Users::login() {
     contents::UsersLogin c;
     init_content(c);
 
-    // we store in the hidden field the previous page
+    // we store in the hidden field the page we wanted to access
     // in order to be able to redirect on it after login
-    //TODO maybe rather use a value store in session
+
+    std::string wantedPage = "/" + get_interface_lang();
+    
+    cppcms::http::request::form_type::const_iterator p = request().get().find("from");
+    cppcms::http::request::form_type::const_iterator end = request().get().end();
+
+    if (p != end) {
+        wantedPage = p->second;
+    }
+
     c.loginUser.previousUrl.value(
-        request().http_referer()
+        wantedPage
     );
 
     render("users_login", c);

@@ -26,6 +26,7 @@
 
 #include "Controller.h"
 #include <cppcms/session_interface.h>
+#include <cppcms/filters.h>
 
 #include "contents/content.h"
 
@@ -104,9 +105,15 @@ bool Controller::check_permission() {
     // when you're logged but you're current group has not
     // enough priviledges
     if (!is_logged()) {
+        std::ostringstream oss;
+        
+        oss << cppcms::filters::urlencode(
+           request().path_info()
+        );
 
         response().set_redirect_header(
             "/" + get_interface_lang() +"/users/login"
+            "?from=" + oss.str()
         );
         return false;
     }
