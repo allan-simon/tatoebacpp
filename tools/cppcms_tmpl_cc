@@ -570,12 +570,10 @@ class url_block:
             params=make_format_params(m.group(4))
         if not params:
             output("out()"+
-                "<<cppcms::filters::escape(Config::get_instance()->webPath)"+
-                "<<cppcms::filters::escape(content.lang)<<%s;"% s)
+                "<< \"/\" <<cppcms::filters::escape(content.lang)<<%s;"% s)
         else:
             output('out()'+
-                "<<cppcms::filters::escape(Config::get_instance()->webPath)"+
-                "<<cppcms::filters::escape(content.lang)"+
+                "<< \"/\" << cppcms::filters::escape(content.lang)"+
                 '<<cppcms::locale::format(%s) %% (%s);' % (s, ') % ('.join(params)))
 
 
