@@ -23,6 +23,7 @@
  * @link     http://tatoeba.org
  */
 
+#include <iostream>
 
 
 #include <sstream>
@@ -340,7 +341,7 @@ void Sentences::pack_translations(
     while (!itemsQueue.empty() && currentDepth < maxDepth) {
         pivot = itemsQueue.front();
         itemsQueue.pop();
-
+        
         TatoRelationsNode *it;
         TatoItem *tempChild = NULL;
         TATO_RELATIONS_FOREACH(pivot->relations, it) {
@@ -348,6 +349,7 @@ void Sentences::pack_translations(
             tempChild = it->with;
             // if we haven't visited this sentence before
             if (visiteds.insert(tempChild->id).second) {
+                
                 itemsQueue.push(tempChild);
                 translations[currentDepth].push_back(
                     results::Sentence(
@@ -366,7 +368,7 @@ void Sentences::pack_translations(
         if (pivot == lastItemForThisDistance) {
             currentDepth++;
             translations.push_back(SentencesVector());
-            lastItemForThisDistance = tempChild;
+            lastItemForThisDistance = itemsQueue.front();
 
         }
     }
