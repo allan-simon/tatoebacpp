@@ -368,7 +368,7 @@ void Sentences::pack_translations(
         if (pivot == lastItemForThisDistance) {
             currentDepth++;
             translations.push_back(SentencesVector());
-            lastItemForThisDistance = itemsQueue.front();
+            lastItemForThisDistance = itemsQueue.back();
 
         }
     }
