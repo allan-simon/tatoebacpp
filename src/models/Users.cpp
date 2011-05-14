@@ -74,7 +74,6 @@ bool Users::is_login_correct(
     std::stringstream in;
     in.write(buf, 16);
     
-
     checkPasswdState.bind(login);
     checkPasswdState.bind(in);
     cppdb::result res = checkPasswdState.row();
@@ -117,7 +116,7 @@ bool Users::add_user(
     try {
         addState.exec();    
     } catch (cppdb::cppdb_error const &e) {
-
+        addState.reset();
         return false;
     }
     addState.reset();

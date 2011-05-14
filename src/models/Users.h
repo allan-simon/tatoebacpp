@@ -108,6 +108,7 @@ template <class T> T Users::get_id_from_name(std::string username) {
 
     T userId;
     res.fetch(0, userId);
+    getIdFromName.reset();
     
     return userId;
 
