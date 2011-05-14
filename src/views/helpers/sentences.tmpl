@@ -48,6 +48,17 @@
     <% template main_sentence(results::Sentence sentence) %>
         <div class="sentence mainSentence">
             <a
+                class="infoIcon"
+                href="<% url "/sentences/show/{1}" using sentence.id %>"
+            >
+                <img
+                    width="16"
+                    height="16"
+                    alt="show"
+                    src="http://flags.tatoeba.org/img/info.png"
+                >
+            </a>
+            <a
                 class="languageFlag"
                 href="<% url "/sentences/edit-lang/{1}" using sentence.id %>"
             >
@@ -116,7 +127,16 @@
     <% template sentence_content(results::Sentence sentence, int depth) %>
 
         <div class="sentenceContent">
-            <% c++ sentence_text(sentence.text, depth); %>
+            <div>
+                <a
+                    class="text"
+                    href="<% url "/sentences/show/{1}" using sentence.id %>"
+                >
+                    <% depth %>
+                    -
+                    <% sentence.text%>
+                </a>
+            </div>
             <br />
         </div>
 
@@ -124,13 +144,6 @@
 
 
 
-    <% template sentence_text(std::string text, int depth) %>
-        <div>
-            <% depth %>
-            -
-            <% text %>
-        </div> 
-    <% end template %>
     
     <% template sentence_lang(std::string lang) %>
         <img 
