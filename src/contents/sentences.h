@@ -109,7 +109,7 @@ namespace contents {
          * Constructor
          */
         SentencesEditLang(std::string idStr, std::string lang) :
-            editLang(idStr)
+            editLang(idStr, lang)
         {
             id = atoi(idStr.c_str());
 
