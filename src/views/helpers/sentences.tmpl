@@ -8,7 +8,7 @@
         <div class="sentences_set" >
         <% include menu(mainSentence.id) %>
         <% include main_sentence(mainSentence) %>
-        <% include all_translations(mainSentence.translations) %>
+        <% include all_translations(mainSentence.translations, mainSentence.id) %>
 
         </div>
 
@@ -72,12 +72,12 @@
 
 
     
-    <% template all_translations(TransVector translations) %>
+    <% template all_translations(TransVector translations, int mainSentenceId) %>
         <% foreach transOfDepthN in translations %>
             <div class="translations" >
             <% c++ int depth = 1; %>
             <% item %>
-                <% c++ translations_of_same_depth(transOfDepthN, depth); %>
+                <% c++ translations_of_same_depth(transOfDepthN, depth, mainSentenceId); %>
                 <% c++ depth++; %>
             <% end %>
             </div>
@@ -85,9 +85,10 @@
     <% end template %>
 
 
-    <% template translations_of_same_depth(SentencesVector translations, int depth) %>
+    <% template translations_of_same_depth(SentencesVector translations, int depth, int mainSentenceId) %>
         <% foreach translation in translations %>
             <% if (depth == 1) %>
+
             <h3>
                 Direct Translations
             </h3>
@@ -105,18 +106,48 @@
             <% end %>
 
             <% item %>
-                <% c++ generic_sentence(translation, "directTranslation", depth); %>
+                <% c++ generic_sentence(translation, depth, mainSentenceId); %>
             <% end %>
         <% end foreach%>
 
     <% end template %>
         
-    <% template generic_sentence(results::Sentence sentence, std::string type, int depth) %>
+    <% template generic_sentence(results::Sentence sentence, int depth, int mainSentenceId) %>
 
-        <div class="sentence <% type %>">
+        <div class="sentence directTranslation">
+            <% if currentUserHelper.is_logged() %>
+                <% if (depth == 1) %>
+                    <a
+                        class="delete link button"
+                        href="<% url "/sentences/unlink/{1}/{2}" using mainSentenceId, sentence.id %>"
+                    >
+                        <img
+                            width="16"
+                            height="16"
+                            title="<% gt "Unlink this translation." %>"
+                            alt="<% gt "Unlink" %>"
+                            src="http://flags.tatoeba.org/img/unlink.png"
+                        >
+                    </a>
+                <% else %>
+                    <a
+                        class="add link button"
+                        href="<% url "/sentences/link/{1}/{2}" using mainSentenceId, sentence.id %>"
+                    >
+                        <img
+                            width="16"
+                            height="16"
+                            title="<% gt "link with this sentence." %>"
+                            alt="<% gt "link" %>"
+                            src="http://flags.tatoeba.org/img/link.png"
+                        >
+                    </a>
 
-        <% include sentence_lang(sentence.lang) %>
-        <% c++ sentence_content(sentence, depth); %>
+                <% end %>
+            <% end if %>
+
+            <% include sentence_lang(sentence.lang) %>
+            <% c++ sentence_content(sentence, depth); %>
         </div>
 
     <% end template %>

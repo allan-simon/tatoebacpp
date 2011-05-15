@@ -50,6 +50,7 @@ void Pages::homepage() {
         sentencesModel.get_random()
     );
     shc.lang = c.lang;
+    shc.currentUserHelper = c.usersHelper;
     c.shc = shc;
     render("homepage", c);
 }

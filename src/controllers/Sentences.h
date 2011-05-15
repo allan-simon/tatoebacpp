@@ -118,6 +118,16 @@ class Sentences : public Controller {
          */ 
         void translate_treat();
 
+        /**
+         * Link two sentences together
+         */
+        void link(std::string idOneStr, std::string idTwoStr);
+
+        /**
+         * Unlink two sentences 
+         */
+        void unlink(std::string idOneStr, std::string idTwoStr);
+
 };
 
 } // End namespace

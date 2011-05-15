@@ -55,6 +55,8 @@ Sentences::Sentences(cppcms::service &serv) : Controller(serv) {
   	disp->assign("/edit-lang/(\\d+)", &Sentences::edit_lang, this, 1);
   	disp->assign("/edit-lang_treat", &Sentences::edit_lang_treat, this);
 
+  	disp->assign("/link/(\\d+)/(\\d+)", &Sentences::link, this, 1, 2);
+  	disp->assign("/unlink/(\\d+)/(\\d+)", &Sentences::unlink, this, 1, 2);
     sentencesModel = new models::Sentences();
 }
 
@@ -78,6 +80,7 @@ void Sentences::show(std::string sentence_id) {
     );
     c.id = id;
     shc.lang = c.lang;
+    shc.currentUserHelper = c.usersHelper;
     c.shc = shc;
     
 
@@ -243,6 +246,53 @@ void Sentences::translate_treat() {
         "/" + translatedIdStr
     );
 }
+
+
+/**
+ *
+ */
+void Sentences::link(std::string idOneStr, std::string idTwoStr) {
+    CHECK_PERMISSION_OR_GO_TO_LOGIN();
+	int idOne = atoi(idOneStr.c_str());
+	int idTwo = atoi(idTwoStr.c_str());
+    
+    sentencesModel->link(
+        idOne,
+        idTwo,
+        get_current_user_id()
+    );
+
+    response().set_redirect_header(
+        "/" + get_interface_lang() +
+        "/sentences/show"
+        "/" + idOneStr
+    );
+
+}
+
+/**
+ *
+ */
+void Sentences::unlink(std::string idOneStr, std::string idTwoStr) {
+    CHECK_PERMISSION_OR_GO_TO_LOGIN();
+	int idOne = atoi(idOneStr.c_str());
+	int idTwo = atoi(idTwoStr.c_str());
+   
+    
+    sentencesModel->unlink(
+        idOne,
+        idTwo,
+        get_current_user_id()
+    );
+
+    response().set_redirect_header(
+        "/" + get_interface_lang() +
+        "/sentences/show"
+        "/" + idOneStr
+    );
+
+}
+
 
 
 

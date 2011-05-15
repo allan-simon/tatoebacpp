@@ -26,6 +26,7 @@
 #define CONTENTS_HELPER_SENTENCES_H
 
 #include "helpers.h"
+#include "users.h"
 #include "results/sentences.h"
 
 namespace contents {
@@ -36,8 +37,14 @@ namespace contents {
          */
         struct Sentences : public Helper {
             /**
+             * Store information about the current user (not the sentence owner)
+             */
+            Users currentUserHelper;
+
+            /**
              * Collection of Sentences
              */
+            
             results::SentencesPagiVector sentences;
             public:
                 /**

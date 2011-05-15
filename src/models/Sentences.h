@@ -132,6 +132,16 @@ class Sentences {
         );
 
         /**
+         * Will unlink the sentence X and Y
+         */
+        void unlink(
+            int xId,
+            int yId,
+            int userId
+        );
+
+
+        /**
          * Change the text of the sentence with the given id
          * by the one send as parameter, if the pair (newText,lang) already
          * exists an exception is thrown

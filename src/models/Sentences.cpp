@@ -202,6 +202,34 @@ void Sentences::link(
 /**
  *
  */
+void Sentences::unlink(
+    int xId,
+    int yId,
+    int userId
+) {
+
+    TatoDb *tatoDb = GET_DB_POINTER(); 
+    TatoItem *item = tato_db_item_find(tatoDb, xId);
+        
+    TatoRelationsNode *it;
+    TATO_RELATIONS_FOREACH(item->relations, it) {
+        if (it->with->id == yId) {
+            bool deleted = tato_db_relation_delete(
+                tatoDb,
+                it->relation->id
+            );
+            if (deleted) {
+                // TODO add it to the logs
+            }
+            return; 
+        }
+    }
+}
+
+
+/**
+ *
+ */
 void Sentences::edit_text(
     int id,
     std::string newString,
