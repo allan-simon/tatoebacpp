@@ -38,9 +38,9 @@ Users::Users(cppcms::service &serv) : Controller(serv) {
     usersModel = new models::Users(cppdb::session("sqlite3:db=../doc/sqlite3.db"));
     cppcms::url_dispatcher* d = &dispatcher();
     d->assign("/register-new", &Users::register_new, this);
-    d->assign("/register-new-treat", &Users::register_new_treat, this);
+    d->assign("/register-new_treat", &Users::register_new_treat, this);
   	d->assign("/login", &Users::login, this);
-  	d->assign("/login-treat", &Users::login_treat, this);
+  	d->assign("/login_treat", &Users::login_treat, this);
   	d->assign("/logout", &Users::logout, this);
     //tatoapp.dispatcher().assign("/users/all((/\\d+)?)", &Users::listMembers, this, 1);
 }
@@ -67,13 +67,15 @@ void Users::register_new() {
  *
  */
 void Users::register_new_treat() {
+    TREAT_PAGE();
+
     contents::UsersRegisterNew c;
     init_content(c);
     c.registerNewUser.load(context());
 
     if(c.registerNewUser.validate()) {
         if (
-            usersModel->add_user(
+            usersModel->add(
                 c.registerNewUser.username.value(),
                 c.registerNewUser.password.value(),
                 c.registerNewUser.email.value()
@@ -120,7 +122,7 @@ void Users::login() {
  *
  */
 void Users::login_treat() {
-
+    TREAT_PAGE();
     forms::LoginUser loginUser;
     loginUser.load(context());
 

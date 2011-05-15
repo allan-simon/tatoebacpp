@@ -92,7 +92,7 @@ class Users : public SqliteModel {
          * Add a new user with the given login/pass/mail
          * return false if the user can't be added (login already taken etc.)
          */
-        bool add_user(
+        bool add(
             std::string login,
             std::string pass,
             std::string email

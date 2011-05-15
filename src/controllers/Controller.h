@@ -38,6 +38,14 @@
        return;\
     }
 
+#define TREAT_PAGE() \
+    if (request().post().empty()) {\
+        response().set_redirect_header(\
+            "/" + get_interface_lang()\
+        );\
+        return;\
+    }
+
 namespace contents {
     class BaseContent;
 }

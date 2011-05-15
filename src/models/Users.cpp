@@ -94,7 +94,7 @@ bool Users::is_login_correct(
 /**
  *
  */
-bool Users::add_user(
+bool Users::add(
     std::string login,
     std::string pass,
     std::string email

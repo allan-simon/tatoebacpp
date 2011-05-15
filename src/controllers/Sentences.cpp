@@ -117,6 +117,7 @@ void Sentences::add() {
  *
  */
 void Sentences::add_treat() {
+    TREAT_PAGE();
     CHECK_PERMISSION_OR_GO_TO_LOGIN();
 
 	forms::AddSentence addSentence;
@@ -198,6 +199,7 @@ void Sentences::translate(std::string toTranslateId) {
  *
  */
 void Sentences::translate_treat() {
+    TREAT_PAGE();
     CHECK_PERMISSION_OR_GO_TO_LOGIN();
 
 	forms::TransSentence transSentence;
@@ -280,6 +282,7 @@ void Sentences::edit_text(std::string sentenceId) {
  *
  */
 void Sentences::edit_text_treat() {
+    TREAT_PAGE();
     CHECK_PERMISSION_OR_GO_TO_LOGIN();
 
 	forms::EditTextSentence editText;
@@ -357,6 +360,7 @@ void Sentences::edit_lang(std::string sentenceId) {
  * TODO
  */
 void Sentences::edit_lang_treat() {
+    TREAT_PAGE();
     CHECK_PERMISSION_OR_GO_TO_LOGIN();
 
 	forms::EditLangSentence editLang;
