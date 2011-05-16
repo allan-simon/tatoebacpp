@@ -70,12 +70,12 @@ Sentences::Sentences() {
 /**
  *
  */
-results::Sentence Sentences::get_by_id(int id) {
+results::Sentence Sentences::get_by_id(int id, int depth) {
     TatoDb *tatoDb = GET_DB_POINTER();
     TatoItem *item = tato_db_item_find(tatoDb, id);
 
     if (item != NULL) { 
-        return sentence_from_item(item);
+        return sentence_from_item(item, depth);
     } else {
         return results::Sentence();
     }
@@ -103,7 +103,7 @@ results::Sentence Sentences::get_random() {
     TatoDb *tatoDb = GET_DB_POINTER();
     TatoItem *randItem = tato_db_item_rand(tatoDb);
 
-    return sentence_from_item(randItem);
+    return sentence_from_item(randItem, 20);
 
 }
 
@@ -340,11 +340,10 @@ void Sentences::edit_lang(
 
 
 
-
 /**
  *
  */
-results::Sentence Sentences::sentence_from_item(TatoItem* item) {
+results::Sentence Sentences::sentence_from_item(TatoItem* item, int depth) {
     results::Sentence sentence(
         item->id,
         item->str,
@@ -358,7 +357,7 @@ results::Sentence Sentences::sentence_from_item(TatoItem* item) {
     //TODO reintroduce metas
     //models::Metas metasModel;
     //sentence.metas = metasModel.get_all_metas_of_sentence(item); 
-    pack_translations(item, sentence.translations, 20);
+    pack_translations(item, sentence.translations, depth);
    
     return sentence; 
 }

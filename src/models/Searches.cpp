@@ -46,7 +46,8 @@ results::SentencesPagiVector Searches::advance(
     int resultSize = resultIds.size();
     for (int i = 0; i < resultSize; ++i) {
         sentencesPagiVector[i] = sentencesModel.get_by_id(
-            resultIds[i]
+            resultIds[i],
+            3 //TODO magic number: max depth for search results
         );
     }
     sentencesPagiVector.offset = offset;

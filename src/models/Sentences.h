@@ -90,7 +90,7 @@ class Sentences {
         /**
          * get a sentence with a given ID and all its translations
          */
-        results::Sentence get_by_id(int id);
+        results::Sentence get_by_id(int id, int depth);
         /**
          * Return the id of a random existing sentence
          */
@@ -189,7 +189,7 @@ class Sentences {
          * return the results::Sentence object constructed with a given
          * TatoItem struct
          */
-        results::Sentence sentence_from_item(TatoItem* item);
+        results::Sentence sentence_from_item(TatoItem* item, int depth);
 
         /**
          * Will traverse the graph of translations starting from
