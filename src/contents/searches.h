@@ -17,41 +17,41 @@
  *
  *
  * @category Tatoebacpp
- * @package  Helpers
+ * @package  Contents
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
+#ifndef CONTENTS_SEARCHES_H
+#define CONTENTS_SEARCHES_H
 
-
-#ifndef CONTENTS_HELPER_USERS_H
-#define CONTENTS_HELPER_USERS_H
-
-#include "helpers.h"
+#include "contents/content.h"
+#include "contents/forms/search.h"
+#include "contents/helpers/sentences.h"
 
 namespace contents {
-    namespace helpers {
-        /**
-         * @struct Users
-         * Used everywhere we need to send current user information
-         * to the view
-         */
-        struct Users : public Helpers {
-    
-            /**
-             * Name of the user, empty for visitor
-             */
-            std::string username;
 
-            public:
-                /**
-                 * To know if the current user is logged or not
-                 */
-                bool is_logged() {
-                    return !username.empty();
-                }
-        };
-    }
+/**
+ * @struct SearchesSimple
+ * TODO write doc
+ */
+struct SearchesSimple : public BaseContent {
+    helpers::Sentences shc;
+    std::string queryStr;
+    std::string queryLang;
 };
+
+/**
+ * @struct SearchesShowResult
+ * content use to diplsay the results of request on the search engine
+ */
+struct SearchesShowResult : public SearchesSimple {
+    int paginationSize;
+};
+
+
+
+};
+
 #endif
 

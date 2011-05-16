@@ -35,7 +35,7 @@ namespace contents {
          * @struct Sentences
          * Used everywhere we need to send sentence(s) to the view
          */
-        struct Sentences : public Helper {
+        struct Sentences : public Helpers {
             /**
              * Store information about the current user (not the sentence owner)
              */

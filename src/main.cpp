@@ -39,61 +39,58 @@
 
 
 #include "models/TatoDB.h"
+#include "models/SearchEngine.h"
 using namespace std;
 using namespace cppcms;
 
 int main(int argc,char ** argv)
 {
-    try {
+    //TODO send notice message to logs instead of cout
 
-        service app(argc, argv);
+    service app(argc, argv);
 
-        /*start the graph database*/
-        string dictPath = app.settings().get<string>("tatoeba.tatodbxml");
-        TatoDB::get_instance(dictPath);
-        cout << "[NOTICE] database loaded" << endl;
+    /*start the graph database*/
+    string dictPath = app.settings().get<string>("tatoeba.tatodbxml");
+    TatoDB::get_instance(dictPath);
+    cout << "[NOTICE] database loaded" << endl;
 
-        /*load the languages*/
-        Languages::get_instance();
-        Languages::get_instance()->init(
-            app.settings().at("tatoeba.languages").object()
-        );
+    /*load the languages*/
+    Languages::get_instance();
+    Languages::get_instance()->init(
+        app.settings().at("tatoeba.languages").object()
+    );
 
-        /*start the search engine*/
-        //SearchEngine::get_instance();
-        //SearchEngine::get_instance()->init_indexed_metas(
-        //    app.settings().at("tatoeba.indexedMetas").object()
-        //);
-        cout << "[NOTICE] search engine indexed" << endl;
+    /*start the search engine*/
+    SearchEngine::get_instance();
+    SearchEngine::get_instance()->init_indexed_metas(
+        app.settings().at("tatoeba.indexedMetas").object()
+    );
+    cout << "[NOTICE] search engine loaded" << endl;
 
-        //singletons::ActionId::get_instance();
-        /*load some conf defined variables*/
-        Config *conf = Config::get_instance();
-	    conf->cssPath = app.settings().get<string>("tatoeba.css");
-	    conf->imgPath = app.settings().get<string>("tatoeba.img");
-        conf->webPath = app.settings().get<string>("tatoeba.web");
+    //singletons::ActionId::get_instance();
+    /*load some conf defined variables*/
+    Config *conf = Config::get_instance();
+    conf->cssPath = app.settings().get<string>("tatoeba.css");
+    conf->imgPath = app.settings().get<string>("tatoeba.img");
+    conf->webPath = app.settings().get<string>("tatoeba.web");
 
 
-        /*instantiate the website application*/
-        cout << "[NOTICE] website to be launched" << endl;
-        booster::intrusive_ptr<apps::Tatoeba> tatoApp = new apps::Tatoeba(app);
-        app.applications_pool().mount(tatoApp);
-        /*launch it */
-        cout << "[NOTICE] website launched" << endl;
-        app.run();
-        cout << "[NOTICE] website stopped" << endl;
-        cout << "[NOTICE] going to dump the database" << endl;
-        //TatoDB::get_instance("")->dump("dump.xml");
+    /*instantiate the website application*/
+    cout << "[NOTICE] website to be launched" << endl;
+    booster::intrusive_ptr<apps::Tatoeba> tatoApp = new apps::Tatoeba(app);
+    app.applications_pool().mount(tatoApp);
+    /*launch it */
+    cout << "[NOTICE] website launched" << endl;
+    app.run();
+    cout << "[NOTICE] website stopped" << endl;
+    cout << "[NOTICE] going to dump the database" << endl;
+    TatoDB::get_instance("")->dump("dump.xml");
 
-        /*time to destroy all the singletons*/
-        singletons::ActionId::kill();
-        //SearchEngine::kill();
-        TatoDB::kill();
-        Config::kill();
-        Languages::kill();
-
-    } catch(std::exception const &e) {
-        cerr<<e.what()<<endl;
-    }
+    /*time to destroy all the singletons*/
+    singletons::ActionId::kill();
+    SearchEngine::kill();
+    TatoDB::kill();
+    Config::kill();
+    Languages::kill();
 }
 

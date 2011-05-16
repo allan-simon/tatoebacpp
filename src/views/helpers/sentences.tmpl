@@ -1,4 +1,5 @@
 <%c++ #include "contents/helpers/sentences.h" %>
+<%c++ #include "contents/helpers/paginations.h" %>
 <%c++ #include "results/sentences.h" %>
 <%c++ using namespace contents; %>
 <% skin %>
@@ -185,6 +186,36 @@
             height="20"
         />
     <% end template %>
+
+
+    <% template sentences_list(std::string title, int size) %>
+        <% c++ contents::helpers::Paginations phc( %>
+        <% c++ content.sentences.offset, %>
+        <% c++ size, %>
+        <% c++ content.sentences.maxsize, %>
+        <% c++ content.baseUrl, %>
+        <% c++ content.lang %>
+        <% c++ ); %>
+
+        <h3>
+            <% title %>
+             (Total: <% sentences.maxsize %> Sentence(s))
+        </h3>
+        
+        <% c++ pagination_helper ph(out(), phc); %> 
+        <% c++ ph.pagination(); %>
+
+        <% foreach sentence in sentences %>
+            <% item %>
+                <% include sentences_group(sentence) %>
+                <br/>
+                <br/>
+                <br/>
+            <% end %>
+        <% end foreach %>
+    <% end template %>
+
+
 
 <% end view %>
 <% end skin %>

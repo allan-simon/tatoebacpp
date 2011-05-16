@@ -37,6 +37,7 @@
 #include "controllers/Sentences.h"
 #include "controllers/Users.h"
 #include "controllers/Pages.h"
+#include "controllers/Searches.h"
 
 
 /** 
@@ -55,6 +56,7 @@ private:
     controllers::Sentences sentences;
     controllers::Pages pages;
     controllers::Users users;
+    controllers::Searches searches;
     /**
      * map containing aviable language of tatoeba
      * @TODO move this in Languages singleton

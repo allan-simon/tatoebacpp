@@ -58,7 +58,26 @@ target_link_libraries(
     cppdb
     booster
     sqlite3
+    tokyodystopia
 )
+
+add_executable(
+    indexer
+    src/indexer.cpp
+    src/generics/Languages.cpp
+    src/models/TatoDB.cpp
+    src/models/SearchEngine.cpp
+)
+
+target_link_libraries(
+    indexer
+    tato
+    cppcms
+    cppdb
+    tokyodystopia
+)
+
+
 
 add_custom_command(
     OUTPUT simple.cpp

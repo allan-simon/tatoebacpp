@@ -1,0 +1,71 @@
+<%c++  #include "contents/helpers/paginations.h" %>
+<% c++ #include <cppcms/view.h> %>
+<% c++ #include <algorithm> %>
+<%c++ using namespace contents; %>
+<% skin %>
+<% view pagination_helper uses helpers::Paginations %>
+    <% template pagination() %>
+        <% c++ if (content.size >= content.max) return; %>
+        <div class="pagination">
+
+            <ul class="paginationnumbers" > 
+
+                <% if not atBeginning %>
+                    <li class="first" >
+                        <a href="<% url "{1}" using baseUrl %>">
+                            first
+                        </a> 
+                    </li>
+                    <% c++ out() << " " ;%>
+                    <li class="prev" >
+                        <a href="<% url "{1}/{2}/{3}" using baseUrl, prevOffset, size %>" >
+                            prev
+                        </a>
+                    </li>
+                    <% c++ out() << " " ;%>
+                <% end %>
+     
+
+                <% c++ for (int i = content.firstDisplayedPage ; i < content.currentPage ; ++i) { %>
+                    <li class="number" >
+                        <a href="<% url "{1}" using baseUrl %>/<% c++ out() << content.offsetPage(i); %>/<% size %>" >
+                            <% c++ out() << i; %>
+                        </a>
+                    </li> 
+                    <% c++ out() << " " ;%>
+                <% c++ } %>
+
+                <li class="number currentPage" ><% currentPage %></li>
+
+                <% c++ for (int i = content.currentPage + 1; i <= content.lastDisplayedPage ; ++i) { %>
+                    <li class="number" >
+                        <a href="<% url "{1}" using baseUrl %>/<% c++ out() << content.offsetPage(i); %>/<% size %>" >
+                            <% c++ out() << i; %>
+                        </a>
+                    </li> 
+                    <% c++ out() << " " ;%>
+                <% c++ } %>
+            
+                <% if not atEnd %>
+                    <li class="next">
+
+                        <a href="<% url "{1}/{2}/{3}" using baseUrl, nextOffset, size %>" >
+                            next
+                        </a>
+                    </li>
+                    <% c++ out() << " " ;%>
+                    <li class="last">
+                        <a class="last" href="<% url "{1}/{2}/{3}" using baseUrl, lastOffset, size %>" >
+                            last
+                        </a>
+                    </li>
+                <% end %>
+    
+            </ul>
+           
+
+        </div>
+    <% end template %>
+
+<% end view %>
+<% end skin %>

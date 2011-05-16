@@ -46,7 +46,7 @@ namespace forms {
         /**
          * Language in which we want the results
          */
-        cppcms::widgets::select wordLang;
+        cppcms::widgets::select sentencesLang;
 
         /**
          * HTML submit button
@@ -54,7 +54,7 @@ namespace forms {
 		cppcms::widgets::submit submit;
 		
 		SearchesSimple() {
-            *this + query + wordLang + submit;
+            *this + query + sentencesLang + submit;
 
             query.name("query");
 
@@ -65,16 +65,16 @@ namespace forms {
             ISOToNameMap isoToName = Languages::get_instance()->get_iso_to_name_map();
             ISOToNameMap::iterator itr;
             for(itr = isoToName.begin(); itr != isoToName.end(); ++itr){
-                wordLang.add(itr->second,itr->first);
+                sentencesLang.add(itr->second,itr->first);
             }
 
-            submit.name("Add word");
-            submit.value("add");
+            submit.name("search");
+            submit.value("Search");
 
             query.non_empty();
             // TODO for select I'm sure there's something more specific for
             // selects to say "value must one the possible values of the select"
-            wordLang.non_empty();
+            sentencesLang.non_empty();
         };
 
         /**

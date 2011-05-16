@@ -77,6 +77,7 @@ namespace results {
          *
          *  0 =>  [translation1, translation2]
          *  1 =>  [indirect translation 1, indirect translation2, etc.]
+         *  2 etc.
          *
          *  the first index is used to know the distance between the main
          *  sentence and a translation

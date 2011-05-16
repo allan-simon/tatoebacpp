@@ -32,6 +32,7 @@
 #include <exception>
 #include <cstring>
 #include "models/Sentences.h"
+#include "models/SearchEngine.h"
 namespace models {
 
 /**
@@ -159,13 +160,13 @@ results::Sentence Sentences::add(
             str,
             userId
         );
+        */
 
-        SearchEngine::get_instance()->add_word(
-            newItem->id,
+        SearchEngine::get_instance()->add_sentence(
+            item->id,
             str,
             lang
         );
-        */
     }
     return results::Sentence(
         item->id,
@@ -242,6 +243,7 @@ void Sentences::edit_text(
     if (item == NULL) {
         return;
     }
+    std::string oldString(item->str);
 
     int origId = tato_item_lang_item_can_add(
         item->lang,
@@ -267,6 +269,14 @@ void Sentences::edit_text(
 	tato_item_lang_item_add(item->lang, item);
 
     //TODO readd log and search engine update
+    SearchEngine::get_instance()->edit_text(
+        item->id,
+        oldString,
+        newString,
+        std::string(item->lang->code)
+    );
+
+
     return;
 
 }
@@ -287,6 +297,7 @@ void Sentences::edit_lang(
     if (item == NULL) {
         return;
     }
+    std::string prevLang(item->lang->code);
 
     TatoItemLang* newTatoLang = tato_db_lang_find_or_create(
         tatoDb,
@@ -315,7 +326,14 @@ void Sentences::edit_lang(
 
 	tato_item_lang_item_add(newTatoLang, item);
 
-    //TODO readd log and search engine update
+    //TODO readd log update
+    SearchEngine::get_instance()->edit_lang(
+        item->id,
+        std::string(item->str),
+        prevLang,
+        newLang
+    );
+
     return;
 
 }

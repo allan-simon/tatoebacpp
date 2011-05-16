@@ -69,7 +69,8 @@
             </a>
 		</div>
 		<div id="container">
-				<% include body() %>
+            <% include search_bar() %>
+			<% include body() %>
 
 		</div>
         <% include footer() %>
@@ -106,6 +107,54 @@
         you're not supposed to view this
     </div>
 <% end template %>
+
+<% template search_bar() %>
+
+<div class="search_bar_container">
+    <div class="search_bar">
+        <form
+            action="<% url "/searches/simple_treat" %>"
+            method="POST"
+            id="SentenceSearchForm"
+        >
+            <fieldset class="input text">
+                <label for="SentenceQuery">
+                    <% gt "Example sentences with the words :" %>
+                </label>
+                <div class="input text">
+                    <label for="SentenceQuery"></label>
+                    <% form as_space searchesSimple.query %>
+                    <!--
+                    <input
+                        type="text"
+                        accesskey="4"
+                        value=""
+                        id="SentenceQuery"
+                        name="query"
+                    >
+                    -->
+                </div>
+            </fieldset>
+
+            <fieldset class="select">
+                <label>From</label>
+                <% form as_space searchesSimple.sentencesLang %>
+            </fieldset>
+
+
+            <fieldset class="submit">
+                <% form as_space searchesSimple.submit %>
+            </fieldset>
+
+        </form>
+    </div>
+
+    <div class="search_bar_left"></div>
+    <div class="search_bar_right"></div>
+</div>
+
+<% end template %>
+
 
 <% template user_menu() %>
 		<div id="user_menu">
@@ -163,7 +212,7 @@
             </a>
         </li>
         <li class="menuItem">
-            <a href="<% url "/contribute" %>" class="menuSection">
+            <a href="<% url "/sentences/add" %>" class="menuSection">
                 <% gt "Contribute" %>
             </a>
         </li>

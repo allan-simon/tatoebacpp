@@ -17,62 +17,70 @@
  *
  *
  * @category Tatoebacpp
- * @package  Models
+ * @package  Controllers
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
 
 
-#ifndef TATOEBACPP_MODELS_TATODB_H
-#define TATOEBACPP_MODELS_TATODB_H
+#ifndef CONTROLLERS_SEARCHES_H
+#define CONTROLLERS_SEARCHES_H
 
-#include <iostream>
-#include "generics/Singleton.h"
+#include "Controller.h"
 
-extern "C" {
-#include "tato/db.h"
+namespace models {
+    class Searches;
 }
 
-#define GET_DB_POINTER() TatoDB::get_instance("")->get_db_pointer()
+
+namespace controllers {
 
 /**
- * @class TatoDB
- * singleton representing the graph database of tatoeba
+ * @class Searches
+ * Class that will controll all the page request related to the 
+ * search engine
  */
-class TatoDB : public Singleton<TatoDB>{
-    friend class Singleton<TatoDB>;
-
+class Searches : public Controller {
     private:
         /**
-         * Pointer on the graph database structure
+         * Model class for the search engine
          */
-        TatoDb *tatoDb;
+        models::Searches *searchesModel;
+	public:
         /**
-         * Constructor, will create a tatodb graph database
-         * and fill it with the data at data_path
+         * Constructor, will attach the url to the dispatcher
+         * and instantiate the model
          */
-        TatoDB(std::string data_path);
+		Searches(cppcms::service &serv);
+        
         /**
-         * destructor
+         * Destructor
          */
-        ~TatoDB();
+        ~Searches();
 
-    public:
         /**
-         * Will return the pointer on the tatodb graph structure
+         * Will treat the request send by the search bar
          */
-        TatoDb *get_db_pointer();
-       
+        void simple_treat();
+
         /**
-         * Will dump the database in the given following xml file
-         */ 
-        void dump(std::string path);
+         * Display the sentences matching the query
+         */
+        void show_result(std::string query, std::string lang);
         /**
-         * Will feed the search engine 
-         */ 
-        void feed_search_engine();
+         * Display the sentences matching the query (with pagination)
+         */
+        void show_result(
+            std::string query,
+            std::string lang,
+            std::string offset,
+            std::string size
+        );
+
 };
 
+}; // End namespace
 
 #endif
+

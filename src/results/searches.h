@@ -17,41 +17,41 @@
  *
  *
  * @category Tatoebacpp
- * @package  Helpers
+ * @package  Results
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
 
+namespace results {
 
-#ifndef CONTENTS_HELPER_USERS_H
-#define CONTENTS_HELPER_USERS_H
-
-#include "helpers.h"
-
-namespace contents {
-    namespace helpers {
+/**
+ * @struct Searches
+ * Used to store the ids of the sentence that match a search query
+ */
+struct Searches : public std::vector<int> {
+    /**
+     * offset, mainly used in pagination, if we want to skip the offset th
+     * results
+     */
+    int offset;
+    /**
+     * used with pagination, we will retrieve at most maxsize elements
+     */
+    int maxsize;
+    public:
         /**
-         * @struct Users
-         * Used everywhere we need to send current user information
-         * to the view
+         * Constructor
          */
-        struct Users : public Helpers {
-    
-            /**
-             * Name of the user, empty for visitor
-             */
-            std::string username;
-
-            public:
-                /**
-                 * To know if the current user is logged or not
-                 */
-                bool is_logged() {
-                    return !username.empty();
-                }
-        };
-    }
+        Searches(): offset(0), maxsize(0) {};
+        /**
+         * Constructor with a preallocated size
+         */
+        Searches(int size) :
+            std::vector<int>(size),
+            offset(0),
+            maxsize(0)
+            {};
 };
-#endif
 
+} // end of namespace

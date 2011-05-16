@@ -1,0 +1,26 @@
+<%c++ #include "contents/searches.h" %>
+<% skin %>
+<% view searches_show_result uses contents::SearchesShowResult extends master %>
+<% template title() %><% gt "Search Result"  %><% end template %>
+
+<% template main_content() %>
+    <div class="module">
+        <% if not shc.empty() %>
+            <% c++ sentences_helper sh(out(), content.shc); %>
+            <% c++ sh.sentences_list("Search results", content.paginationSize); %> 
+        <% else %>
+            No Result
+        <% end %>
+    </div>
+<% end %>
+
+<% template annexe_content() %>
+    <div class="module">
+    </div>
+
+<% end %>
+
+
+
+<% end view %>
+<% end skin %>

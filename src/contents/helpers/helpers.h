@@ -10,7 +10,7 @@ namespace contents {
          * Base struct for sending data from the controller to the view
          * for data meant to be used in some reusable modules
          */
-        struct Helper : public cppcms::base_content {
+        struct Helpers : public cppcms::base_content {
             /**
              * @TODO write this doc
              */
