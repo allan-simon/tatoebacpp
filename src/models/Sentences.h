@@ -97,6 +97,13 @@ class Sentences {
         int get_random_id();
 
         /**
+         * Return the id of a random existing sentence in the language with
+         * the given iso code
+         */
+        int get_random_id(std::string isoCode);
+
+
+        /**
          * get a random sentence and all its translations
          */
         results::Sentence get_random();

@@ -42,6 +42,7 @@ Sentences::Sentences(cppcms::service &serv) : Controller(serv) {
     
   	disp->assign("/show/(\\d+)", &Sentences::show, this, 1);
   	disp->assign("/show-random", &Sentences::show_random, this);
+  	disp->assign("/show-random-in/(\\w+)", &Sentences::show_random_in, this, 1);
 
   	disp->assign("/add", &Sentences::add, this);
   	disp->assign("/add_treat", &Sentences::add_treat, this);
@@ -102,6 +103,25 @@ void Sentences::show_random() {
     );
 
 }
+
+
+/**
+ *
+ */
+void Sentences::show_random_in(std::string isoCode) {
+    std::ostringstream oss;
+    oss << sentencesModel->get_random_id(isoCode);
+
+    response().set_redirect_header(
+        "/" + get_interface_lang() +
+        "/sentences/show"
+        "/" + oss.str()
+    );
+
+}
+
+
+
 
 /**
  *

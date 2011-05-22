@@ -98,6 +98,25 @@ int Sentences::get_random_id() {
 /**
  *
  */
+int Sentences::get_random_id(std::string isoCode) {
+    int id = 0;
+    TatoDb *tatoDb = GET_DB_POINTER();
+    TatoItem *randSentence = tato_db_item_rand_with_lang(
+        tatoDb,
+        isoCode.c_str()
+    );
+
+    std::stringstream ss;
+    ss << randSentence->id;
+    ss >> id;
+
+    return id;
+}
+
+
+/**
+ *
+ */
 results::Sentence Sentences::get_random() {
 
     TatoDb *tatoDb = GET_DB_POINTER();

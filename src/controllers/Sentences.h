@@ -76,6 +76,12 @@ class Sentences : public Controller {
         void show_random();
 
         /**
+         * Display a random sentence in the language with the given iso code
+         */
+        void show_random_in(std::string isoCode);
+
+
+        /**
          * Display a form to add a new sentence
          */
         void add();
