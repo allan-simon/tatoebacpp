@@ -17,59 +17,17 @@
  *
  *
  * @category Tatoebacpp
- * @package  Contents
+ * @package  Results
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
+#ifndef TATOEBACPP_RESULTS_SENTENCES_STATS_H
+#define TATOEBACPP_RESULTS_SENTENCES_STATS_H
 
+#include <map>
 
-#ifndef TATOEBACPP_CONTENTS_PAGES_H
-#define TATOEBACPP_CONTENTS_PAGES_H
-
-#include "contents/content.h"
-#include "results/sentences_stats.h"
-#include "contents/helpers/sentences.h"
-
-namespace contents {
-
-/**
- * Base content for every action of Pages controller
- *
- */
-struct Pages : public BaseContent {
-};
-
-/**
- * @struct PagesHomepage
- * Content used by the homepage
- */
-struct PagesHomepage : public Pages {
-    helpers::Sentences shc;
-    results::SentencesStats sentencesStats;
-};
-
-/**
- * @struct PagesContribute
- * Content used by page Contribute
- */
-struct PagesContribute : public Pages {
-};
-
-/**
- * @struct PagesTermsOfUse
- * Content used by page Terms of use
- */
-struct PagesTermsOfUse : public Pages {
-};
-
-/**
- * Content used by page Team and credits
- */
-struct PagesTeamAndCredits : public Pages {
-
-};
-
-} //end of namespace
-
+namespace results {
+    typedef std::map<int, std::string> SentencesStats;
+}
 #endif

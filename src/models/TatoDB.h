@@ -27,14 +27,16 @@
 #ifndef TATOEBACPP_MODELS_TATODB_H
 #define TATOEBACPP_MODELS_TATODB_H
 
-#include <iostream>
+#include <map>
 #include "generics/Singleton.h"
+#include "results/sentences_stats.h"
 
 extern "C" {
 #include "tato/db.h"
 }
 
 #define GET_DB_POINTER() TatoDB::get_instance("")->get_db_pointer()
+
 
 /**
  * @class TatoDB
@@ -63,6 +65,11 @@ class TatoDB : public Singleton<TatoDB>{
          * Will return the pointer on the tatodb graph structure
          */
         TatoDb *get_db_pointer();
+
+        /**
+         * Will return a map of with the number of sentences for each language
+         */
+        results::SentencesStats get_sentences_stats();
        
         /**
          * Will dump the database in the given following xml file

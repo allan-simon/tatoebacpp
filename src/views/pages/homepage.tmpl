@@ -40,6 +40,28 @@
     </div>
 <% end template %>
 
+<%template top_five_lang_module() %>
+    <div class="module">
+        <h2><% gt "X sentences" %></h2>
+        <div id="sentencesStats">
+        <% foreach language in sentencesStats %>
+            <ul>
+            <%item%>
+                <li class="stat">
+                    <img
+                        width="30"
+                        height="20"
+                        alt="<% language.second %>" title="TODO"
+                        src="http://flags.tatoeba.org/img/flags/<% language.second %>.png"
+                    >
+                    <span class="total"><% language.first %></span>
+                </li>
+            <%end%>
+            </ul>
+        <% end foreach%>
+        </div>
+    </div>
+<%end template%>
 
 <% end view %>
 <% end skin %>

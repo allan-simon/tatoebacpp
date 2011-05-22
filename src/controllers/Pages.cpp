@@ -28,6 +28,7 @@
 
 #include "contents/pages.h"
 #include "models/Sentences.h"
+#include "models/TatoDB.h"
 
 namespace controllers {
 
@@ -44,6 +45,7 @@ Pages::Pages(cppcms::service& serv) : controllers::Controller(serv) {
 void Pages::homepage() {
     contents::PagesHomepage c;
     init_content(c);
+    c.sentencesStats = TatoDB::get_instance("")->get_sentences_stats();
 
     models::Sentences sentencesModel;
 	contents::helpers::Sentences shc(
