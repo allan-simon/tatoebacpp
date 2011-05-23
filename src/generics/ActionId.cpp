@@ -23,8 +23,10 @@
  * @link     http://tatoeba.org
  */
 
-#include "ActionId.h"
 #include <cppdb/frontend.h>
+
+#include "ActionId.h"
+#include "contents/Config.h"
 
 namespace singletons {
 
@@ -32,8 +34,9 @@ namespace singletons {
  *
  */
 ActionId::ActionId() {
-    //TODO replace the hardcodedpath by something in config.js
-    cppdb::session sqliteDb("sqlite3:db=../doc/sqlite3.db");
+    cppdb::session sqliteDb(
+        "sqlite3:db=" + Config::get_instance()->sqlite3Path
+    );
     sqliteDb << "SELECT last_id FROM action_id LIMIT 1;" <<
         cppdb::row >> lastActionId;
 }
@@ -52,8 +55,12 @@ unsigned int ActionId::get_action_id() {
  *
  */
 ActionId::~ActionId() {
-    cppdb::session sqliteDb("sqlite3:db=../doc/sqlite3.db");
-    sqliteDb << "UPDATE action_id SET last_id = ?;" << lastActionId << cppdb::exec;
+    cppdb::session sqliteDb(
+        "sqlite3:db=" + Config::get_instance()->sqlite3Path
+    );
+    sqliteDb << "UPDATE action_id SET last_id = ?;" <<
+        lastActionId <<
+        cppdb::exec;
 }
 
 };//end namespace singletons

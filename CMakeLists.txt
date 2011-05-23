@@ -64,6 +64,7 @@ target_link_libraries(
 add_executable(
     indexer
     src/indexer.cpp
+    src/contents/Config.cpp
     src/generics/Languages.cpp
     src/models/TatoDB.cpp
     src/models/SearchEngine.cpp

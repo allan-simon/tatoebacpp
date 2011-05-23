@@ -54,6 +54,10 @@ class SearchEngine : public Singleton<SearchEngine>{
 
     private:
         /**
+         * store the path where the indexes are stored
+         */
+        std::string indexesPath;
+        /**
          * store the code of the last errors that occured on the database
          */
         int errorCode;
@@ -66,7 +70,6 @@ class SearchEngine : public Singleton<SearchEngine>{
          * related to this language (e.g:  cmn => cmn_pinyin , cmn_traditional)
          */
         LangsIndexedMetasMap langsIndexedMetas;
-
         /**
          * Create a new index in the search engine with the name given
          * ass parameter
@@ -98,6 +101,9 @@ class SearchEngine : public Singleton<SearchEngine>{
         ~SearchEngine();
 
     public:
+        void init(std::string indexesPath) {
+
+        }
         /**
          * Will init the meta that are indexed, based on the list
          * provided by the config.js file
@@ -107,12 +113,36 @@ class SearchEngine : public Singleton<SearchEngine>{
         );
 
         /**
+         * Wrapper on the way we use to get the pointer to the 
+         * index with the given name
+         */
+        TCIDB* get_index(std::string indexName);
+
+        /**
+         * Wrapper when we have finish to use an index
+         */
+        void close_index(TCIDB* index);
+
+
+        /**
          * index the sentence number "sentenceId" in the index "lang"
          */
         void add_sentence(
             int sentenceId,
             std::string text,
             std::string lang
+        );
+
+
+        /**
+         * index the sentence number "sentenceId" in the index "lang"
+         * used for mass adding as we use an already opened index
+         */
+        void add_sentence(
+            int sentenceId,
+            std::string text,
+            std::string lang,
+            TCIDB* index
         );
 
         /**

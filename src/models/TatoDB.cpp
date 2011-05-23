@@ -64,26 +64,42 @@ results::SentencesStats TatoDB::get_sentences_stats() {
  *
  */
 void TatoDB::feed_search_engine() {
-	TatoTreeIntNode *it = NULL;
+	TatoTreeStrNode *iterLang = NULL;
+	TatoTreeStrNode *iterItem = NULL;
     TatoItem *item = NULL;
-	RB_FOREACH(it, TatoTreeInt_, tatoDb->items) {
-        item = (TatoItem*) it->value;
-        SearchEngine::get_instance()->add_sentence(
-            item->id,
-            std::string(item->str),
-            std::string(item->lang->code)
-        );
 
-        TatoKvListNode *itkv;
-        TATO_KVLIST_FOREACH(item->metas, itkv) {
-            SearchEngine::get_instance()->add_meta(
+	
+    TATO_TREE_STR_FOREACH(tatoDb->langs, iterLang) {
+
+        TatoItemLang* lang = (TatoItemLang*)iterLang->value;
+        std::string langCode(lang->code);
+
+        TCIDB* index = SearchEngine::get_instance()->get_index(langCode);
+
+	    TATO_TREE_STR_FOREACH(lang->index, iterItem) {
+
+            item = (TatoItem*) iterItem->value;
+            SearchEngine::get_instance()->add_sentence(
                 item->id,
-                std::string(itkv->key),
-                std::string(itkv->value),
-                std::string(item->lang->code)
+                std::string(item->str),
+                std::string(item->lang->code),
+                index
             );
+
+            TatoKvListNode *itkv;
+            TATO_KVLIST_FOREACH(item->metas, itkv) {
+                SearchEngine::get_instance()->add_meta(
+                    item->id,
+                    std::string(itkv->key),
+                    std::string(itkv->value),
+                    std::string(item->lang->code)
+                );
+            }
         }
-	}
+
+        SearchEngine::get_instance()->close_index(index);
+    }
+
 }
 
 

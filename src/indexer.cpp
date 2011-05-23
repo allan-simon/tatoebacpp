@@ -7,6 +7,7 @@
 
 #include "models/SearchEngine.h"
 #include "generics/Languages.h"
+#include "contents/Config.h"
 
 #include "models/TatoDB.h"
 #include "models/SearchEngine.h"
@@ -19,6 +20,11 @@ int main(int argc,char ** argv)
 
     service app(argc, argv);
 
+    /*load some conf defined variables*/
+    Config *conf = Config::get_instance();
+    conf->indexesPath = app.settings().get<string>(
+        "tatoeba.searchEngine.indexesPath"
+    );
     /*start the graph database*/
     string dictPath = app.settings().get<string>("tatoeba.tatodbxml");
     TatoDB::get_instance(dictPath);

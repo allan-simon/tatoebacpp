@@ -49,6 +49,19 @@ int main(int argc,char ** argv)
 
     service app(argc, argv);
 
+    /*load some conf defined variables*/
+    Config *conf = Config::get_instance();
+    conf->cssPath = app.settings().get<string>("tatoeba.css");
+    conf->imgPath = app.settings().get<string>("tatoeba.img");
+    conf->webPath = app.settings().get<string>("tatoeba.web");
+    conf->indexesPath = app.settings().get<string>(
+        "tatoeba.searchEngine.indexesPath"
+    );
+    conf->sqlite3Path = app.settings().get<string>(
+        "tatoeba.sqlite3.path"
+    );
+        
+
     /*start the graph database*/
     string dictPath = app.settings().get<string>("tatoeba.tatodbxml");
     TatoDB::get_instance(dictPath);
@@ -68,13 +81,6 @@ int main(int argc,char ** argv)
     cout << "[NOTICE] search engine loaded" << endl;
 
     //singletons::ActionId::get_instance();
-    /*load some conf defined variables*/
-    Config *conf = Config::get_instance();
-    conf->cssPath = app.settings().get<string>("tatoeba.css");
-    conf->imgPath = app.settings().get<string>("tatoeba.img");
-    conf->webPath = app.settings().get<string>("tatoeba.web");
-
-
     /*instantiate the website application*/
     cout << "[NOTICE] website to be launched" << endl;
     booster::intrusive_ptr<apps::Tatoeba> tatoApp = new apps::Tatoeba(app);

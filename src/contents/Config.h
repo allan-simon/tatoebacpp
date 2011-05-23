@@ -59,6 +59,15 @@ class Config : public Singleton<Config> {
          */
         std::string webPath;
 
+        /**
+         * Store the path where the search engine indexes are stored
+         */
+        std::string indexesPath;
+
+        /**
+         * Store the path where the sqlite3 database is stored
+         */
+        std::string sqlite3Path;
 };
 
 #endif

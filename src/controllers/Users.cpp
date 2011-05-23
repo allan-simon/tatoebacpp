@@ -26,6 +26,7 @@
 #include <cppcms/session_interface.h>
 #include "contents/users.h"
 #include "models/Users.h"
+#include "contents/Config.h"
 
 namespace controllers {
 
@@ -34,8 +35,9 @@ namespace controllers {
  */
 Users::Users(cppcms::service &serv) : Controller(serv) {
 
-    //TODO use a constant for this
-    usersModel = new models::Users(cppdb::session("sqlite3:db=../doc/sqlite3.db"));
+    usersModel = new models::Users(cppdb::session(
+        "sqlite3:db=" + Config::get_instance()->sqlite3Path
+    ));
     cppcms::url_dispatcher* d = &dispatcher();
     d->assign("/register-new", &Users::register_new, this);
     d->assign("/register-new_treat", &Users::register_new_treat, this);

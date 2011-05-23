@@ -31,6 +31,12 @@
             "eng" : "en_GB.UTF-8",
             "fra" : "fr_FR.UTF-8"
         },
+        "searchEngine" : {
+            "indexesPath" : "../data/indexes/"
+        },
+        "sqlite3" : {
+            "path" : "../doc/sqlite3.db"
+        },
         "languages" : {
 
             "acm"  : ["Iraqi Arabic" ,  2], 

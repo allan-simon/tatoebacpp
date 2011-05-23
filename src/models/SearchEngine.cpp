@@ -23,20 +23,24 @@
  * @link     http://tatoeba.org
  */
 
+#include <cmath>
 #include "SearchEngine.h"
 #include "generics/Languages.h"
-#include <cmath>
+#include "contents/Config.h"
 
 /**
  *
  */
 SearchEngine::SearchEngine() {
 
+    indexesPath = Config::get_instance()->indexesPath; 
+    /*
     ISOToNameMap isoToName = Languages::get_instance()->get_iso_to_name_map();
     ISOToNameMap::const_iterator itr;
     for (itr = isoToName.begin(); itr != isoToName.end(); ++itr) {
         add_index(itr->first);
     }
+    */
 
 
     // create the object
@@ -49,6 +53,7 @@ SearchEngine::~SearchEngine() {
     // close the databases
     //
 
+    /*
     LangsDbsMap::const_iterator end = langsDbs.end();
     for (LangsDbsMap::const_iterator it = langsDbs.begin(); it != end; ++it) {
         if (!tcidbclose(it->second)) {
@@ -58,7 +63,37 @@ SearchEngine::~SearchEngine() {
         // delete the object
         tcidbdel(it->second);
     }
+    */
 }
+
+/**
+ *
+ */
+TCIDB* SearchEngine::get_index(std::string indexName) {
+    TCIDB *tempIDB = tcidbnew();
+    std::string indexPath = indexesPath + indexName;
+    if (!tcidbopen(tempIDB, indexPath.c_str(), IDBOWRITER | IDBOCREAT | IDBOLCKNB )) {
+        errorCode = tcidbecode(tempIDB);
+        std::cerr << "open error: "<< tcidberrmsg(errorCode) << std::endl;
+        // TODO throw an exception instead
+        return NULL;
+    }
+    return  tempIDB;
+
+}
+
+/**
+ *
+ */
+void SearchEngine::close_index(TCIDB* index) {
+    if (!tcidbclose(index)) {
+        errorCode = tcidbecode(index);
+        std::cerr << "close error: "<< tcidberrmsg(errorCode) << std::endl;
+    }
+    // delete the object
+    tcidbdel(index);
+}
+
 
 /**
  *
@@ -83,7 +118,7 @@ void SearchEngine::init_indexed_metas(
         ) {
             std::string meta = (*jsonItr).str();
             langsIndexedMetas[tempLang].push_back(meta);
-            add_index(tempLang + "_" + meta);
+            //add_index(tempLang + "_" + meta);
         }
     }
 }
@@ -93,14 +128,15 @@ void SearchEngine::init_indexed_metas(
  */
 void SearchEngine::add_index(std::string indexName) {
 
-        TCIDB *tempIDB = tcidbnew();
-        tcidbsetcache(tempIDB,-1,-1);
-        // open the database
-        if (!tcidbopen(tempIDB, indexName.c_str(), IDBOWRITER | IDBOCREAT | IDBOLCKNB )) {
-            errorCode = tcidbecode(tempIDB);
-            std::cerr << "open error: "<< tcidberrmsg(errorCode) << std::endl;
-        }
-        langsDbs[indexName] = tempIDB;
+    TCIDB *tempIDB = tcidbnew();
+    //tcidbsetcache(tempIDB,1,1);
+    // open the database
+    std::string indexPath = indexesPath + indexName;
+    if (!tcidbopen(tempIDB, indexPath.c_str(), IDBOWRITER | IDBOCREAT | IDBOLCKNB )) {
+        errorCode = tcidbecode(tempIDB);
+        std::cerr << "open error: "<< tcidberrmsg(errorCode) << std::endl;
+    }
+    langsDbs[indexName] = tempIDB;
 }
 
 /**
@@ -111,15 +147,30 @@ void SearchEngine::add_sentence(
     std::string text,
     std::string lang
 ) {
-    if (langsDbs.find(lang) == langsDbs.end()) {
-        return;
+    TCIDB *langIDB = get_index(lang); //langsDbs[lang];
+    if (!tcidbput(langIDB, sentenceId, text.c_str())) {
+        errorCode = tcidbecode(langIDB);
+        std::cerr << "add error: "<< tcidberrmsg(errorCode) << std::endl;
     }
-    TCIDB *langIDB = langsDbs[lang];
+    close_index(langIDB);
+}
+
+/**
+ *
+ */
+void SearchEngine::add_sentence(
+    int sentenceId,
+    std::string text,
+    std::string lang,
+    TCIDB * langIDB
+) {
     if (!tcidbput(langIDB, sentenceId, text.c_str())) {
         errorCode = tcidbecode(langIDB);
         std::cerr << "add error: "<< tcidberrmsg(errorCode) << std::endl;
     }
 }
+
+
 
 /**
  *
@@ -138,6 +189,7 @@ void SearchEngine::add_meta(
 }
 
 
+
 /**
  *
  */
@@ -147,16 +199,12 @@ void SearchEngine::edit_text(
     std::string newText,
     std::string lang
 ) {
-    if (
-        langsDbs.find(lang) == langsDbs.end()
-    ) {
-        return;
-    }
 
-    TCIDB *langIDB = langsDbs[lang];
+    TCIDB *langIDB = get_index(lang);//langsDbs[lang];
     if (!tcidbout(langIDB, sentenceId)) {
         errorCode = tcidbecode(langIDB);
         std::cerr << "remove error: "<< tcidberrmsg(errorCode) << std::endl;
+        close_index(langIDB);
         return;
     }
 
@@ -164,8 +212,10 @@ void SearchEngine::edit_text(
     if (!tcidbput(langIDB, sentenceId, newText.c_str())) {
         errorCode = tcidbecode(langIDB);
         std::cerr << "add error: "<< tcidberrmsg(errorCode) << std::endl;
+        close_index(langIDB);
         return;
     }
+    close_index(langIDB);
 }
 
 /**
@@ -177,25 +227,27 @@ void SearchEngine::edit_lang(
     std::string oldLang,
     std::string newLang
 ) {
-     if (
-        langsDbs.find(oldLang) == langsDbs.end() ||
-        langsDbs.find(newLang) == langsDbs.end()
-    ) {
-        return;
-    }
+    TCIDB *oldIDB = get_index(oldLang);
+    TCIDB *newIDB = get_index(newLang);
 
-    if (!tcidbout(langsDbs[oldLang], sentenceId)) {
-        errorCode = tcidbecode(langsDbs[newLang]);
+
+    if (!tcidbout(oldIDB, sentenceId)) {
+        errorCode = tcidbecode(oldIDB);
         std::cerr << "remove error: "<< tcidberrmsg(errorCode) << std::endl;
+        close_index(oldIDB);
         return;
     }
 
-    if (!tcidbput(langsDbs[newLang], sentenceId, text.c_str())) {
-        errorCode = tcidbecode(langsDbs[newLang]);
+    if (!tcidbput(newIDB, sentenceId, text.c_str())) {
+        errorCode = tcidbecode(newIDB);
         std::cerr << "add error: "<< tcidberrmsg(errorCode) << std::endl;
+        close_index(oldIDB);
+        close_index(newIDB);
         return;
     }
    
+    close_index(oldIDB);
+    close_index(newIDB);
 }
 
 /**
@@ -208,14 +260,12 @@ void SearchEngine::edit_meta(
     std::string lang
 ) {
     std::string indexName(lang + "_" + key);
-    if (langsDbs.find(indexName) == langsDbs.end()) {
-        return;
-    }
+    TCIDB *langIDB = get_index(indexName);
 
-    TCIDB *langIDB = langsDbs[indexName];
     if (!tcidbout(langIDB, sentenceId)) {
         errorCode = tcidbecode(langIDB);
         std::cerr << "remove error: "<< tcidberrmsg(errorCode) << std::endl;
+        close_index(langIDB);
         return;
     }
 
@@ -223,8 +273,10 @@ void SearchEngine::edit_meta(
     if (!tcidbput(langIDB, sentenceId, value.c_str())) {
         errorCode = tcidbecode(langIDB);
         std::cerr << "add error: "<< tcidberrmsg(errorCode) << std::endl;
+        close_index(langIDB);
         return;
     }
+    close_index(langIDB);
 
 }
 
@@ -237,14 +289,13 @@ void SearchEngine::remove_sentence(
     int sentenceId,
     std::string lang
 ) {
-    if (langsDbs.find(lang) == langsDbs.end()) {
-        return;
-    }
 
-    if (!tcidbout(langsDbs[lang], sentenceId)) {
-        errorCode = tcidbecode(langsDbs[lang]);
+    TCIDB *langIDB = get_index(lang);//langsDbs[lang];
+    if (!tcidbout(langIDB, sentenceId)) {
+        errorCode = tcidbecode(langIDB);
         std::cerr << "remove error: "<< tcidberrmsg(errorCode) << std::endl;
     }
+    close_index(langIDB);
 
     // remove also the metas from the indexes
     IndexedMetas::const_iterator end = langsIndexedMetas[lang].end();
@@ -254,10 +305,13 @@ void SearchEngine::remove_sentence(
         ++itr
     ) {
         std::string indexName(lang + "_" + *itr);
-        if (!tcidbout(langsDbs[indexName], sentenceId)) {
-            errorCode = tcidbecode(langsDbs[indexName]);
+        TCIDB *metaIDB = get_index(indexName);
+
+        if (!tcidbout(metaIDB, sentenceId)) {
+            errorCode = tcidbecode(metaIDB);
             std::cerr << "remove error: "<< tcidberrmsg(errorCode) << std::endl;
         }
+        close_index(metaIDB);
        
     }
 
@@ -274,15 +328,13 @@ void SearchEngine::remove_meta(
     std::string lang
 ) {
     std::string indexName(lang + "_" + key);
-    if (langsDbs.find(indexName) == langsDbs.end()) {
-        return;
-    }
+    TCIDB *metaIDB = get_index(indexName);
 
-    if (!tcidbout(langsDbs[indexName], sentenceId)) {
-        errorCode = tcidbecode(langsDbs[indexName]);
+    if (!tcidbout(metaIDB, sentenceId)) {
+        errorCode = tcidbecode(metaIDB);
         std::cerr << "remove error: "<< tcidberrmsg(errorCode) << std::endl;
-        return;
     }
+    close_index(metaIDB);
 
 
 }
@@ -340,7 +392,9 @@ results::Searches SearchEngine::search_one_index(
     results::Searches& results,
     std::set<int>& uniqueResults
 ) {
-    if (langsDbs.find(indexName) == langsDbs.end()) {
+    TCIDB *langIDB = get_index(indexName); //langsDbs[lang];
+    if (langIDB == NULL) {
+        close_index(langIDB);
         return results::Searches();
     }
     /* search records */
@@ -350,7 +404,7 @@ results::Searches SearchEngine::search_one_index(
     //we first search for words beginning with the
     //request, so that they will appear first
     uint64_t *beginWithResult = tcidbsearch(
-        langsDbs[indexName],
+        langIDB,
         request.c_str(),
         IDBSPREFIX,
         &rnum
@@ -373,13 +427,13 @@ results::Searches SearchEngine::search_one_index(
         offset = std::max(0, offset- rnum);
         free(beginWithResult);
     } else {
-        errorCode = tcidbecode(langsDbs[indexName]);
+        errorCode = tcidbecode(langIDB);
         std::cerr << "search error: "<< tcidberrmsg(errorCode) << std::endl;
     }
 
     // and then we make a more generic search
     uint64_t *dystopiaResult = tcidbsearch2(
-        langsDbs[indexName],
+        langIDB,
         request.c_str(),
         &rnum
     );
@@ -414,8 +468,9 @@ results::Searches SearchEngine::search_one_index(
         }
         free(dystopiaResult);
     } else {
-        errorCode = tcidbecode(langsDbs[indexName]);
+        errorCode = tcidbecode(langIDB);
         std::cerr << "search error: "<< tcidberrmsg(errorCode) << std::endl;
     }
+    close_index(langIDB);
     return results;
 }
