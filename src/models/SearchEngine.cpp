@@ -86,6 +86,10 @@ TCIDB* SearchEngine::get_index(std::string indexName) {
  *
  */
 void SearchEngine::close_index(TCIDB* index) {
+    if (index == NULL) {
+        return;
+    }
+
     if (!tcidbclose(index)) {
         errorCode = tcidbecode(index);
         std::cerr << "close error: "<< tcidberrmsg(errorCode) << std::endl;
@@ -394,7 +398,6 @@ results::Searches SearchEngine::search_one_index(
 ) {
     TCIDB *langIDB = get_index(indexName); //langsDbs[lang];
     if (langIDB == NULL) {
-        close_index(langIDB);
         return results::Searches();
     }
     /* search records */
