@@ -83,6 +83,12 @@ class Languages : public Singleton<Languages> {
          */
         std::string get_iso_from_id(int id);
 
+        /**
+         * Test if an ISO code exists/is supported or not
+         */
+        bool iso_exists(const std::string &isoCode);
+
+
 };
 
 #endif

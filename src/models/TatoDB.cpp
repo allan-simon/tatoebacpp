@@ -102,6 +102,63 @@ void TatoDB::feed_search_engine() {
 
 }
 
+/**
+ *
+ */
+/*
+void TatoDB::feed_search_engine_indirect() {
+	TatoTreeStrNode *iterLang = NULL;
+	TatoTreeStrNode *iterLang2 = NULL;
+	TatoTreeStrNode *iterItem = NULL;
+    TatoItem *item = NULL;
+
+	
+    TATO_TREE_STR_FOREACH(tatoDb->langs, iterLang) {
+        
+        TatoItemLang* lang = (TatoItemLang*)iterLang->value;
+        std::string langCode(lang->code);
+
+        TATO_TREE_STR_FOREACH(tatoDb->langs, iterLang2) {
+
+            // we're indexing only the sentence having a direct or indirect translation
+            // (distance <= 2) in the following language
+            TatoItemLang* transInLang = (TatoItemLang*)iterLang2->value;
+            std::string transInLangCode(transInLang->code);
+
+            TCIDB* index = SearchEngine::get_instance()->get_index(
+                "indirect/" + langCode + transInLangCode
+            );
+
+            TATO_TREE_STR_FOREACH(lang->index, iterItem) {
+
+                item = (TatoItem*) iterItem->value;
+
+                //TODO if has translation in 
+                SearchEngine::get_instance()->add_sentence(
+                    item->id,
+                    std::string(item->str),
+                    std::string(item->lang->code),
+                    index
+                );
+
+                TatoKvListNode *itkv;
+                TATO_KVLIST_FOREACH(item->metas, itkv) {
+                    SearchEngine::get_instance()->add_meta(
+                        item->id,
+                        std::string(itkv->key),
+                        std::string(itkv->value),
+                        std::string(item->lang->code)
+                    );
+                }
+            }
+
+            SearchEngine::get_instance()->close_index(index);
+        }
+    }
+
+}
+*/
+
 
  
 

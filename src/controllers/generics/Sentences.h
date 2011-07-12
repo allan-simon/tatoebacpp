@@ -43,11 +43,11 @@ namespace models {
 }
 
 namespace controllers {
-
+namespace generics {
 /**
  * @class Controller class to handle pages related to sentences
  */
-class Sentences : public Controller {
+class Sentences {
     private:
         /**
          * Model class for sentences
@@ -58,84 +58,85 @@ class Sentences : public Controller {
          * Constructor, will attach the url to the dispatcher
          * and instantiate the model
          */
-		Sentences(cppcms::service &serv);
+		Sentences();
         
         /**
          * Destructor
          */
-        ~Sentences();
+        virtual ~Sentences();
 
         /**
          * Display the sentence with the given id
          */
-		void show(std::string sentence_id);
+		virtual void show(std::string sentence_id) = 0;
 
         /**
          * Display a random sentence
          */
-        void show_random();
+        virtual void show_random() = 0;
 
         /**
          * Display a random sentence in the language with the given iso code
          */
-        void show_random_in(std::string isoCode);
+        virtual void show_random_in(std::string isoCode) = 0;
 
 
         /**
          * Display a form to add a new sentence
          */
-        void add();
+        virtual void add() = 0;
 
         /**
          * Treat the result sent by a form to add a new sentence
          */
-        void add_treat();
+        virtual void add_treat() = 0;
 
         /**
          * Display a form to change the text of the sentence with the
          * given id
          */
-        void edit_text(std::string sentenceId);
+        virtual void edit_text(std::string sentenceId) = 0;
 
         /**
          * Treat the result sent by a form to edit the text of a sentence
          */ 
-        void edit_text_treat();
+        virtual void edit_text_treat() = 0;
 
         /**
          * Display a form to change the lang of the sentence with the
          * given id
          */
-        void edit_lang(std::string sentenceId);
+        virtual void edit_lang(std::string sentenceId) = 0;
 
         /**
          * Treat the result sent by a form to edit the lang of a sentence
          */ 
-        void edit_lang_treat();
+        virtual void edit_lang_treat() = 0;
 
         /**
          * Display a form to add a translation to the sentence with the
          * given id
          */
-        void translate(std::string sentenceId);
+        virtual void translate(std::string sentenceId) = 0;
 
         /**
          * Treat the result sent by a form to translate a sentence
          */ 
-        void translate_treat();
+        virtual void translate_treat() = 0;
 
         /**
          * Link two sentences together
          */
-        void link(std::string idOneStr, std::string idTwoStr);
+        virtual void link(std::string idOneStr, std::string idTwoStr) = 0;
 
         /**
          * Unlink two sentences 
          */
-        void unlink(std::string idOneStr, std::string idTwoStr);
+        virtual void unlink(std::string idOneStr, std::string idTwoStr) = 0;
 
 };
 
-} // End namespace
+} // End namespace generics
+} // End namespace controllers
 
 #endif

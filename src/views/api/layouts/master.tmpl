@@ -1,0 +1,28 @@
+<% c++ #include "contents/content.h" %>
+<% skin %>
+<% view master_api uses contents::BaseContent %>
+
+<% template header() %>
+<% end template %>
+
+
+<% template render() %><?xml version="1.0" encoding="UTF-8"?>
+<tatoeba>
+    <head>
+    <% include header() %>
+    </head>
+    <data>
+    <% include data() %>
+    </data>
+</tatoeba>
+<% end template %>
+
+
+<% template data() %>
+<!-- put here something -->
+<% end template %>
+
+
+<% end view %>
+<% end skin %>
+

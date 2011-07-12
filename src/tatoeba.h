@@ -34,10 +34,11 @@
 
 #include <cppcms/application.h>
 #include <cppdb/frontend.h>
-#include "controllers/Sentences.h"
-#include "controllers/Users.h"
-#include "controllers/Pages.h"
-#include "controllers/Searches.h"
+#include "controllers/webs/Sentences.h"
+#include "controllers/apis/Sentences.h"
+#include "controllers/webs/Users.h"
+#include "controllers/webs/Pages.h"
+#include "controllers/webs/Searches.h"
 
 
 /** 
@@ -53,10 +54,11 @@ namespace apps {
 class Tatoeba : public cppcms::application {
 
 private:
-    controllers::Sentences sentences;
-    controllers::Pages pages;
-    controllers::Users users;
-    controllers::Searches searches;
+    controllers::webs::Sentences sentences;
+    controllers::apis::Sentences sentencesApi;
+    controllers::webs::Pages pages;
+    controllers::webs::Users users;
+    controllers::webs::Searches searches;
     /**
      * map containing aviable language of tatoeba
      * @TODO move this in Languages singleton

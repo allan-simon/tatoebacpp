@@ -85,7 +85,7 @@ class SearchEngine : public Singleton<SearchEngine>{
         results::Searches search_one_index(
             std::string request,
             std::string lang,
-            int size,
+            unsigned int size,
             int offset,
             results::Searches &results,
             std::set<int> &uniqueResults
@@ -216,7 +216,7 @@ class SearchEngine : public Singleton<SearchEngine>{
         results::Searches search(
             std::string request,
             std::string lang,
-            int size,
+            unsigned int size,
             int offset
         );
         

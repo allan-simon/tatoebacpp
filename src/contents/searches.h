@@ -51,7 +51,7 @@ struct SearchesShowResult : public SearchesSimple {
 
 
 
-};
+} // end namespace contents
 
 #endif
 

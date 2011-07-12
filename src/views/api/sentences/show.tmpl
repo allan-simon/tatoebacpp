@@ -1,0 +1,17 @@
+<%c++ #include "contents/sentences.h" %>
+<% skin %>
+<% view sentences_show_api uses contents::SentencesShow extends master_api %>
+
+/**
+ *TODO use a xml helper instead
+ */
+<% template data() %>
+    <% if not shc.empty() %>
+        <% c++ sentences_helper_api sh(out(), content.shc); %>
+        <% c++ sh.sentences_group(content.shc.sentences[0]) ;%>
+    <% end if %>
+<% end template %>
+
+<% end view %>
+<% end skin %>
+

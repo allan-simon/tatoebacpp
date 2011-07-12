@@ -54,7 +54,7 @@ namespace contents {
  * regroup all controllers of the application
  */
 namespace controllers {
-
+namespace generics {
 /**
  * @class Controller
  * it's a generic which is herited by all controllers
@@ -106,6 +106,7 @@ class Controller : public cppcms::application {
 		Controller(cppcms::service &serv);
 };
 
-} // End namespace
+} // End namespace generics
+} // End namespace controllers
 
 #endif

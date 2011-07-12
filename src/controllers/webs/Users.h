@@ -32,6 +32,7 @@ namespace models {
     class Users;
 }
 namespace controllers {
+namespace webs { 
 /**
  * @class Controller class to handle pages related to users
  */
@@ -85,6 +86,7 @@ class Users : public Controller {
         */
 };
 
-} // End namespace
+} // End namespace webs 
+} // End namespace controllers
 
 #endif

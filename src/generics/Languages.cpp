@@ -80,3 +80,11 @@ std::string Languages::get_iso_from_id(int id) {
     // TODO handle if the isoCode is a wrong one
     return idToISO[id];
 }
+
+/**
+ *
+ */
+bool Languages::iso_exists(const std::string &isoCode) {
+    return isoToId.find(isoCode) != isoToId.end();
+}
+

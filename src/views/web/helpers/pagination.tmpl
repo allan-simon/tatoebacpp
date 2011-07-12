@@ -6,6 +6,12 @@
 <% view pagination_helper uses helpers::Paginations %>
     <% template pagination() %>
         <% c++ if (content.size >= content.max) return; %>
+       <style type="text/css"> 
+       .paginationnumbers li {
+               display:inline;
+                   padding-right: 5px;
+       }
+        </style>
         <div class="pagination">
 
             <ul class="paginationnumbers" > 

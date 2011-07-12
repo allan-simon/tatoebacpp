@@ -106,7 +106,19 @@ class Sentences {
         /**
          * get a random sentence and all its translations
          */
-        results::Sentence get_random();
+        results::Sentence get_random(
+            const int depthLimit = 20
+        );
+
+        /**
+         * get a random sentence in the language with the given iso code
+         * and all its translations
+         */
+        results::Sentence get_random(
+            std::string isoCode,
+            const int depthLimit = 20
+        );
+
 
         /**
          * Will add the given sentence in the database

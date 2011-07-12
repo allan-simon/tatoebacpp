@@ -31,6 +31,7 @@
 #include "contents/content.h"
 
 namespace controllers {
+namespace generics {
 
 /**
  *
@@ -129,4 +130,5 @@ int Controller::get_current_user_id() {
 }
 
 
-} // End namespace
+} // End namespace generics
+} // End namespace controllers

@@ -63,5 +63,5 @@ ActionId::~ActionId() {
         cppdb::exec;
 }
 
-};//end namespace singletons
+}//end namespace singletons
 

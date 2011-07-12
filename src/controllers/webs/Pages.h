@@ -23,64 +23,42 @@
  * @link     http://tatoeba.org
  */
 
-
-#ifndef CONTROLLERS_SEARCHES_H
-#define CONTROLLERS_SEARCHES_H
+#ifndef CONTROLLERS_WEBS_PAGES_H
+#define CONTROLLERS_WEBS_PAGES_H
 
 #include "Controller.h"
 
-namespace models {
-    class Searches;
-}
-
-
 namespace controllers {
-
+namespace webs { 
 /**
- * @class Searches
- * Class that will controll all the page request related to the 
- * search engine
+ * @class Pages
+ * contains all functions to generate all independant pages
  */
-class Searches : public Controller {
-    private:
+class Pages : public Controller {
+    public:
         /**
-         * Model class for the search engine
+         * Constructor
          */
-        models::Searches *searchesModel;
-	public:
+        Pages(cppcms::service &serv);
         /**
-         * Constructor, will attach the url to the dispatcher
-         * and instantiate the model
+         * generate home page
          */
-		Searches(cppcms::service &serv);
-        
+        void homepage();
         /**
-         * Destructor
+         * Main page to add sentences and so
          */
-        ~Searches();
-
+        void contribute();
         /**
-         * Will treat the request send by the search bar
+         * Terms of use page
          */
-        void simple_treat();
-
+        void terms_of_use();
         /**
-         * Display the sentences matching the query
+         * Team and Credits page
          */
-        void show_result(std::string query, std::string lang);
-        /**
-         * Display the sentences matching the query (with pagination)
-         */
-        void show_result(
-            std::string query,
-            std::string lang,
-            std::string offset,
-            std::string size
-        );
-
+        void team_and_credits();
 };
 
-}; // End namespace
+} // End namespace webs
+} // End namespace generics
 
 #endif
-

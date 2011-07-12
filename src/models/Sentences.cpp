@@ -39,7 +39,7 @@ namespace models {
  * 
  */
 SentDupliException::SentDupliException(int originalId)
-    : originalId(originalId) {};
+    : originalId(originalId) {}
 
 /**
  * 
@@ -58,7 +58,7 @@ int SentDupliException::get_original_id() const throw() {
 /**
  *
  */
-SentDupliException::~SentDupliException() throw() {};
+SentDupliException::~SentDupliException() throw() {}
 
 
 /**
@@ -117,12 +117,33 @@ int Sentences::get_random_id(std::string isoCode) {
 /**
  *
  */
-results::Sentence Sentences::get_random() {
+results::Sentence Sentences::get_random(
+    const int depthLimit
+) {
 
     TatoDb *tatoDb = GET_DB_POINTER();
     TatoItem *randItem = tato_db_item_rand(tatoDb);
 
-    return sentence_from_item(randItem, 20);
+    return sentence_from_item(randItem, depthLimit);
+
+}
+
+/**
+ *
+ */
+results::Sentence Sentences::get_random(
+    std::string isoCode,
+    const int depthLimit
+) {
+
+    TatoDb *tatoDb = GET_DB_POINTER();
+    TatoItem *randItem = tato_db_item_rand_with_lang(
+        tatoDb,
+        isoCode.c_str()
+    );
+
+
+    return sentence_from_item(randItem, depthLimit);
 
 }
 
@@ -233,7 +254,7 @@ void Sentences::unlink(
         
     TatoRelationsNode *it;
     TATO_RELATIONS_FOREACH(item->relations, it) {
-        if (it->with->id == yId) {
+        if (it->with->id == (unsigned int)yId) {
             bool deleted = tato_db_relation_delete(
                 tatoDb,
                 it->relation->id
@@ -426,7 +447,7 @@ void Sentences::pack_translations(
             }
 
         }
-        // if we have iterated over all the cild of nodes of depth N-1
+        // if we have iterated over all the child of nodes of depth N-1
         // it means we have finished depth N and that the next node will be of
         // depth N + 1
         if (pivot == lastItemForThisDistance) {
@@ -434,6 +455,14 @@ void Sentences::pack_translations(
             translations.push_back(SentencesVector());
             lastItemForThisDistance = itemsQueue.back();
 
+        }
+    }
+
+    //TODO workaround; need to find why we have one or two last extra
+    // empty vectors in the results vectors
+    for(int i = 0; i <currentDepth; i++) {
+        if (translations.back().empty()) {
+            translations.pop_back();
         }
     }
 

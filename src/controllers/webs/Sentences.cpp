@@ -24,15 +24,16 @@
  */
 
 #include "Controller.h"
-#include "controllers/Sentences.h"
+#include "Sentences.h"
 #include "contents/sentences.h"
 
 #include "models/Sentences.h"
 
 namespace controllers {
+namespace webs {
 
 /**
- *
+ * TODO: maybe does not need to inherit from controller ?
  */
 Sentences::Sentences(cppcms::service &serv) : Controller(serv) {
     // TODO have /  and /show directing to some "index" page 
@@ -67,6 +68,9 @@ Sentences::Sentences(cppcms::service &serv) : Controller(serv) {
 Sentences::~Sentences() {
     delete sentencesModel; 
 }
+
+
+
 
 /**
  * 
@@ -476,4 +480,7 @@ void Sentences::edit_lang_treat() {
 
 
 
-} // End namespace
+} // end of namespace webs
+} // end of namespace controllers
+
+

@@ -1,0 +1,85 @@
+<%c++ #include "contents/helpers/sentences.h" %>
+<%c++ #include "contents/helpers/paginations.h" %>
+<%c++ #include "results/sentences.h" %>
+<%c++ using namespace contents; %>
+<% skin %>
+<% view sentences_helper_api uses helpers::Sentences %>
+
+    <% template sentences_group(results::Sentence &mainSentence) %>
+        <sentencesset>
+        <% include main_sentence(mainSentence) %>
+        <% include all_translations(mainSentence.translations, mainSentence.id) %>
+
+        </sentencesset>
+
+    <% end template %>
+
+    <% template main_sentence(results::Sentence &sentence) %>
+        <mainsentence id="<% sentence.id%>" lang="<% sentence.lang %>">
+                <text><![CDATA[<% sentence.text %>]]></text>
+        </mainsentence>
+    <% end template%>
+
+
+    
+    <% template all_translations(TransVector &translations, int mainSentenceId) %>
+        <% foreach transOfDepthN in translations %>
+            <translations>
+            <% c++ int depth = 1; %>
+            <% item %>
+                <depth value="<% c++ out() << depth; %>">
+                <% c++ translations_of_same_depth(transOfDepthN, mainSentenceId); %>
+                <% c++ depth++; %>
+                </depth>
+            <% end %>
+            </translations>
+        <% end foreach%>
+    <% end template %>
+
+
+    <% template translations_of_same_depth(SentencesVector &translations, int mainSentenceId) %>
+        <% foreach translation in translations %>
+            <% item %>
+                <% c++ generic_sentence(translation, mainSentenceId); %>
+            <% end item %>
+        <% end foreach %>
+
+    <% end template %>
+        
+    <% template generic_sentence(results::Sentence &sentence, int mainSentenceId) %>
+        <sentence
+            id="<% sentence.id %>"
+            lang="<% sentence.lang %>"
+        >
+            <text><![CDATA[<% sentence.text  %>]]></text>
+        </sentence>
+
+    <% end template %>
+
+
+
+    <% template sentences_list(std::string title, int size) %>
+        <% c++ contents::helpers::Paginations phc( %>
+        <% c++ content.sentences.offset, %>
+        <% c++ size, %>
+        <% c++ content.sentences.maxsize, %>
+        <% c++ content.baseUrl, %>
+        <% c++ content.lang %>
+        <% c++ ); %>
+
+        <% c++ pagination_helper ph(out(), phc); %> 
+        <% c++ ph.pagination(); %>
+
+        <list>
+        <% foreach sentence in sentences %>
+            <% item %>
+                <% include sentences_group(sentence) %>
+            <% end %>
+        <% end foreach %>
+        </list>
+    <% end template %>
+
+
+
+<% end view %>
+<% end skin %>

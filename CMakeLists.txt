@@ -9,6 +9,7 @@ file(
     GLOB
     controllers_files
     src/controllers/*
+    src/controllers/*/*
 )
 
 file(
@@ -48,7 +49,7 @@ add_executable(
     ${generics_files}
     ${results_files}
     ${contents_files}
-    simple.cpp
+    view_web.cpp
 )
 
 target_link_libraries(
@@ -81,10 +82,12 @@ target_link_libraries(
 
 
 add_custom_command(
-    OUTPUT simple.cpp
+    OUTPUT view_web.cpp
     COMMAND ../tools/cppcms_tmpl_cc 
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/views/*/*.tmpl 
-        -o simple.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/views/web/*/*.tmpl 
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/views/api/*/*.tmpl 
+        -o view_web.cpp
     DEPENDS
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/views/*/*.tmpl 
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/views/web/*/*.tmpl 
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/views/api/*/*.tmpl 
 )

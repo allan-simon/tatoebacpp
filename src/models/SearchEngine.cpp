@@ -348,7 +348,7 @@ void SearchEngine::remove_meta(
 results::Searches SearchEngine::search(
     std::string request,
     std::string lang,
-    int size,
+    unsigned int size,
     int offset
 ) {
     std::set<int> uniqueResults;
@@ -391,7 +391,7 @@ results::Searches SearchEngine::search(
 results::Searches SearchEngine::search_one_index(
     std::string request,
     std::string indexName,
-    int size,
+    unsigned int size,
     int offset,
     results::Searches& results,
     std::set<int>& uniqueResults
@@ -413,7 +413,7 @@ results::Searches SearchEngine::search_one_index(
         &rnum
     );
 
-    int max = std::min(rnum,size+offset);
+    int max = std::min(rnum,(int)size+offset);
 
     if (beginWithResult) {
 

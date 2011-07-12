@@ -24,15 +24,16 @@
  */
 
 #include "Controller.h"
-#include "controllers/Pages.h"
+#include "Pages.h"
 
 #include "contents/pages.h"
 #include "models/Sentences.h"
 #include "models/TatoDB.h"
 
 namespace controllers {
+namespace webs {
 
-Pages::Pages(cppcms::service& serv) : controllers::Controller(serv) {
+Pages::Pages(cppcms::service& serv) : controllers::webs::Controller(serv) {
     dispatcher().assign("", &Pages::homepage, this);
   	dispatcher().assign("/contribute", &Pages::contribute, this);
   	dispatcher().assign("/terms-of-use", &Pages::terms_of_use, this);
@@ -86,4 +87,5 @@ void Pages::team_and_credits() {
     render("teamandcredits", c);
 }
 
-} // End namespace
+} // End namespace webs
+} // End namespace controllers

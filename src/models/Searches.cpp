@@ -55,4 +55,4 @@ results::SentencesPagiVector Searches::advance(
     return sentencesPagiVector;
 }
 
-}; //end of namespace
+} //end of namespace

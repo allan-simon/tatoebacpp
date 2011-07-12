@@ -5,7 +5,7 @@
 <% skin %>
 <% view sentences_helper uses helpers::Sentences %>
 
-    <% template sentences_group(results::Sentence mainSentence) %>
+    <% template sentences_group(results::Sentence &mainSentence) %>
         <div class="sentences_set" >
         <% include menu(mainSentence.id) %>
         <% include main_sentence(mainSentence) %>
@@ -46,7 +46,7 @@
         </ul>
     <% end template %>
 
-    <% template main_sentence(results::Sentence sentence) %>
+    <% template main_sentence(results::Sentence &sentence) %>
         <div class="sentence mainSentence">
             <a
                 class="infoIcon"
@@ -73,7 +73,7 @@
 
 
     
-    <% template all_translations(TransVector translations, int mainSentenceId) %>
+    <% template all_translations(TransVector &translations, int mainSentenceId) %>
         <% foreach transOfDepthN in translations %>
             <div class="translations" >
             <% c++ int depth = 1; %>
@@ -86,7 +86,7 @@
     <% end template %>
 
 
-    <% template translations_of_same_depth(SentencesVector translations, int depth, int mainSentenceId) %>
+    <% template translations_of_same_depth(SentencesVector &translations, int depth, int mainSentenceId) %>
         <% foreach translation in translations %>
             <% if (depth == 1) %>
 

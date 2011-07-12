@@ -9,6 +9,7 @@
 #include "results/sentences.h"
 //TODO write doc
 namespace models {
+
 class Searches {
     public:
         Searches();
@@ -24,6 +25,7 @@ class Searches {
 
 
 };
-};
+
+} // end namespace models
 #endif 
 

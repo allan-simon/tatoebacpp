@@ -1,5 +1,5 @@
 #include "Controller.h"
-#include "controllers/Searches.h"
+#include "Searches.h"
 #include "contents/searches.h"
 
 #include "models/Searches.h"
@@ -7,7 +7,7 @@
 #include <cppcms/filters.h>
 
 namespace controllers {
-
+namespace webs {
 /**
  *
  */
@@ -92,4 +92,5 @@ void Searches::show_result (
     render ("searches_show_result", c);
 }
 
-};
+} // End namespace webs
+} // End namespace controllers

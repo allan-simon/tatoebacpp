@@ -54,7 +54,7 @@ namespace models {
     };
     typedef std::vector<UserResult> ListOfUsers;
 
-static int callback(void *NotUsed, int argc, char **argv, char **azColName);
+//static int callback(void *NotUsed, int argc, char **argv, char **azColName);
 
 class Users : public SqliteModel {
     private:

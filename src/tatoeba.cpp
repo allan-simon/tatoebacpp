@@ -37,9 +37,6 @@
 
 #include "tatoeba.h"
 
-#include "controllers/Pages.h"
-#include "controllers/Sentences.h"
-#include "controllers/Users.h"
 
 namespace apps {
 
@@ -49,11 +46,13 @@ namespace apps {
 Tatoeba::Tatoeba(cppcms::service &serv) :
     cppcms::application(serv),
     sentences(serv),
-    users(serv),
+    sentencesApi(serv),
     pages(serv),
+    users(serv),
     searches(serv)
 {
 
+    add(sentencesApi, "^/sentences/api(.*)", 1);
     add(sentences, "^/sentences(.*)", 1);
     add(users, "^/users(.*)", 1);
     add(searches, "^/searches(.*)", 1);

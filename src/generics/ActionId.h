@@ -63,5 +63,5 @@ class ActionId : public Singleton<ActionId> {
 
 };
 
-}; //end namespace singletons
+} //end namespace singletons
 #endif

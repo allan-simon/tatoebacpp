@@ -22,14 +22,15 @@
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
-#include "controllers/Users.h"
 #include <cppcms/session_interface.h>
+
+#include "Users.h"
 #include "contents/users.h"
 #include "models/Users.h"
 #include "contents/Config.h"
 
 namespace controllers {
-
+namespace webs {
 /**
  *
  */
@@ -182,4 +183,5 @@ void Users::list_members(std::string page) {
     render("allusers", c);
 }
 */
-} // End namespace
+} // End namespace webs
+} // End namespace controllers
