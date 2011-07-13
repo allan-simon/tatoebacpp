@@ -6,6 +6,9 @@ import sys
 
 variable_match=r"\*?([a-zA-Z][a-zA-Z0-9_\[\]]*\(?\)?)(((\.|->)([a-zA-Z][a-zA-Z0-9_\[\]]*\(?\)?))*)"
 str_match=r'"([^"\\]|\\[^"]|\\")*"'
+single_var_param_match=r'(?:-?\d+|"(?:[^"\\]|\\[^"]|\\")*")'
+call_param_match=r'(?:\(\)|\((?:' + single_var_param_match + r')(?:,' + single_var_param_match + r')*\))'
+variable_match=r"\*?([a-zA-Z][a-zA-Z0-9_]*"+ call_param_match +r"?)(((\.|->)([a-zA-Z][a-zA-Z0-9_]*" + call_param_match + r"?))*)"
 
 def interleave(*args):
     for idx in range(0, max(map(len,args))):
@@ -53,20 +56,20 @@ class skin_block:
         output( "} // end of namespace %s" % namespace_name)
 
 
-def write_class_loader():
+def write_class_loader(unsafe = False):
     global class_list
     global namespace_name
     output("namespace {")
     output(" struct loader { ")
     output("  loader() { ")
     output("    cppcms::views_pool::mapping_type mapping;" )
+    if  unsafe:
+        builder = 'unsafe_view_builder'
+    else:
+        builder = 'view_builder'
     for class_def in class_list:
-        if (class_def.content_name != ""):
-            output( '   mapping["%s"]=&cppcms::views_pool::view_builder<%s::%s,%s>;' \
-                % (class_def.name,class_def.namespace,class_def.name,class_def.content_name))
-        else:
-            output( '   mapping["%s"]=&cppcms::views_pool::view_builder<%s::%s>;' \
-                % (class_def.name,class_def.namespace,class_def.name))
+        output( '   mapping["%s"]=&cppcms::views_pool::%s<%s::%s,%s>;' \
+                % (class_def.name,builder,class_def.namespace,class_def.name,class_def.content_name))
     output('    cppcms::views_pool::static_instance().add_view("%s",mapping); ' % namespace_name)
     output(' }')
     output(' ~loader() {  cppcms::views_pool::static_instance().remove_view("%s"); }' % namespace_name)
@@ -83,11 +86,9 @@ class html_type:
         else:
             html_type_code='as_html'
 
-    
-
 
 class view_block:
-    pattern=r'^<%\s*view\s+(\w+)\s+(uses\s+(:?:?\w+(::\w+)?))?\s+(extends\s+(:?:?\w+(::\w+)?))?\s*%>$'
+    pattern=r'^<%\s*view\s+(\w+)\s+uses\s+(:?:?\w+(::\w+)*)(\s+extends\s+(:?:?\w+(::\w+)?))?\s*%>$'
     type='view'
     topmost = 0
     def declare(self):
@@ -112,12 +113,9 @@ class view_block:
 
     def use(self,m):
         self.class_name=m.group(1)
-        if m.group(2):
-            self.uses=m.group(3)
-        else:
-            self.uses=''
-        if m.group(5):
-            self.extends=m.group(6)
+        self.uses=m.group(2)
+        if m.group(4):
+            self.extends=m.group(5)
         else:
             self.extends=''
         self.declare();
@@ -369,7 +367,7 @@ class if_block:
         self.type=m.group(1)
         if m.group(4):
             if m.group(4)=='rtl':
-                self.ident='(cppcms::locale::translate("LTR").str<char>(out().getloc())=="RTL")'
+                self.ident='(cppcms::locale::translate("LTR").str(out().getloc())=="RTL")'
             else:
                 self.ident=make_ident(m.group(4))
             if m.group(3):
@@ -424,6 +422,8 @@ class cpp_include_block:
 class base_show:
     mark='('+variable_match+r')\s*(\|(.*))?'
     base_pattern='^\s*'+mark + '$'
+    def __init__(self,default_filter='escape'):
+        self.default_filter=default_filter
     def get_params(self,s):
         pattern='^\s*(('+variable_match+')|('+str_match+')|(\-?\d+(\.\d*)?))\s*(,(.*))?$'
         res=[]
@@ -449,7 +449,7 @@ class base_show:
             return [];
         var=make_ident(m.group(1))
         if not m.group(8):
-            return "cppcms::filters::escape(%s)" % var
+            return "cppcms::filters::%s(%s)" % (self.default_filter, var)
         filters=m.group(8)
         expr='^\s*(ext\s+)?(\w+)\s*(\((([^"\)]|'+str_match + ')*)\))?\s*(\|(.*))?$'
         m=re.match(expr,filters)
@@ -481,7 +481,7 @@ class form_block:
         if type=='input' or type=='begin' or type=='end':
             flags = 'cppcms::form_flags::' + html_type_code;
             output('{ cppcms::form_context _form_context(out(),%s);' % flags)
-            render_command = '    %s.render_input(_form_context);' % ident;
+            render_command = '    (%s).render_input(_form_context);' % ident;
             if type=='begin':
                 output('    _form_context.widget_part(cppcms::form_context::first_part);')
                 output(render_command)
@@ -491,30 +491,40 @@ class form_block:
             else:
                 output('    _form_context.widget_part(cppcms::form_context::first_part);')
                 output(render_command)
-                output('    out() << %s.attributes_string();' % ident)
+                output('    out() << (%s).attributes_string();' % ident)
                 output('    _form_context.widget_part(cppcms::form_context::second_part);')
                 output(render_command)
             output('}')
 
         else:
             flags = 'cppcms::form_flags::%s,cppcms::form_flags::%s' % ( html_type_code, m.group(1));
-            output('{ cppcms::form_context _form_context(out(),%s); %s.render(_form_context); }' % (flags , ident))
+            output('{ cppcms::form_context _form_context(out(),%s); (%s).render(_form_context); }' % (flags , ident))
+
+class render_block:
+    pattern=r'<%\s*render\s+(?P<name>[a-zA-Z]\w*)(\s+using\s+(?P<content>'+variable_match+r'))?\s*%>'
+    def use(self,m):
+        if m.group('content'):
+            content = make_ident(m.group('content'))
+        else:
+            content = 'content';
+        global namespace_name
+        output('content.app().render("%s","%s",out(),%s);"' % (content,namespace_name,content))
 
 
 class filters_show_block(base_show):
-    pattern=r'^<%\s*('+ variable_match + r'\s*(\|.*)?)%>$'
+    pattern=r'^<%=?\s*('+ variable_match + r'\s*(\|.*)?)%>$'
     def use(self,m):
         expr=self.prepare(m.group(1));
         if expr!="":
             output('out()<<%s;' % expr)
 
-def make_format_params(s):
+def make_format_params(s,default_filter = 'escape'):
     pattern=r'^(([^,\("]|'+str_match+'|\(([^"\)]|'+str_match+')*\))+)(,(.*))?$'
     params=[]
     m=re.match(pattern,s)
     s_orig=s
     while m.group(1):
-        res=base_show().prepare(m.group(1))
+        res=base_show(default_filter).prepare(m.group(1))
         if res:
             params.append(res)
         if not m.group(6):
@@ -523,6 +533,63 @@ def make_format_params(s):
         m=re.match(pattern,s)
     error_exit("Seems to be wrong parameters list [%s]" % s_orig)
     return []
+
+class cache_block:
+    pattern=r'<%\s*cache\s+((?P<str>'+ \
+            str_match +')|(?P<var>'+ variable_match +r'))' + \
+            r'(\s+for\s+(?P<time>\d+))?(\s+on\s+miss\s+(?P<callback>[a-zA-Z]\w*)\(\))?' \
+            + r'(?P<notriggers>\s+no\s+triggers)?' \
+            + r'(?P<norecording>\s+no\s+recording)?' \
+            + '\s*%>'        
+    type = 'cache'
+    def use(self,m):
+        if(m.group('str')):
+            self.parameter = m.group('str')
+        else:
+            self.parameter = make_ident(m.group('var'));
+        self.notriggers = m.group('notriggers')
+        self.norecording = m.group('norecording')
+        output('{ std::string _cppcms_temp_val;')
+        output('  if(content.app().cache().fetch_frame(%s,_cppcms_temp_val))' % self.parameter);
+        output('      out() << _cppcms_temp_val;');
+        output('  else {')
+        output('    cppcms::copy_filter _cppcms_cache_flt(out());')
+        if not self.norecording:
+            output('    cppcms::triggers_recorder _cppcms_trig_rec(content.app().cache());')
+        # the code below should be the last one 
+        if(m.group('callback')):
+            output('    '+make_ident(m.group('callback')+'()') + ';')
+        self.timeout = m.group('time');
+        global stack
+        stack.append(self)
+    def on_end(self):
+        if self.timeout:
+            timeout_time = self.timeout
+        else:
+            timeout_time = '-1'
+        if self.norecording:
+            recorded = 'std::set<std::string>()'
+        else:
+            recorded = '_cppcms_trig_rec.detach()'
+        if self.notriggers:
+            notriggers='true'
+        else:
+            notriggers='false'
+        output('    content.app().cache().store_frame(%s,_cppcms_cache_flt.detach(),%s,%s,%s);' \
+                    % (self.parameter,recorded,timeout_time,notriggers))
+        output('}} // cache')
+
+class trigger_block:
+    pattern=r'<%\s*trigger\s+((?P<str>'+  str_match +')|(?P<var>'+ variable_match +r'))' + r'\s*%>'
+    def use(self,m):
+        if(m.group('str')):
+            parameter = m.group('str')
+        else:
+            parameter = make_ident(m.group('var'));
+        output('content.app().cache().add_trigger(%s);' % parameter)
+
+
+
 
 class ngettext_block:
     pattern=r'^<%\s*ngt\s*('+str_match+')\s*,\s*('+str_match+')\s*,\s*('+variable_match+')\s*(using(.*))?\s*%>$'
@@ -576,10 +643,6 @@ class url_block:
                 "<< \"/\" << cppcms::filters::escape(content.lang)"+
                 '<<cppcms::locale::format(%s) %% (%s);' % (s, ') % ('.join(params)))
 
-
-class cpp_block:
-    pattern = r'<%\s*cppblock \s*%>'
-
 def fetch_content(content):
     tmp=''
     for row in re.split('\n',content):
@@ -601,6 +664,7 @@ def help():
         "      -o filename.cpp     file name that implements this template\n" \
         "      -s skin             define skin name\n" \
         "      -d domain           setup gettext domain for this template\n" \
+        "      -u                  use unsafe static casting instead of dynamic casing for dlls\n" \
         "      -h/--help           show this help message\n"
 
 
@@ -613,6 +677,7 @@ def main():
     global namespace_name
     global output_file
     global exit_flag
+    unsafe_build = False
     while indx < len(os.sys.argv):
         if os.sys.argv[indx]=='-s' or os.sys.argv[indx]=='-n':
             if indx+1>=len(os.sys.argv):
@@ -642,7 +707,8 @@ def main():
                 global spec_gettext
                 spec_gettext=os.sys.argv[indx+1]
                 indx+=1
-
+        elif os.sys.argv[indx]=='-u':
+            unsafe_build = True
         elif os.sys.argv[indx]=='--help' or os.sys.argv[indx]=='-h':
             help()
             exit_flag=1
@@ -682,6 +748,8 @@ def main():
                     url_block(), \
                     foreach_block(), item_block(), empty_block(),separator_block(), \
                     include_block(), \
+                    cache_block(), \
+                    trigger_block(), \
                     html_type(), form_block(), \
                     filters_show_block(), error_com() ]:
                 m = re.match(c.pattern,x)
@@ -697,7 +765,7 @@ def main():
             error_exit("Unexpected end of file %s" % file)
     global class_list
     if class_list and exit_flag==0:
-        write_class_loader()
+        write_class_loader(unsafe_build)
 
 #######################
 # MAIN

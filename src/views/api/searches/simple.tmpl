@@ -1,0 +1,15 @@
+<%c++ #include "contents/searches.h" %>
+<% skin %>
+<% view searches_simple_api uses contents::SearchesShowResult extends master_api %>
+
+<% template data() %>
+    <% if not shc.empty() %>
+        <% c++ sentences_helper_api sh(out(), content.shc); %>
+        <% c++ sh.sentences_list(content.paginationSize); %> 
+    <% end %>
+<% end %>
+
+
+
+<% end view %>
+<% end skin %>

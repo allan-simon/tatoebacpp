@@ -9,7 +9,9 @@ file(
     GLOB
     controllers_files
     src/controllers/*
-    src/controllers/*/*
+    src/controllers/apis/*
+    src/controllers/webs/*
+    src/controllers/generics/*
 )
 
 file(

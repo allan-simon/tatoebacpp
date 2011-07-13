@@ -58,18 +58,7 @@
 
 
 
-    <% template sentences_list(std::string title, int size) %>
-        <% c++ contents::helpers::Paginations phc( %>
-        <% c++ content.sentences.offset, %>
-        <% c++ size, %>
-        <% c++ content.sentences.maxsize, %>
-        <% c++ content.baseUrl, %>
-        <% c++ content.lang %>
-        <% c++ ); %>
-
-        <% c++ pagination_helper ph(out(), phc); %> 
-        <% c++ ph.pagination(); %>
-
+    <% template sentences_list(int size) %>
         <list>
         <% foreach sentence in sentences %>
             <% item %>
