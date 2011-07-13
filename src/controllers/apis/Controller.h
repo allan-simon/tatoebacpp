@@ -46,6 +46,17 @@
         return;\
     }
 
+
+#define GET_FIELD(fieldVar, fieldString) \
+    it = getData.find(fieldString);\
+    if (it != getData.end()) {\
+        fieldVar = it->second;\
+    } else {\
+        return;\
+    }
+    
+
+
 namespace contents {
     class BaseContent;
 }

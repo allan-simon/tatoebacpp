@@ -44,24 +44,15 @@ void Searches::simple(
  *
  */
 void Searches::simple () {
-    std::string fromLang = "test";
-    std::string query = "testquery";
+    std::string fromLang = "";
+    std::string query = "";
 
     if (request().request_method() == "GET") {
         cppcms::http::request::form_type getData = request().get();
         cppcms::http::request::form_type::const_iterator it;
         
-        it = getData.find("from");
-        if (it != getData.end()) {
-            fromLang = it->second;
-        }
-
-        it = getData.find("query");
-        if (it != getData.end()) {
-            query = it->second;
-        }
-
-
+        GET_FIELD(fromLang, "from");
+        GET_FIELD(query, "query");
     }
 
     

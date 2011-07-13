@@ -17,59 +17,31 @@
  *
  *
  * @category Tatoebacpp
- * @package  Controllers
+ * @package  Contents
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
+#ifndef CONTENTS_LANGUAGES_H
+#define CONTENTS_LANGUAGES_H
+
+#include "contents/content.h"
+#include "generics/Languages.h"
 
 
-#ifndef CONTROLLERS_APIS_SEARCHES_H
-#define CONTROLLERS_APIS_SEARCHES_H
-
-#include "Controller.h"
-
-namespace models {
-    class Searches;
-}
-
-
-namespace controllers {
-namespace apis {
+namespace contents {
 
 /**
- * @class Searches
- * Class that will controll all the page request related to the 
- * search engine
+ * @struct LanguagesGetLangs
+ * use to send the list of supported languages from the controller
+ * to the view
  */
-class Searches : public Controller {
-    private:
-        /**
-         * Model class for the search engine
-         */
-        models::Searches *searchesModel;
-	public:
-        /**
-         * Constructor, will attach the url to the dispatcher
-         * and instantiate the model
-         */
-		Searches(cppcms::service &serv);
-        
-        /**
-         * Destructor
-         */
-        ~Searches();
-
-        /**
-         * Display the sentences matching the query 
-         */
-        void simple();
-
-
+struct LanguagesGetLangs : public BaseContent {
+    ISOToNameMap langs;
 };
 
-} // End namespace apis
-} // End namespace generics
+} // end namespace contents
 
 #endif
+
 

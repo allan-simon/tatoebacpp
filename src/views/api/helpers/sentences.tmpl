@@ -15,7 +15,7 @@
     <% end template %>
 
     <% template main_sentence(results::Sentence &sentence) %>
-        <mainsentence id="<% sentence.id%>" lang="<% sentence.lang %>">
+        <mainsentence tatoid="<% sentence.id%>" lang="<% sentence.lang %>">
                 <text><![CDATA[<% sentence.text %>]]></text>
         </mainsentence>
     <% end template%>
@@ -48,7 +48,7 @@
         
     <% template generic_sentence(results::Sentence &sentence, int mainSentenceId) %>
         <sentence
-            id="<% sentence.id %>"
+            tatoid="<% sentence.id %>"
             lang="<% sentence.lang %>"
         >
             <text><![CDATA[<% sentence.text  %>]]></text>

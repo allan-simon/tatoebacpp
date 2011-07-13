@@ -24,46 +24,36 @@
  */
 
 
-#ifndef CONTROLLERS_APIS_SEARCHES_H
-#define CONTROLLERS_APIS_SEARCHES_H
+#ifndef CONTROLLERS_APIS_LANGUAGES_H
+#define CONTROLLERS_APIS_LANGUAGES_H
 
 #include "Controller.h"
-
-namespace models {
-    class Searches;
-}
 
 
 namespace controllers {
 namespace apis {
 
 /**
- * @class Searches
- * Class that will controll all the page request related to the 
- * search engine
+ * @class Languages
+ * Class that exposed an api to the Languages singletons
  */
-class Searches : public Controller {
-    private:
-        /**
-         * Model class for the search engine
-         */
-        models::Searches *searchesModel;
+class Languages : public Controller {
 	public:
         /**
          * Constructor, will attach the url to the dispatcher
-         * and instantiate the model
          */
-		Searches(cppcms::service &serv);
+		Languages(cppcms::service &serv);
         
         /**
          * Destructor
          */
-        ~Searches();
+        ~Languages();
 
         /**
-         * Display the sentences matching the query 
+         * Retrieve the list of supported languages, their name
+         * and iso code
          */
-        void simple();
+        void getLangs();
 
 
 };

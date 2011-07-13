@@ -1,0 +1,21 @@
+<%c++ #include "contents/languages.h" %>
+<% skin %>
+<% view languages_get_langs_api uses contents::LanguagesGetLangs extends master_api %>
+
+<% template data() %>
+    <%foreach language in langs %>
+        <languages>
+        <% item %>
+            <language isocode="<% language.first %>">
+                <![CDATA[<% language.second%>]]>
+            </language>
+        <% end%>
+        </languages>
+    <%end foreach %>
+<% end %>
+
+
+
+<% end view %>
+<% end skin %>
+
