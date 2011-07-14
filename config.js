@@ -23,7 +23,7 @@
         }
     },
 	"tatoeba" : {
-        "tatodbxml" : "../doc/tatodb.xml.huge",
+        "tatodbxml" : "../doc/tatodb.xml",
 		"css" : "http://css.tatoeba.org/css",
 		"img" : "http://flags.tatoeba.org/img",
         "web" : "http://127.0.0.1:4242/",
