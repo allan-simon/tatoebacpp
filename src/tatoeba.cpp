@@ -51,7 +51,8 @@ Tatoeba::Tatoeba(cppcms::service &serv) :
     users(serv),
     searches(serv),
     searchesApi(serv),
-    languagesApi(serv)
+    languagesApi(serv),
+    adminApi(serv)
 {
 
     add(sentencesApi, "^/api/sentences(.*)", 1);
@@ -60,6 +61,7 @@ Tatoeba::Tatoeba(cppcms::service &serv) :
     add(searchesApi, "^/api/searches(.*)", 1);
     add(searches, "^/searches(.*)", 1);
     add(languagesApi,"^/api/languages(.*)", 1);
+    add(adminApi,"^/api/admin(.*)", 1);
     //NOTE important to add the page controller at the end
     //as its regexp is more global
     add(pages, "(.*)", 1);

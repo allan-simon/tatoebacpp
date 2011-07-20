@@ -31,14 +31,6 @@
 #include "Controller.h"
 #include "controllers/generics/Sentences.h"
 
-/*
-extern "C" {
-#include "tato/db.h"
-#include "tato/item.h"
-#include "tato/list.h"
-#include "tato/fetcher_tree.h"
-}
-*/
 namespace models {
     class Sentences;
 }

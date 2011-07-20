@@ -41,6 +41,7 @@
 #include "controllers/webs/Searches.h"
 #include "controllers/apis/Searches.h"
 #include "controllers/apis/Languages.h"
+#include "controllers/apis/Admin.h"
 
 
 /** 
@@ -63,6 +64,7 @@ private:
     controllers::webs::Searches searches;
     controllers::apis::Searches searchesApi;
     controllers::apis::Languages languagesApi;
+    controllers::apis::Admin adminApi;
     /**
      * map containing aviable language of tatoeba
      * @TODO move this in Languages singleton

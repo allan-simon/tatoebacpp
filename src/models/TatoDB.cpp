@@ -29,6 +29,14 @@ void TatoDB::dump(std::string path) {
 /**
  *
  */
+void TatoDB::sphinx_dump(std::string path) {
+    tato_db_sphinx_dump(tatoDb, path.c_str());
+}
+
+
+/**
+ *
+ */
 results::SentencesStats TatoDB::get_sentences_stats() {
     results::SentencesStats sentencesStats;
     TatoTreeStrNode *iter = NULL;

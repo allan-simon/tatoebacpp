@@ -75,6 +75,14 @@ class TatoDB : public Singleton<TatoDB>{
          * Will dump the database in the given following xml file
          */ 
         void dump(std::string path);
+
+        /**
+        * @brief Dump the database into a sphinx indexable format in the given file
+        *
+        * @param path Path of the file in which the dump will be written
+        */
+        void sphinx_dump(std::string path);
+
         /**
          * Will feed the search engine 
          */ 
