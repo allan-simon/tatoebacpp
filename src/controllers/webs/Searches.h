@@ -74,9 +74,8 @@ class Searches : public Controller {
          */
         void show_result(
             std::string query,
-            std::string lang,
-            std::string offset,
-            std::string size
+            std::string fromLang,
+            std::string toLang
         );
 
 };

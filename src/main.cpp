@@ -74,11 +74,11 @@ int main(int argc,char ** argv)
     );
 
     /*start the search engine*/
-    SearchEngine::get_instance();
-    SearchEngine::get_instance()->init_indexed_metas(
-        app.settings().at("tatoeba.indexedMetas").object()
-    );
-    cout << "[NOTICE] search engine loaded" << endl;
+    //SearchEngine::get_instance();
+    //SearchEngine::get_instance()->init_indexed_metas(
+    //    app.settings().at("tatoeba.indexedMetas").object()
+    //);
+    //cout << "[NOTICE] search engine loaded" << endl;
 
     //singletons::ActionId::get_instance();
     /*instantiate the website application*/
@@ -94,7 +94,7 @@ int main(int argc,char ** argv)
 
     /*time to destroy all the singletons*/
     singletons::ActionId::kill();
-    SearchEngine::kill();
+    //SearchEngine::kill();
     TatoDB::kill();
     Config::kill();
     Languages::kill();

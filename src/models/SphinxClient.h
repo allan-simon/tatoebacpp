@@ -17,48 +17,56 @@
  *
  *
  * @category Tatoebacpp
- * @package  Results
+ * @package  Models
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
 
-#ifndef TATOEBA_RESULTS_SEARCHES_H 
-#define TATOEBA_RESULTS_SEARCHES_H  
+
+#ifndef TATOEBA_MODELS_SPHINX_CLIENT_H 
+#define TATOEBA_MODELS_SPHINX_CLIENT_H  
 
 #include <vector>
 
-namespace results {
+#if _WIN32
+#include <winsock2.h>
+#endif
 
-/**
- * @struct Searches
- * Used to store the ids of the sentence that match a search query
- */
-struct Searches : public std::vector<int> {
-    /**
-     * offset, mainly used in pagination, if we want to skip the offset th
-     * results
-     */
-    int offset;
-    /**
-     * used with pagination, we will retrieve at most maxsize elements
-     */
-    int maxsize;
+#include "sphinxclient.h"
+#include "results/searches.h"
+
+
+
+
+namespace models {
+
+class SphinxClient {
+
+    private:
+        sphinx_client *client;
+
+        void net_init();
+    
     public:
-        /**
-         * Constructor
-         */
-        Searches(): offset(0), maxsize(0) {};
-        /**
-         * Constructor with a preallocated size
-         */
-        Searches(int size) :
-            std::vector<int>(size),
-            offset(0),
-            maxsize(0)
-            {};
+        SphinxClient(std::string hostname, int port);
+        ~SphinxClient();
+        results::Searches search(
+            const std::string &query,
+            const std::string &from,
+            const std::string &to,
+            const int size,
+            const int offset
+        );
+        /*
+        ::results::Searches search(
+            std::string query,
+            std::string from,
+            std::string to
+        );
+        */
 };
 
-} // end of namespace
+} // end namespace models 
 
 #endif

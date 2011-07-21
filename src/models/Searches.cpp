@@ -13,31 +13,51 @@ namespace models {
 /**
  *
  */
-Searches::Searches() {
-    
+Searches::Searches() :
+    sphinxClient("127.0.0.1", 9312) 
+{
+
 }
 
 /**
  *
  */
 results::SentencesPagiVector Searches::advance(
-    std::string query,
-    std::string lang
+    const std::string &query,
+    const std::string &fromLang,
+    const std::string &toLang 
 ) {
-    return advance(query, lang, 10, 0);
+    return advance(
+        query,
+        fromLang,
+        toLang,
+        10,
+        0
+    );
 }
 results::SentencesPagiVector Searches::advance(
-    std::string query,
-    std::string lang,
-    int size,
-    int offset
+    const std::string &query,
+    const std::string &fromLang,
+    const std::string &toLang,
+    const int size,
+    const int offset
 ) {
+    /*
     results::Searches resultIds = SearchEngine::get_instance()->search(
         query,
         lang,
         size,
         offset
     );
+    */
+    results::Searches resultIds = sphinxClient.search(
+        query,
+        fromLang,
+        toLang,
+        size,
+        offset
+    );
+    
     
     results::SentencesPagiVector sentencesPagiVector(resultIds.size());
 

@@ -47,6 +47,13 @@ namespace forms {
          * Language in which we want the results
          */
         cppcms::widgets::select sentencesLang;
+        
+        
+        /**
+         * Language in which we want the results to 
+         * have translations in
+         */
+        cppcms::widgets::select translatedInLang;
 
         /**
          * HTML submit button
@@ -54,7 +61,7 @@ namespace forms {
 		cppcms::widgets::submit submit;
 		
 		SearchesSimple() {
-            *this + query + sentencesLang + submit;
+            *this + query + sentencesLang + translatedInLang + submit;
 
             query.name("query");
 
@@ -66,6 +73,7 @@ namespace forms {
             ISOToNameMap::iterator itr;
             for(itr = isoToName.begin(); itr != isoToName.end(); ++itr){
                 sentencesLang.add(itr->second,itr->first);
+                translatedInLang.add(itr->second,itr->first);
             }
 
             submit.name("search");
@@ -75,13 +83,14 @@ namespace forms {
             // TODO for select I'm sure there's something more specific for
             // selects to say "value must one the possible values of the select"
             sentencesLang.non_empty();
+            translatedInLang.non_empty();
         };
 
         /**
          * Test if the form is correctly filled
          */
 		virtual bool validate() {
-			if ( ! form::validate()) {
+			if (!form::validate()) {
 				return false;
 			}
 			return true;

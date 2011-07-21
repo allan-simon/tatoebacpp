@@ -17,8 +17,7 @@ Searches::Searches(cppcms::service &serv) : Controller(serv) {
     cppcms::url_dispatcher* disp = &dispatcher();
 
   	disp->assign("/simple_treat$", &Searches::simple_treat, this);
-  	disp->assign("/show-result/(.*)/([a-z]+)$", &Searches::show_result, this,1, 2);
-  	disp->assign("/show-result/(.*)/([a-z]+)/(\\d+)/(\\d+)$", &Searches::show_result, this,1 ,2, 3, 4);
+  	disp->assign("/show-result/(.*)/([a-z]+)/([a-z]+)$", &Searches::show_result, this,1, 2, 3);
 
     searchesModel = new models::Searches();
 }
@@ -46,46 +45,72 @@ void Searches::simple_treat() {
 
     std::ostringstream oss;
     oss << cppcms::filters::urlencode(searchesSimple.query.value());
+    
 
     response().set_redirect_header(
         "/" + get_interface_lang() +"/searches/show-result"
         "/" + oss.str() +
-        "/" + searchesSimple.sentencesLang.selected_id()
+        "/" + searchesSimple.sentencesLang.selected_id() +
+        "/" + searchesSimple.translatedInLang.selected_id()
     );
 
 }
 
-/**
- *
- */
-void Searches::show_result(std::string query, std::string lang) {
-    show_result(query, lang, "1", "10");
-}
+//TODO move this
+#define GET_FIELD(fieldVar, fieldString) \
+    it = getData.find(fieldString);\
+    if (it != getData.end()) {\
+        fieldVar = it->second;\
+    }
+    
+
 
 /**
  *
  */
-void Searches::show_result (
-        std::string query,
-        std::string lang,
-        std::string offsetStr,
-        std::string sizeStr
+void Searches::show_result(
+    std::string query,
+    std::string fromLang,
+    std::string toLang
 ) {
-    unsigned int size = atoi(sizeStr.c_str());
-    unsigned int offset = atoi(offsetStr.c_str()) - 1;
+    unsigned int offset = 1;
+    unsigned int size = 10;
+
+    if (request().request_method() == "GET") {
+        cppcms::http::request::form_type getData = request().get();
+        cppcms::http::request::form_type::const_iterator it;
+       
+        std::string sizeStr = "10";
+        std::string offsetStr = "1";
+        GET_FIELD(fromLang, "offset");
+        GET_FIELD(toLang, "size");
+
+        size = atoi(sizeStr.c_str());
+        offset = atoi(offsetStr.c_str()) - 1;
+    }
+
+
 
 	contents::SearchesShowResult c;
 	contents::helpers::Sentences shc;
     init_content(c);
     // TODO filter this as otherwise it will produce strange result
     // if user search "../" etC.
-    shc.baseUrl = "/searches/show-result/" + query + "/" + lang;
+    shc.baseUrl = "/searches/show-result/" + query + "/" + fromLang + "/" + toLang;
     shc.lang = c.lang;
     c.queryStr = query;
-    c.queryLang = lang;
+    c.queryLang = fromLang;
     c.paginationSize = size;
+
     shc.currentUserHelper = c.usersHelper;
-    shc.sentences = searchesModel->advance(query, lang, size, offset);
+
+    shc.sentences = searchesModel->advance(
+        query,
+        fromLang,
+        toLang,
+        size,
+        offset
+    );
     
     c.shc = shc;
 

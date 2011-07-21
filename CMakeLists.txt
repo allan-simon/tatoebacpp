@@ -62,6 +62,7 @@ target_link_libraries(
     booster
     sqlite3
     tokyodystopia
+    sphinxclient
 )
 
 add_executable(

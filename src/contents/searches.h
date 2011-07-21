@@ -39,6 +39,7 @@ struct SearchesSimple : public BaseContent {
     helpers::Sentences shc;
     std::string queryStr;
     std::string queryLang;
+    std::string toLang;
 };
 
 /**

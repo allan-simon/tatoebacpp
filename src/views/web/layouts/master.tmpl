@@ -137,10 +137,13 @@
             </fieldset>
 
             <fieldset class="select">
-                <label>From</label>
+                <label><% gt "From" %></label>
                 <% form as_space searchesSimple.sentencesLang %>
             </fieldset>
-
+            <fieldset class="select">
+                <label><% gt "To" %></label>
+                <% form as_space searchesSimple.translatedInLang %>
+            </fieldset>
 
             <fieldset class="submit">
                 <% form as_space searchesSimple.submit %>

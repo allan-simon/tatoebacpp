@@ -3,8 +3,10 @@
 #include "contents/searches.h"
 
 #include "models/Searches.h"
+#include "results/searches.h"
 
 #include <cppcms/filters.h>
+
 
 namespace controllers {
 namespace apis {
@@ -44,7 +46,8 @@ void Searches::simple(
  *
  */
 void Searches::simple () {
-    std::string fromLang = "";
+    std::string fromLang = "und";
+    std::string toLang = "und";
     std::string query = "";
 
     if (request().request_method() == "GET") {
@@ -52,6 +55,7 @@ void Searches::simple () {
         cppcms::http::request::form_type::const_iterator it;
         
         GET_FIELD(fromLang, "from");
+        GET_FIELD(toLang, "to");
         GET_FIELD(query, "query");
     }
 
@@ -70,11 +74,14 @@ void Searches::simple () {
     c.paginationSize = size;
     shc.currentUserHelper = c.usersHelper;
 
-    std::cout << "[DEBUG]" <<  query <<  " in " << fromLang << std::endl; 
+    std::cout << "[DEBUG]" <<  query <<
+        " in " << fromLang <<
+        " to " << toLang << std::endl; 
 
     shc.sentences = searchesModel->advance(
         query,
         fromLang,
+        toLang,
         size,
         offset
     );

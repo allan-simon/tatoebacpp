@@ -51,8 +51,6 @@
     it = getData.find(fieldString);\
     if (it != getData.end()) {\
         fieldVar = it->second;\
-    } else {\
-        return;\
     }
     
 

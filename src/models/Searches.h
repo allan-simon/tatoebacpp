@@ -6,21 +6,54 @@
 #include <map>
 #include <laputa.h>
 
+
+#include "SphinxClient.h"
 #include "results/sentences.h"
 //TODO write doc
 namespace models {
 
+/**
+* @class Searches
+*/
 class Searches {
+    private:
+        SphinxClient sphinxClient;
+
     public:
         Searches();
 
 
-        results::SentencesPagiVector advance(std::string query, std::string lang);
+        /**
+        * @brief 
+        *
+        * @param query
+        * @param 
+        *
+        * @return 
+        */
+
         results::SentencesPagiVector advance(
-            std::string query,
-            std::string lang,
-            int size,
-            int offset
+            const std::string &query,
+            const std::string &fromLang,
+            const std::string &toLang
+        );
+
+        /**
+        * @brief 
+        *
+        * @param query
+        * @param lang
+        * @param size
+        * @param 
+        *
+        * @return 
+        */
+        results::SentencesPagiVector advance(
+            const std::string &query,
+            const std::string &fromLang,
+            const std::string &toLang,
+            const int size,
+            const int offset
         );
 
 
