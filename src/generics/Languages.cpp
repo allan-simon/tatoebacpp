@@ -51,6 +51,7 @@ void Languages::init(
 
         isoToName[itr->first] = lang[0].str(); 
         isoToId[itr->first] = langId; 
+        nameToIso[lang[0].str()] = itr->first;
         idToISO[langId] = itr->first;
 
     }
@@ -63,6 +64,15 @@ void Languages::init(
 ISOToNameMap Languages::get_iso_to_name_map() {
     return isoToName;
 }
+
+/**
+ *
+ */
+NameToISOMap Languages::get_name_to_iso_map() {
+    return nameToIso;
+}
+
+
 
 /**
  *

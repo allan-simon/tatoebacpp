@@ -35,7 +35,6 @@ namespace forms {
     /**
      * @struct SearchesSimple
      * form that permit to search for sentences
-     * @TODO we don't have "translated in" filter
      */
 	struct SearchesSimple : public cppcms::form {
         /**
@@ -69,11 +68,14 @@ namespace forms {
             // @TODO it should be possible to subclass widges::select 
             // in order to have a languageSelect in order to not duplicate
             // this piece of code everywhere we need a language select
-            ISOToNameMap isoToName = Languages::get_instance()->get_iso_to_name_map();
-            ISOToNameMap::iterator itr;
-            for(itr = isoToName.begin(); itr != isoToName.end(); ++itr){
-                sentencesLang.add(itr->second,itr->first);
-                translatedInLang.add(itr->second,itr->first);
+            NameToISOMap nameToIso = Languages::get_instance()->get_name_to_iso_map();
+            NameToISOMap::iterator itr;
+
+            sentencesLang.add("Any","und");
+            translatedInLang.add("Any","und");
+            for(itr = nameToIso.begin(); itr != nameToIso.end(); ++itr){
+                sentencesLang.add(itr->first,itr->second);
+                translatedInLang.add(itr->first,itr->second);
             }
 
             submit.name("search");

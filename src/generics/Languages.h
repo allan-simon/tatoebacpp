@@ -32,11 +32,14 @@
 #include "Singleton.h"
 #include <cppcms/json.h>
 
+//TODO maybe replace all these maps by something smarter
 typedef std::map<std::string, std::string> ISOToNameMap;
+typedef std::map<std::string, std::string> NameToISOMap;
 typedef std::map<int, std::string> IdToISOMap;
 typedef std::map<std::string, int> ISOToIdMap;
 
 
+//TODO try to view how it deals with i18n (especially for language name sorting)
 /**
  * Singleton class used to store the information about the
  * languages supported in Tatoeba, and their related info
@@ -50,6 +53,13 @@ class Languages : public Singleton<Languages> {
          * Map associating ISO code to the English name
          **/
         ISOToNameMap isoToName;
+
+        /**
+         * Map associating  English name of a language to its ISO code
+         **/
+        ISOToNameMap nameToIso;
+
+
 
         /**
          * Map associating internal ID in the database to ISO code
@@ -67,7 +77,14 @@ class Languages : public Singleton<Languages> {
          * return the map ISO code => English name
          */
         ISOToNameMap get_iso_to_name_map();
+
+         /**
+         * return the map English name => ISO code
+         */
+        ISOToNameMap get_name_to_iso_map();
         
+
+
         /**
          * Initialize the singleton with the data stored in config.js 
          */
