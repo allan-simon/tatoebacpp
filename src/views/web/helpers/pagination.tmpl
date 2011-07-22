@@ -24,7 +24,7 @@
                     </li>
                     <% c++ out() << " " ;%>
                     <li class="prev" >
-                        <a href="<% url "{1}/{2}/{3}" using baseUrl, prevOffset, size %>" >
+                        <a href="<% url "{1}?offset={2}&size={3}" using baseUrl, prevOffset, size %>" >
                             prev
                         </a>
                     </li>
@@ -34,7 +34,7 @@
 
                 <% c++ for (int i = content.firstDisplayedPage ; i < content.currentPage ; ++i) { %>
                     <li class="number" >
-                        <a href="<% url "{1}" using baseUrl %>/<% c++ out() << content.offsetPage(i); %>/<% size %>" >
+                        <a href="<% url "{1}" using baseUrl %>?offset=<% c++ out() << content.offsetPage(i); %>&size=<% size %>" >
                             <% c++ out() << i; %>
                         </a>
                     </li> 
@@ -45,7 +45,7 @@
 
                 <% c++ for (int i = content.currentPage + 1; i <= content.lastDisplayedPage ; ++i) { %>
                     <li class="number" >
-                        <a href="<% url "{1}" using baseUrl %>/<% c++ out() << content.offsetPage(i); %>/<% size %>" >
+                        <a href="<% url "{1}" using baseUrl %>?offset=<% c++ out() << content.offsetPage(i); %>&size=<% size %>" >
                             <% c++ out() << i; %>
                         </a>
                     </li> 
@@ -55,13 +55,13 @@
                 <% if not atEnd %>
                     <li class="next">
 
-                        <a href="<% url "{1}/{2}/{3}" using baseUrl, nextOffset, size %>" >
+                        <a href="<% url "{1}?offset={2}&size={3}" using baseUrl, nextOffset, size %>" >
                             next
                         </a>
                     </li>
                     <% c++ out() << " " ;%>
                     <li class="last">
-                        <a class="last" href="<% url "{1}/{2}/{3}" using baseUrl, lastOffset, size %>" >
+                        <a class="last" href="<% url "{1}?offset={2}&size={3}" using baseUrl, lastOffset, size %>" >
                             last
                         </a>
                     </li>
