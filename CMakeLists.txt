@@ -61,27 +61,26 @@ target_link_libraries(
     cppdb
     booster
     sqlite3
-    tokyodystopia
+    #tokyodystopia
     sphinxclient
 )
 
-add_executable(
-    indexer
-    src/indexer.cpp
-    src/contents/Config.cpp
-    src/generics/Languages.cpp
-    src/models/TatoDB.cpp
-    src/models/SearchEngine.cpp
-)
+#add_executable(
+#    indexer
+#    src/indexer.cpp
+#    src/contents/Config.cpp
+#    src/generics/Languages.cpp
+#    src/models/TatoDB.cpp
+#)
 
-target_link_libraries(
-    indexer
-    tato
-    cppcms
-    cppdb
-    tokyodystopia
-)
-
+#target_link_libraries(
+#    indexer
+#    tato
+#    cppcms
+#    cppdb
+#    tokyodystopia
+#)
+#
 
 
 add_custom_command(

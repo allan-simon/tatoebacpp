@@ -41,16 +41,47 @@
 
 namespace models {
 
+/**
+ * @class Class used to communicate with the sphinx server,
+ *        to make query, update indexes etc.
+ */
 class SphinxClient {
 
     private:
+            
+        /**
+        * @brief Structure used by the C API of sphinx
+        */
         sphinx_client *client;
 
         void net_init();
     
     public:
+            
+        /**
+        * @brief Consructor for the sphinx client
+        *
+        * @param hostname Ip on which the sphinx deamon is running
+        * @param port     Port on which the deamon is listening
+        */
         SphinxClient(std::string hostname, int port);
+
         ~SphinxClient();
+
+                
+        /**
+        * @brief 
+        *
+        * @param query  Query to send to sphinx
+        * @param from   Language in which we're searching ("und" to search
+        *               in every language
+        * @param to     Filter only having result in that language ("und" for
+        *               no filter)
+        * @param size   Number of max results wanted
+        * @param offset Offset (used for pagination)
+        *
+        * @return       List of sentences group that match the query
+        */
         results::Searches search(
             const std::string &query,
             const std::string &from,
@@ -58,6 +89,69 @@ class SphinxClient {
             const int size,
             const int offset
         );
+
+        
+        /**
+         * index the sentence number "sentenceId" in the index "lang"
+         */
+        void add_sentence(
+            const int sentenceId,
+            const std::string &text,
+            const std::string &lang
+        );
+
+        /**
+         * update the entry of the sentence "sentenceId" to fit the newText
+         */
+        void edit_text(
+            const int sentenceId,
+            const std::string &oldText,
+            const std::string &newText,
+            const std::string &lang
+        );    
+              
+        /**   
+         * move the sentence "sentenceId" from the index "oldLang" to "newLang"
+         */   
+        void edit_lang(
+            const int sentenceId,
+            const std::string &text,
+            const std::string &oldLang,
+            const std::string &newLang
+        );    
+              
+              
+        /**   
+         * Remove the sentence "sentenceId" from the index "lang"
+         */   
+        void remove_sentence(
+            const int sentenceId,
+            const std::string &lang
+        );    
+              
+              
+        /**   
+         *    
+         */   
+        /*
+        void add_link(
+            const int sentenceId,
+            const std::string &lang,
+            const std::string &linkedToLang
+        );
+        */
+
+        /**
+         *
+         */
+        /*
+        void remove_link(
+            const int sentenceId,
+            const std::string lang,
+            const std::string removeLinkToLang
+        );
+        */
+
         /*
         ::results::Searches search(
             std::string query,

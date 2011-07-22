@@ -31,6 +31,7 @@
 #include <exception>
 
 #include "models/TatoDB.h"
+#include "models/SphinxClient.h"
 #include "results/sentences.h"
 
 extern "C" {
@@ -66,7 +67,6 @@ class SentDupliException : public std::exception {
          * Store the id of the original sentence
          */
         int originalId;
-
 };
 
 
@@ -203,6 +203,11 @@ class Sentences {
         */
 
     private :
+        /**
+         * Client access to the sphinx server
+         */
+        SphinxClient sphinxClient;
+
         //TODO reintroduce logs
         /**
          * return the results::Sentence object constructed with a given
@@ -222,6 +227,7 @@ class Sentences {
             TransVector &translations,
             int maxDepth
         );
+
 };
 
 

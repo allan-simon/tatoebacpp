@@ -29,6 +29,9 @@
 
 namespace models {
 
+/**
+ *
+ */
 SphinxClient::SphinxClient(std::string hostname, int port) {
 	net_init();
 
@@ -53,12 +56,17 @@ SphinxClient::SphinxClient(std::string hostname, int port) {
 
 }
 
+/**
+ *
+ */
 SphinxClient::~SphinxClient() {
 	sphinx_close (client);
 	sphinx_destroy (client);
 }
 
-
+/**
+ *
+ */
 void SphinxClient::net_init () {
 #if _WIN32
 	// init WSA on Windows
@@ -72,6 +80,9 @@ void SphinxClient::net_init () {
 }
 
 
+/**
+ *
+ */
 results::Searches SphinxClient::search(
     const std::string &query,
     const std::string &from,
@@ -124,6 +135,54 @@ results::Searches SphinxClient::search(
     return matchedIds;
 }
 
+
+/**
+ *
+ */
+void SphinxClient::add_sentence(
+    const int sentenceId,
+    const std::string &text,
+    const std::string &lang
+) {
+
+    //TODO write here the code to update in realtime
+    // the index when the API will be ready
+}
+
+/**
+ *
+ */
+void SphinxClient::edit_text(
+    const int sentenceId,
+    const std::string &oldText,
+    const std::string &newText,
+    const std::string &lang
+) {
+    //TODO waiting the sphinx api to be ready
+}
+
+/**
+ *
+ */
+void SphinxClient::edit_lang(
+    const int sentenceId,
+    const std::string &text,
+    const std::string &oldLang,
+    const std::string &newLang
+) {
+    //TODO waiting the sphinx api to be ready
+
+}
+
+/**
+ *
+ */
+void remove_sentence(
+    const int sentenceId,
+    const std::string &lang
+) {
+    //TODO waiting the sphinx api to be ready
+}
 
 } // end namespace models
 

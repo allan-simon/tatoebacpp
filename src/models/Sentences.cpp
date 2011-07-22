@@ -32,14 +32,17 @@
 #include <exception>
 #include <cstring>
 #include "models/Sentences.h"
-#include "models/SearchEngine.h"
+#include "models/SphinxClient.h"
 namespace models {
 
 /**
  * 
  */
-SentDupliException::SentDupliException(int originalId)
-    : originalId(originalId) {}
+SentDupliException::SentDupliException(int originalId):
+    originalId(originalId)
+{
+
+}
 
 /**
  * 
@@ -64,7 +67,10 @@ SentDupliException::~SentDupliException() throw() {}
 /**
  *
  */
-Sentences::Sentences() {
+Sentences::Sentences():
+    sphinxClient("127.0.0.1", 9312)
+{
+
 }
 
 /**
@@ -202,7 +208,7 @@ results::Sentence Sentences::add(
         );
         */
 
-        SearchEngine::get_instance()->add_sentence(
+        sphinxClient.add_sentence(
             item->id,
             str,
             lang
@@ -309,7 +315,7 @@ void Sentences::edit_text(
 	tato_item_lang_item_add(item->lang, item);
 
     //TODO readd log and search engine update
-    SearchEngine::get_instance()->edit_text(
+    sphinxClient.edit_text(
         item->id,
         oldString,
         newString,
@@ -367,7 +373,7 @@ void Sentences::edit_lang(
 	tato_item_lang_item_add(newTatoLang, item);
 
     //TODO readd log update
-    SearchEngine::get_instance()->edit_lang(
+    sphinxClient.edit_lang(
         item->id,
         std::string(item->str),
         prevLang,

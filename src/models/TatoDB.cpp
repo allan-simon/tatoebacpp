@@ -1,5 +1,5 @@
 #include "TatoDB.h"
-#include "SearchEngine.h"
+//#include "SearchEngine.h"
 
 /**
  *
@@ -71,6 +71,7 @@ results::SentencesStats TatoDB::get_sentences_stats() {
 /**
  *
  */
+/*
 void TatoDB::feed_search_engine() {
 	TatoTreeStrNode *iterLang = NULL;
 	TatoTreeStrNode *iterItem = NULL;
@@ -109,7 +110,7 @@ void TatoDB::feed_search_engine() {
     }
 
 }
-
+*/
 /**
  *
  */
