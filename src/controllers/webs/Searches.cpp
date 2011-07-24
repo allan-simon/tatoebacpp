@@ -82,8 +82,9 @@ void Searches::show_result(
        
         std::string sizeStr = "10";
         std::string offsetStr = "1";
-        GET_FIELD(fromLang, "offset");
-        GET_FIELD(toLang, "size");
+        GET_FIELD(offsetStr, "offset");
+        GET_FIELD(sizeStr, "size");
+
 
         size = atoi(sizeStr.c_str());
         offset = atoi(offsetStr.c_str()) - 1;
