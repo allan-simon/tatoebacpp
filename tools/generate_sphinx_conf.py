@@ -1,7 +1,7 @@
 import json
 import sys
 
-xmlDumpPath = "/home/allan/git/tatoebacpp/build/sphinxdump.xml"
+xmlDumpPath = "/tmp/sphinxdump.xml"
 
 jsonFile = "../config.js"
 if (len(sys.argv) == 2):
