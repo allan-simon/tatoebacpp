@@ -30,27 +30,54 @@
 #include "contents/forms/register.h"
 #include "contents/forms/login.h"
 
+#include "results/users.h"
+
 namespace contents {
+namespace users {
 
 /**
- * @struct UsersRegisterNew
- * content used by the Users::register_new
- * contain the info for the register new user page
+ * @struct RegisterNew
+ * @brief  content used by the Users::register_new
+ *         contain the info for the register new user page
  */
-struct UsersRegisterNew : public BaseContent {
+struct RegisterNew : public BaseContent {
     forms::RegisterNewUser registerNewUser;
 };
 
 /**
- * @struct UsersLogin
- * content used by Users::login
- * contain the info for the login page
+ * @struct Login
+ * @brief  content used by Users::login
+ *         contain the info for the login page
  */
-struct UsersLogin : public BaseContent {
+struct Login : public BaseContent {
     forms::LoginUser loginUser;
 };
 
-}
+/**
+ * @struct All
+ * @brief content used by Users::all
+ *        contain the list of tatoeba's users
+ */
+struct All : public BaseContent {
+    results::PagiUsers users;     
+    std::string baseUrl;
+};
+
+
+/**
+ * @struct Profile
+ * @brief content used by Users::profile
+ *        contain the information about the requested user
+ */
+struct Profile : public BaseContent {
+    results::User user;     
+};
+
+
+
+
+} // end of namespace users
+} // end of namespace contents
 
 #endif
 

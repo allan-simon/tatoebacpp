@@ -1,0 +1,79 @@
+<%c++ #include "contents/users.h" %>
+<% skin %>
+<% view users_all uses contents::users::All extends master %>
+<% template title() %><% gt "Members"  %><% end template %>
+
+<% template css() %>
+<link
+    rel="stylesheet"
+    type="text/css"
+    href="http://css.tatoeba.org/css/users/all.css?1"
+/>
+
+<% end template %>
+
+
+<% template main_content() %>
+    <div class="module">
+        <% c++ contents::helpers::Paginations phc( %>
+        <% c++ content.users.offset, %>
+        <% c++ content.users.size(), %>
+        <% c++ content.users.maxsize, %>
+        <% c++ content.baseUrl, %>
+        <% c++ content.lang %>
+        <% c++ ); %>
+
+        <h3>
+             <!-- TODO i18n this -->
+             (Total: <% users.maxsize %> User(s))
+        </h3>
+
+        <% foreach user in users%>
+            <% item %>
+                <% include user_div(user) %>
+            <% end %>
+        <% end foreach %>
+    </div>
+<% end %>
+
+/**
+ * @brief display a a block with user's most important informat
+ * @TODO complete the missing data (image, status etc.)
+ */
+<% template user_div(results::User &user) %>
+    <div class="user"> 
+        <div class="image">
+            <!-- TODO fill it with the correct image -->
+        </div>
+
+        <div class="username">
+            <a href="<% url "/users/profile/{1}" using user.username %>" >
+                <% user.username%>
+            </a>
+        </div>
+
+        <div class="memberSince" title="<% gt "Member since" %>">
+            <!-- TODO fill it with the correct date -->
+            <span class="date"><span>
+        </div> 
+        
+        <div class="status">
+            <div class="power">
+                <!-- TODO -->
+            </div>
+        </div>
+            
+    </div>
+
+<% end template%>
+
+<% template annexe_content() %>
+    <div class="module">
+    </div>
+
+<% end %>
+
+
+
+<% end view %>
+<% end skin %>

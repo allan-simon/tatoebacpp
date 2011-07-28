@@ -56,15 +56,6 @@ void Searches::simple_treat() {
 
 }
 
-//TODO move this
-#define GET_FIELD(fieldVar, fieldString) \
-    it = getData.find(fieldString);\
-    if (it != getData.end()) {\
-        fieldVar = it->second;\
-    }
-    
-
-
 /**
  *
  */
@@ -73,6 +64,7 @@ void Searches::show_result(
     std::string fromLang,
     std::string toLang
 ) {
+    // TODO replace by page instead of offset/size
     unsigned int offset = 1;
     unsigned int size = 10;
 
@@ -80,16 +72,10 @@ void Searches::show_result(
         cppcms::http::request::form_type getData = request().get();
         cppcms::http::request::form_type::const_iterator it;
        
-        std::string sizeStr = "10";
-        std::string offsetStr = "1";
-        GET_FIELD(offsetStr, "offset");
-        GET_FIELD(sizeStr, "size");
-
-
-        size = atoi(sizeStr.c_str());
-        offset = atoi(offsetStr.c_str()) - 1;
+        GET_INT_FIELD(offset, "offset");
+        GET_INT_FIELD(size, "size");
     }
-
+    offset -= 1;
 
 
 	contents::SearchesShowResult c;

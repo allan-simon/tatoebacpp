@@ -26,48 +26,31 @@
 #ifndef MODELS_USERS_H
 #define MODELS_USERS_H
 
-#include "models/SqliteModel.h"
 #include <iostream>
 #include <vector>
 #include <booster/locale/date_time.h>
 
+#include "models/SqliteModel.h"
+#include "results/users.h"
 
 namespace models {
 
-    // TODO improve this
-    // TODO move this in results
-    struct UserResult {
-        int id;
-        std::string username;
-        std::string email;
-        std::string lang;
-        std::string since;
-        int last_time_active;
-        bool send_notifications;
-        std::string name;
-        int birthday;
-        std::string description;
-        std::string homepage;
-        std::string image;
-        std::string country_id;
-        bool is_public;
-    };
-    typedef std::vector<UserResult> ListOfUsers;
 
-//static int callback(void *NotUsed, int argc, char **argv, char **azColName);
 
 class Users : public SqliteModel {
     private:
         /**
          * SQL statement to check if the password is correct
          */
-        cppdb::statement checkPasswdState; 
+        cppdb::statement checkPasswd; 
         /**
          * SQL statement to add a user in the database
          */
-        cppdb::statement addState;
-        cppdb::statement getAllState;
-        cppdb::statement getIdFromName;
+        cppdb::statement addUser;
+        cppdb::statement getUsers;
+        cppdb::statement getUsersCount;
+        cppdb::statement getIdFromUsername;
+        cppdb::statement getUserFromUsername;
 
     public:
         /**
@@ -78,37 +61,74 @@ class Users : public SqliteModel {
         /**
          * Return the id of the user having the given name
          */
-        template <class T> T get_id_from_name(std::string username);
+        template <class T> T get_id_from_name(
+            const std::string &username
+        );
 
         /**
          * Test if the pair login/pass exists in the database
          */
         bool is_login_correct(
-            std::string login,
-            std::string pass
-        );
-
-        /**
+            const std::string &login,
+            const std::string &pass
+        );         
+                   
+        /**        
          * Add a new user with the given login/pass/mail
          * return false if the user can't be added (login already taken etc.)
-         */
+         */        
         bool add(
-            std::string login,
-            std::string pass,
-            std::string email
+            const std::string &login,
+            const std::string &pass,
+            const std::string &email
+        );         
+                   
+        /**        
+        * @brief Get a paginated list of users
+        *          
+        * @param page Used for pagination 
+        *          
+        * @return Paginated vector of users
+        */
+        results::PagiUsers get_all_users(
+            const int page
         );
-        std::vector<UserResult> get_all_users();
+
+
+        /**
+        * @brief Get the complete user information from his
+        *        username
+        *
+        * @param username Name of the user for whom we want the information
+        *
+        * @return The user structure correctly filled
+        */
+        results::User get_user_from_username(
+            const std::string &username
+        );
 };
+
+
+
 /**
- *
- */
-template <class T> T Users::get_id_from_name(std::string username) {
-    getIdFromName.bind(username);
-    cppdb::result res = getIdFromName.row();
+* @brief          User to retrieve the identifier of a given user
+* @TODO           Throw an exception when the user does not exists
+*
+* @tparam T       Type under which we want the id (int or std::string)
+* @param username Name of the user want the id of
+* 
+*
+* @return         The id in the requested type 
+*/
+template <class T> T models::Users::get_id_from_name(
+    const std::string &username
+) {
+    getIdFromUsername.bind(username);
+    cppdb::result res = getIdFromUsername.row();
 
     T userId;
     res.fetch(0, userId);
-    getIdFromName.reset();
+    getIdFromUsername.reset();
     
     return userId;
 

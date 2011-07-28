@@ -1,11 +1,6 @@
 #include "models/Searches.h"
 #include "models/Sentences.h"
 
-extern "C" {
-#include "tato/fetcher.h"
-#include "tato/item.h"
-#include "tato/lang.h"
-}
 
 namespace models {
 
@@ -21,7 +16,7 @@ Searches::Searches() :
 /**
  *
  */
-results::SentencesPagiVector Searches::advance(
+results::PagiSentences Searches::advance(
     const std::string &query,
     const std::string &fromLang,
     const std::string &toLang 
@@ -34,7 +29,7 @@ results::SentencesPagiVector Searches::advance(
         0
     );
 }
-results::SentencesPagiVector Searches::advance(
+results::PagiSentences Searches::advance(
     const std::string &query,
     const std::string &fromLang,
     const std::string &toLang,
@@ -58,20 +53,20 @@ results::SentencesPagiVector Searches::advance(
     );
     
     
-    results::SentencesPagiVector sentencesPagiVector(resultIds.size());
+    results::PagiSentences pagiSentences(resultIds.size());
 
     models::Sentences sentencesModel;
 
     int resultSize = resultIds.size();
     for (int i = 0; i < resultSize; ++i) {
-        sentencesPagiVector[i] = sentencesModel.get_by_id(
+        pagiSentences[i] = sentencesModel.get_by_id(
             resultIds[i],
             3 //TODO magic number: max depth for search results
         );
     }
-    sentencesPagiVector.offset = offset;
-    sentencesPagiVector.maxsize = resultIds.maxsize;
-    return sentencesPagiVector;
+    pagiSentences.offset = offset;
+    pagiSentences.maxsize = resultIds.maxsize;
+    return pagiSentences;
 }
 
 } //end of namespace

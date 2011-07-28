@@ -1,0 +1,227 @@
+<%c++ #include "contents/users.h" %>
+<% skin %>
+<% view users_profile uses contents::users::Profile extends master %>
+
+/**
+ * @brief Page's title
+ */
+<% template title() %>
+    <% gt "{1}'s page" using user.username %>
+<% end template %>
+
+
+/**
+ * @brief Load the CSS specific to this page
+ */
+<% template css() %>
+<link
+    rel="stylesheet"
+    type="text/css"
+    href="http://css.tatoeba.org/css/user/profile.css?1"
+/>
+
+<% end template %>
+
+/**
+ * @brief All the content that will be displayed in the main div
+ *        of the page
+ */
+<% template main_content() %>
+    <% include profile_summary_module() %>
+    <% include description_module() %>
+<% end %>
+
+/**
+ * @brief All the information of the given user are briefly presented
+ *        here
+ * @todo  maybe also display the user id (usefull for admin)
+ */
+<% template profile_summary_module() %>
+
+    <div class="module profileSummary">    
+        <div class="editOption">
+            <a href="<% url "/users/edit_profile" %>">
+                <% gt "Edit"%>
+            </a>
+        </div>
+
+        <img
+            src="http://flags.tatoeba.org/img/profiles_128/482065fb0fce0e1fccc523a28143d7f7.png"
+            alt="sysko"
+        />
+
+        <div class="info">
+            <div class="username"><% user.username %></div>
+
+            <div>
+                <!-- TODO add status -->
+                <span class="field"><% gt "Name" %></span>
+                <span class="value"><% user.username %></span>
+            </div>
+
+            <div>
+                <!-- TODO add status and country 
+                <span class="field"><% gt "Country" %></span>
+                <
+                <span class="value">< user.country ></span>
+                -->
+            </div>
+
+            <!-- TODO add birthday -->
+            <!-- TODO add homepage -->
+            <!-- TODO add member since-->
+
+        </div>
+
+        <!-- TODO add status -->
+        <div class="status" >
+            <% gt "admin" %> 
+        </div>
+    </div> 
+
+<% end template %>
+
+/**
+ * @brief the user description is presented in that module
+ */
+<% template description_module() %>
+
+    <div class="module profileDescription">
+        <div class="editOption">
+            <a href="<% url "users/edit_profile#description"%>">
+                <%gt "Edit" %>
+            </a>
+        </div>
+
+        <div class="content">
+            <!-- TODO add content (maybe with markdown) -->
+        </div>
+    </div>
+
+<% end template %>
+
+/**
+ * @brief Display all the annexe modules
+ *
+ */
+<% template annexe_content() %>
+    <% include user_menu_module() %>
+    <% include stats() %>
+    <% include settings_module() %>
+
+<% end template %>
+
+/**
+ * @brief display the sub menu to access to the different data
+ *        related to a user (sentences he has added etc.)
+ */
+<% template user_menu_module() %>
+<div class="module">
+    <h2>sysko</h2>
+    
+    <ul class="annexeMenu">
+        <li class="item">
+            <a href="<% url "/users/profile/{1}" using user.username %>">
+                <% gt "Profile" %>
+            </a>
+        </li>
+    
+        <li class="item">
+            <a href="<% url "/sentences/of_user/{1}" using user.username %>">
+                <% gt "Sentences" %>
+            </a>
+        </li>
+
+        <li class="item">
+            <a href="<% url "/favorites/of_user/{1}" using user.username %>">
+                <% gt "Favorites" %>
+            </a>
+        </li>
+    
+        <li class="item">
+            <a href="<% url "/comments/of_user/{1}" using user.username %>">
+                <% gt "Comments" %>
+            </a>
+        </li>
+    
+        <li class="item">
+            <a href="<% url "/comments/on_sentences_of_user/{1}" using user.username %>">
+                <%  gt "Comments on {1}'s sentences" using user.username %>
+            </a>
+        </li>
+
+        <li class="item">
+            <a href="<% url "/wall/messages_of_user/{1}" using user.username %>">
+                <% gt "Wall messages" %>
+            </a>
+        </li>
+    
+        <li class="item">
+
+            <a href="<% url "/contributions/of_user/{1}" using user.username %>">
+                <% gt "Logs" %>
+            </a>
+        </li>
+    </ul>
+    
+    </div>
+<% end template %>
+
+/**
+ * @brief display some information about the settings chosen by the user
+ *        (if he has activated email notification, profile public or
+ *        private etc.)
+ * @todo  add if and else 
+ */
+<% template settings_module() %>
+    <div class="module">
+        <h2><% gt "Settings" %></h2>
+        <ul class="annexeMenu">
+            <li class="item">
+                <!-- TODO add if /else -->
+                <% gt "Email notifications are ENABLED." %>
+            </li>
+            <li class="item">
+                <!-- TODO add if /else -->
+                <% gt "Access to this profile is PUBLIC. All the information can be seen by everyone." %>
+            </li>
+        </ul>
+
+        <div class="editOption">
+            <a href="<% url "user/settings" %> ">
+                <% gt "Edit" %>
+            </a>
+        </div>
+    </div>
+<% end template %>
+
+/**
+ * @brief Display some figures about what the user has done
+ */
+<% template stats() %>
+    <div class="module">
+        <h2><% gt "Stats" %></h2>
+        <dl>
+            <dt><% gt "Comments posted" %></dt>
+            <dd><!-- TODO add this --></dd>
+
+            <dt><% gt "Sentences owned" %></dt>
+            <dd><!-- TODO add this --></dd>
+
+            <dt><% gt "Sentences favorited" %></dt>
+            <dd><!-- TODO add this --></dd>
+
+            <dt><% gt "Contributions" %></dt>
+            <dd><!-- TODO add this --></dd>
+        </dl>
+        
+        <div>
+            <a href="<% url "users/last_activity_of/" using user.username %>">
+                <% gt "Show latest activity" %>
+            </a>
+        </div>
+    </div>
+<% end template %>
+
+<% end view %>
+<% end skin %>

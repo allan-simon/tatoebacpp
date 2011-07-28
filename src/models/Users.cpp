@@ -30,6 +30,9 @@
 #include <cppdb/frontend.h>
 #include "models/Users.h"
 
+
+#define USERS_PER_PAGE 20
+
 using namespace cppcms::crypto;
 namespace models {
 
@@ -38,20 +41,30 @@ namespace models {
  */
 Users::Users(cppdb::session sqliteDb) : SqliteModel(sqliteDb) {
     // TODO ADD check for the username 
-    checkPasswdState = sqliteDb.create_prepared_statement(
+
+    // create all the prepated statement
+    checkPasswd = sqliteDb.prepare(
         "SELECT 1 FROM users "
         "WHERE username = ? AND password = ? LIMIT 1"
     );
-    addState = sqliteDb.create_prepared_statement(
+    addUser = sqliteDb.prepare(
         "INSERT INTO users(username, password, email)"
         "VALUES(?,?,?)"
     );
-    getAllState = sqliteDb.create_prepared_statement(
-        "SELECT * FROM users"
+    getUsers = sqliteDb.prepare(
+        "SELECT * FROM users LIMIT 20 OFFSET ? "
     );
 
-    getIdFromName = sqliteDb.create_prepared_statement(
+    getUsersCount = sqliteDb.prepare(
+        "SELECT count(*) as total FROM users "
+    );
+
+    getIdFromUsername = sqliteDb.prepare(
         "SELECT id FROM users WHERE username = ? LIMIT 1"
+    );
+    
+    getUserFromUsername = sqliteDb.prepare(
+        "SELECT * FROM users WHERE username = ? LIMIT 1 "
     );
 }
 
@@ -59,31 +72,43 @@ Users::Users(cppdb::session sqliteDb) : SqliteModel(sqliteDb) {
 /**
  *
  */
-bool Users::is_login_correct(
-    std::string login,
-    std::string pass
+static std::string binary_md5(
+    const std::string toHash
 ) {
-    
     // we generate the md5 of the password
     std::auto_ptr<message_digest> d(message_digest::md5());
 
     char buf[16];
-    d->append(pass.c_str(), pass.size());
+    d->append(toHash.c_str(), toHash.size());
     d->readout(buf);
 
     std::stringstream in;
     in.write(buf, 16);
+ 
+    return in.str();
+}
+
+/**
+ *
+ */
+bool Users::is_login_correct(
+    const std::string &login,
+    const std::string &pass
+) {
     
-    checkPasswdState.bind(login);
-    checkPasswdState.bind(in);
-    cppdb::result res = checkPasswdState.row();
+   
+    checkPasswd.bind(login);
+    checkPasswd.bind(
+        binary_md5(pass)
+    );
+    cppdb::result res = checkPasswd.row();
    
    
     int checkresult = 0;
     res.fetch(0,checkresult);
 
     // Don't forget to reset statement
-    checkPasswdState.reset();
+    checkPasswd.reset();
 
     if (checkresult == 1 ) {
         return true;
@@ -95,56 +120,80 @@ bool Users::is_login_correct(
  *
  */
 bool Users::add(
-    std::string login,
-    std::string pass,
-    std::string email
-) {
-
-    std::auto_ptr<message_digest> d(message_digest::md5());
-
-    // we generate the md5 of the password
-    char buf[16];
-    d->append(pass.c_str(), pass.size());
-    d->readout(buf);
-    std::stringstream binaryHash;
-    binaryHash.write(buf, 16);
-    
-    addState.bind(login);
-    addState.bind(binaryHash);
-    addState.bind(email);
-
+    const std::string &login,
+    const std::string &pass,
+    const std::string &email
+) {       
+          
+    addUser.bind(login);
+    addUser.bind(
+        binary_md5(pass)
+    );
+    addUser.bind(email);
+          
     try {
-        addState.exec();    
+        addUser.exec();    
     } catch (cppdb::cppdb_error const &e) {
-        addState.reset();
+        addUser.reset();
         return false;
     }
-    addState.reset();
+    addUser.reset();
     return true;
-}
+}         
+          
+/**       
+ *        
+ */       
+results::PagiUsers Users::get_all_users(
+    const int page
+) {
+    results::PagiUsers pagiUsers;
 
-/**
- *
- */
-ListOfUsers Users::get_all_users() {
-    cppdb::result res = getAllState.query();
+    pagiUsers.maxsize = getUsersCount.row().get<int>("total");
 
-    ListOfUsers listOfUsers;
-
+    getUsers.bind(page * USERS_PER_PAGE);
+    cppdb::result res = getUsers.query();
+    
     while (res.next()) {
-        UserResult user;
+
+        results::User user;
         user.id = res.get<int>("id");
         user.username = res.get<std::string>("username");
         user.email = res.get<std::string>("email");
-        std::tm sinceTime = res.get<std::tm>("since");
-        user.since = asctime(&sinceTime);
-        listOfUsers.push_back(user);
+        //std::tm sinceTime = res.get<std::tm>("since");
+        //user.since = asctime(&sinceTime);
+        pagiUsers.push_back(user);
     }
 
-    getAllState.reset();
 
-    return listOfUsers;
+    getUsers.reset();
+
+    return pagiUsers;
 }
 
+/**
+ * @TODO must throw exception if the user does not exist
+ */
+results::User Users::get_user_from_username(
+    const std::string &username
+) {
 
+    results::User user; 
+
+    // attach the username to the sql statement
+    getUserFromUsername.bind(username);   
+ 
+    cppdb::result res = getUserFromUsername.row();
+
+    // fill the user structure with the data retrieve from the database
+    user.id = res.get<int>("id");
+    user.username = res.get<std::string>("username");
+    user.email = res.get<std::string>("email");
+
+    // don't forget to reset the statement
+    getUserFromUsername.reset();
+
+    return user;
 }
+
+} // end of namespace models

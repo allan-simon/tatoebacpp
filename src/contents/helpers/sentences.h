@@ -28,6 +28,7 @@
 #include "helpers.h"
 #include "users.h"
 #include "results/sentences.h"
+#include "results/pagination.h"
 
 namespace contents {
     namespace helpers {
@@ -45,7 +46,8 @@ namespace contents {
              * Collection of Sentences
              */
             
-            results::SentencesPagiVector sentences;
+            results::PagiSentences sentences;
+
             public:
                 /**
                  * Defaut constructor will create an empty helper
@@ -54,7 +56,7 @@ namespace contents {
                 /**
                  * Constructor, will init the helper with one sentence
                  */
-                Sentences(results::Sentence sentence) {
+                Sentences(const results::Sentence& sentence) {
                     if (sentence.exists()) {
                         sentences.push_back(sentence);
                     }

@@ -91,7 +91,7 @@ void Controller::go_back_to_previous_page() {
     //std::cout << "referer : " << request().http_referer() << std::endl;
     
     //TODO we do not handle the case where the referer is not a valid page
-    // "*_check" page, or page that require a priviledge that the user does
+    // "*_treat" page, or page that require a priviledge that the user does
     // not have anymore (if session has expired etc.)
     response().set_redirect_header(
         request().http_referer()

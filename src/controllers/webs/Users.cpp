@@ -45,7 +45,8 @@ Users::Users(cppcms::service &serv) : Controller(serv) {
   	d->assign("/login", &Users::login, this);
   	d->assign("/login_treat", &Users::login_treat, this);
   	d->assign("/logout", &Users::logout, this);
-    //tatoapp.dispatcher().assign("/users/all((/\\d+)?)", &Users::listMembers, this, 1);
+    d->assign("/all", &Users::all, this);
+    d->assign("/profile/(.*)", &Users::profile, this, 1);
 }
 
 /**
@@ -59,7 +60,7 @@ Users::~Users() {
  *
  */
 void Users::register_new() {
-    contents::UsersRegisterNew c;
+    contents::users::RegisterNew c;
     init_content(c);
     
 
@@ -72,7 +73,8 @@ void Users::register_new() {
 void Users::register_new_treat() {
     TREAT_PAGE();
 
-    contents::UsersRegisterNew c;
+    // TODO directly use the form
+    contents::users::RegisterNew c;
     init_content(c);
     c.registerNewUser.load(context());
 
@@ -99,7 +101,7 @@ void Users::register_new_treat() {
  *
  */
 void Users::login() {
-    contents::UsersLogin c;
+    contents::users::Login c;
     init_content(c);
 
     // we store in the hidden field the page we wanted to access
@@ -163,25 +165,52 @@ void Users::logout() {
         request().http_referer()
     );
 }
-/*
-void Users::list_members(std::string page) {
-    int intPage;
 
-    // check if there is a page in argument
-    if (page.compare("") == 0) {
-        intPage = 1;
-    }
-    else {
-        // convert page from string to integer
-        std::string realPage = page.substr(1);  // remove the slash in "/pageNumber"
-        intPage = atoi(realPage.c_str());
-    }
 
-    contents::AllUsers c;
+/**
+ *
+ */
+void Users::all() {
+    contents::users::All c;
     init_content(c);
-    c.listOfMembers = userModel.getAllUsers();
-    render("allusers", c);
+
+    unsigned int page = 0;
+
+    if (request().request_method() == "GET") {
+        cppcms::http::request::form_type getData = request().get();
+        cppcms::http::request::form_type::const_iterator it;
+       
+        GET_INT_FIELD(page, "page");
+    }
+
+
+
+    c.users = usersModel->get_all_users(
+        page
+    );
+    std::cout << "[debug] nbr users: " <<  c.users.size() << std::endl;
+    c.baseUrl = "/users/all";
+
+    render("users_all", c);
+
 }
-*/
+
+/**
+ *
+ */
+void Users::profile(std::string userName) {
+    contents::users::Profile c;
+    init_content(c);
+
+    c.user = usersModel->get_user_from_username(
+        userName
+    );
+
+    render("users_profile", c);
+}
+
+
+
+
 } // End namespace webs
 } // End namespace controllers

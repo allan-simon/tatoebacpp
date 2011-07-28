@@ -32,7 +32,7 @@ class Searches {
         * @return 
         */
 
-        results::SentencesPagiVector advance(
+        results::PagiSentences advance(
             const std::string &query,
             const std::string &fromLang,
             const std::string &toLang
@@ -48,7 +48,7 @@ class Searches {
         *
         * @return 
         */
-        results::SentencesPagiVector advance(
+        results::PagiSentences advance(
             const std::string &query,
             const std::string &fromLang,
             const std::string &toLang,

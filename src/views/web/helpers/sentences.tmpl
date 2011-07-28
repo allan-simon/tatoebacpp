@@ -113,7 +113,7 @@
 
     <% end template %>
         
-    <% template generic_sentence(results::Sentence sentence, int depth, int mainSentenceId) %>
+    <% template generic_sentence(results::Sentence &sentence, int depth, int mainSentenceId) %>
 
         <div class="sentence directTranslation">
             <% if currentUserHelper.is_logged() %>
@@ -156,7 +156,7 @@
 
 
 
-    <% template sentence_content(results::Sentence sentence, int depth) %>
+    <% template sentence_content(results::Sentence &sentence, int depth) %>
 
         <div class="sentenceContent">
             <div>

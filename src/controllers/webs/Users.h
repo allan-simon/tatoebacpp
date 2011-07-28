@@ -84,7 +84,19 @@ class Users : public Controller {
         void list_members();
         void list_members(std::string offset, std::string size);
         */
+        /**
+        * @brief list all users in a paginated way
+        */
+        void all();
+        
+        /**
+         * @brief display the profile of a user
+         * 
+         * @param username Name of the user we want the profile of
+         */
+        void profile(std::string username);
 };
+
 
 } // End namespace webs 
 } // End namespace controllers

@@ -6,6 +6,7 @@
 <% view pagination_helper uses helpers::Paginations %>
     <% template pagination() %>
         <% c++ if (content.size >= content.max) return; %>
+        <!-- TODO  remove this inline css -->
        <style type="text/css"> 
        .paginationnumbers li {
                display:inline;

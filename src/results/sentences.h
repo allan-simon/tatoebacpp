@@ -29,6 +29,7 @@
 #include <vector>
 #include <map>
 
+#include "results/pagination.h"
 namespace results {
     struct Sentence;
 }
@@ -44,6 +45,7 @@ typedef std::vector<SentencesVector> TransVector;
  */
 namespace results {
 
+    typedef PagiVector<Sentence> PagiSentences;
     typedef std::map<std::string, std::string> MetasMap;
 
     /**
@@ -97,7 +99,12 @@ namespace results {
              * Constructor that will create a sentence with the correct
              * id, text, lang and flags and no translations using std::string
              */
-            Sentence(int id, std::string text, std::string lang, int flags):
+            Sentence(
+                int id,
+                const std::string& text,
+                const std::string& lang,
+                int flags
+            ):
                 id(id),
                 text(text),
                 lang(lang),
@@ -132,35 +139,10 @@ namespace results {
             /**
              * tell if the object represent an actual sentence
              */
-            bool exists() {
+            bool exists() const {
                 return id > 0;
             }
 
-    };
-
-    /**
-     * Vector of sentences used when need to get only those in a given
-     * window from  offset to min((offet + maxsize), totalnumberofsentences_
-     * @TODO should be possible to template it
-     *
-     */
-    struct SentencesPagiVector : public std::vector<Sentence> {
-        /**
-         * number of sentences that has been skip
-         */
-        int offset;
-        /**
-         * size of the window
-         * if offset + maxsize > total number of sentences then the vector
-         * will contain less sentences than maxsize
-         */
-        int maxsize;
-        public:
-            SentencesPagiVector(): offset(0), maxsize(0) {};
-            SentencesPagiVector(int size) :
-                std::vector<Sentence>(size),
-                offset(0),
-                maxsize(0) {};
     };
 }
 

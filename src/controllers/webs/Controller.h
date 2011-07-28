@@ -48,6 +48,23 @@
         return;\
     }
 
+#define GET_FIELD(fieldVar, fieldString) \
+    it = getData.find(fieldString);\
+    if (it != getData.end()) {\
+        fieldVar = it->second;\
+    }
+    
+#define GET_INT_FIELD(fieldVar, fieldString) \
+    it = getData.find(fieldString);\
+    if (it != getData.end()) {\
+        fieldVar = atoi(it->second.c_str());\
+    }
+    
+
+
+
+
+
 namespace contents {
     class BaseContent;
 }
