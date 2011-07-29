@@ -59,6 +59,17 @@ class MyProfile : public Controller {
          * 
          */
         void show();
+
+        /**
+        * @brief Display a form to edit current user's description
+        */
+        void edit_description();
+
+        /**
+        * @brief Will treat the data send to change current's users
+        *        description
+        */
+        void edit_description_treat();
 };
 
 

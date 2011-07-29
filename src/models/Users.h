@@ -51,6 +51,8 @@ class Users : public SqliteModel {
         cppdb::statement getUsersCount;
         cppdb::statement getIdFromUsername;
         cppdb::statement getUserFromUsername;
+        cppdb::statement getDescriptionFromUsername;
+        cppdb::statement updateDescriptionFromUsername;
 
     public:
         /**
@@ -105,6 +107,30 @@ class Users : public SqliteModel {
         */
         results::User get_user_from_username(
             const std::string &username
+        );
+
+        /**
+        * @brief Get the user description from his
+        *        username
+        *
+        * @param username Name of the user for whom we want the description
+        *
+        * @return The user description as a string
+        */
+        std::string get_description_from_username(
+            const std::string &username
+        );
+
+        /**
+        * @brief Update the description of the given user
+        *
+        * @param username Name of the user we want to update the description of
+        * @param newDescription The new description
+        *
+        */
+        void update_description(
+            const std::string &username,
+            const std::string &newDescription
         );
 };
 

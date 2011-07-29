@@ -25,7 +25,9 @@
 #include <cppcms/session_interface.h>
 
 #include "MyProfile.h"
+#include "contents/my_profile.h"
 #include "contents/users.h"
+
 #include "models/Users.h"
 #include "contents/Config.h"
 
@@ -40,7 +42,9 @@ MyProfile::MyProfile(cppcms::service &serv) : Controller(serv) {
         "sqlite3:db=" + Config::get_instance()->sqlite3Path
     ));
     cppcms::url_dispatcher* d = &dispatcher();
-    d->assign("/show", &MyProfile::show, this);
+    d->assign("/show$", &MyProfile::show, this);
+    d->assign("/edit-description$", &MyProfile::edit_description, this);
+    d->assign("/edit-description_treat$", &MyProfile::edit_description_treat, this);
 }
 
 /**
@@ -66,6 +70,49 @@ void MyProfile::show() {
     );
 
     render("my_profile_show", c);
+}
+
+
+/**
+ *
+ */
+void MyProfile::edit_description() {
+    CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
+
+
+    std::string username = session()["name"];
+    contents::my_profile::EditDescription c (
+        username,
+        usersModel->get_description_from_username(
+            username
+        )
+    );
+    init_content(c);
+
+
+    render("my_profile_edit_description", c);
+
+}
+
+
+/**
+ *
+ */
+void MyProfile::edit_description_treat() {
+    TREAT_PAGE();
+    forms::my_profile::EditDescription form;
+    form.load(context());
+
+    if (form.validate()) {
+        usersModel->update_description(
+            session()["name"],
+            form.description.value()
+        );
+    }
+
+    
+    go_back_to_previous_page();
+
 }
 
 } // End namespace webs 

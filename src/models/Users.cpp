@@ -51,6 +51,13 @@ Users::Users(cppdb::session sqliteDb) : SqliteModel(sqliteDb) {
         "INSERT INTO users(username, password, email)"
         "VALUES(?,?,?)"
     );
+
+    
+    updateDescriptionFromUsername = sqliteDb.prepare(
+        "UPDATE users SET description = ?"
+        "WHERE username = ? "
+    );
+
     getUsers = sqliteDb.prepare(
         "SELECT * FROM users LIMIT 20 OFFSET ? "
     );
@@ -66,6 +73,11 @@ Users::Users(cppdb::session sqliteDb) : SqliteModel(sqliteDb) {
     getUserFromUsername = sqliteDb.prepare(
         "SELECT * FROM users WHERE username = ? LIMIT 1 "
     );
+
+    getDescriptionFromUsername = sqliteDb.prepare(
+        "SELECT description FROM users WHERE username = ? LIMIT 1 "
+    );
+
 }
 
 
@@ -180,6 +192,8 @@ results::User Users::get_user_from_username(
 
     results::User user; 
 
+    // don't forget to reset the statement
+    getUserFromUsername.reset();
     // attach the username to the sql statement
     getUserFromUsername.bind(username);   
  
@@ -188,12 +202,41 @@ results::User Users::get_user_from_username(
     // fill the user structure with the data retrieve from the database
     user.id = res.get<int>("id");
     user.username = res.get<std::string>("username");
+    user.description = res.get<std::string>("description");
     user.email = res.get<std::string>("email");
 
-    // don't forget to reset the statement
-    getUserFromUsername.reset();
 
     return user;
+}
+
+/**
+ * @todo throw exception if user does not exist
+ */
+std::string Users::get_description_from_username(
+    const std::string &username
+) {
+    getDescriptionFromUsername.reset();
+    getDescriptionFromUsername.bind(username);
+    return getDescriptionFromUsername.row().get<std::string>("description");
+    
+}
+
+
+/**
+ * @todo throw exception if user does not exist
+ */
+void Users::update_description(
+    const std::string &username,
+    const std::string &newDescription
+) {
+    std::cout << "[DEBUG] username :" << username << " description :" << newDescription << std::endl;
+
+    // don't forget to reset the statement
+    updateDescriptionFromUsername.reset();
+    updateDescriptionFromUsername.bind(newDescription);
+    updateDescriptionFromUsername.bind(username);
+    updateDescriptionFromUsername.exec();
+    
 }
 
 } // end of namespace models

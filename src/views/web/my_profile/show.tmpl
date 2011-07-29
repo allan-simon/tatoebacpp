@@ -88,13 +88,15 @@
 
     <div class="module profileDescription">
         <div class="editOption">
-            <a href="<% url "users/edit_profile#description"%>">
+            <a href="<% url "/my-profile/edit-description"%>">
                 <%gt "Edit" %>
             </a>
         </div>
 
         <div class="content">
-            <!-- TODO add content (maybe with markdown) -->
+            <!--TODO  maybe markdown it -->
+            <!-- the PRE is to avoid to code a new line to <br/> function -->
+            <pre><% user.description%></pre>
         </div>
     </div>
 
