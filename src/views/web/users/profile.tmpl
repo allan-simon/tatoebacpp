@@ -39,12 +39,6 @@
 <% template profile_summary_module() %>
 
     <div class="module profileSummary">    
-        <div class="editOption">
-            <a href="<% url "/users/edit_profile" %>">
-                <% gt "Edit"%>
-            </a>
-        </div>
-
         <img
             src="http://flags.tatoeba.org/img/profiles_128/482065fb0fce0e1fccc523a28143d7f7.png"
             alt="sysko"
@@ -87,11 +81,6 @@
 <% template description_module() %>
 
     <div class="module profileDescription">
-        <div class="editOption">
-            <a href="<% url "users/edit_profile#description"%>">
-                <%gt "Edit" %>
-            </a>
-        </div>
 
         <div class="content">
             <!-- TODO add content (maybe with markdown) -->
@@ -187,11 +176,6 @@
             </li>
         </ul>
 
-        <div class="editOption">
-            <a href="<% url "user/settings" %> ">
-                <% gt "Edit" %>
-            </a>
-        </div>
     </div>
 <% end template %>
 
