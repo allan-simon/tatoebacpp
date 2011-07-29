@@ -326,7 +326,7 @@ void Sentences::unlink(std::string idOneStr, std::string idTwoStr) {
 void Sentences::edit_text(std::string sentenceId) {
 	int id = atoi(sentenceId.c_str());
 
-    // TODO add a check so taht only moderator or owner can modify it
+    // TODO add a check so that only moderator or owner can modify it
     CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
 	contents::helpers::Sentences shc(
         sentencesModel->get_by_id(id, 5)
