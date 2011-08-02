@@ -30,12 +30,12 @@
 #include "contents/content.h"
 
 namespace forms {
-
+namespace users {
 /**
- * @struct RegisterNewUser
+ * @struct RegisterNew
  * Form to register a new user
  */
-struct RegisterNewUser : public cppcms::form {
+struct RegisterNew : public cppcms::form {
     /**
      * name of the user
      */
@@ -65,7 +65,7 @@ struct RegisterNewUser : public cppcms::form {
      * Default constructor add all the fields to the form
      * define their names etc.
      */
-    RegisterNewUser() {
+    RegisterNew() {
         *this + username + password + email + quiz + termsOfUse + submit;
         
         username.name("username");
@@ -95,7 +95,8 @@ struct RegisterNewUser : public cppcms::form {
     }
 };
 
-}
+} // end namespace users
+} // end namespace forms
 
 #endif
 

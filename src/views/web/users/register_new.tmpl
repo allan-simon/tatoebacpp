@@ -21,7 +21,7 @@
                 <label for="registrationUsername"><% gt "Username:" %></label>
             </td>
             <td>
-                <% form as_space registerNewUser.username %>
+                <% form as_space registerNew.username %>
             </td>
         </tr>
         <tr>
@@ -29,7 +29,7 @@
                 <label for="registrationPassword"><% gt "Password:" %></label>
             </td>
             <td>
-                <% form as_space registerNewUser.password %>
+                <% form as_space registerNew.password %>
             </td>
         </tr>
         <tr>
@@ -37,7 +37,7 @@
                 <label for="registrationEmail"><% gt "Email:"%></label>
             </td>
             <td>
-                <% form as_space registerNewUser.email %>
+                <% form as_space registerNew.email %>
             </td>
         </tr>
     </table>
@@ -46,20 +46,20 @@
         <% gt "We need to make sure you are human." %>
         <div class="input text">
             <label for="UserQuiz"><%gt "What are the five first letters of your email?" %></label>
-            <% form as_space registerNewUser.quiz %>
+            <% form as_space registerNew.quiz %>
         </div>
         <% gt "For instance, if your email is me12345@example.com, the answer is \"me123\"." %>
     </div>
 
     <div id="termsOfUse">
-        <% form as_space registerNewUser.termsOfUse %>
+        <% form as_space registerNew.termsOfUse %>
         <a href="<% url "/terms-of-use" %>">
             <% gt "I accept the terms of use" %>
         </a>
     </div>
 
     <div class="submit>">
-        <% form as_space registerNewUser.submit %>
+        <% form as_space registerNew.submit %>
     </div>
 </form>
 </div>

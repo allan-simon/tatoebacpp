@@ -28,6 +28,8 @@
 #include <vector>
 #include <cppcms/crypto.h>
 #include <cppdb/frontend.h>
+#include <booster/posix_time.h>
+
 #include "models/Users.h"
 
 
@@ -48,8 +50,8 @@ Users::Users(cppdb::session sqliteDb) : SqliteModel(sqliteDb) {
         "WHERE username = ? AND password = ? LIMIT 1"
     );
     addUser = sqliteDb.prepare(
-        "INSERT INTO users(username, password, email)"
-        "VALUES(?,?,?)"
+        "INSERT INTO users(username, password, email, since)"
+        "VALUES(?,?,?,?)"
     );
 
     
@@ -142,6 +144,9 @@ bool Users::add(
         binary_md5(pass)
     );
     addUser.bind(email);
+    addUser.bind(
+        booster::ptime::now().get_seconds()
+    );
           
     try {
         addUser.exec();    
@@ -204,6 +209,7 @@ results::User Users::get_user_from_username(
     user.username = res.get<std::string>("username");
     user.description = res.get<std::string>("description");
     user.email = res.get<std::string>("email");
+    user.since = res.get<long long>("since");
 
 
     return user;

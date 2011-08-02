@@ -41,7 +41,7 @@ namespace users {
  *         contain the info for the register new user page
  */
 struct RegisterNew : public BaseContent {
-    forms::RegisterNewUser registerNewUser;
+    forms::users::RegisterNew registerNew;
 };
 
 /**

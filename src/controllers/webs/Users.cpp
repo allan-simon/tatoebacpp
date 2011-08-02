@@ -74,20 +74,19 @@ void Users::register_new_treat() {
     TREAT_PAGE();
 
     // TODO directly use the form
-    contents::users::RegisterNew c;
-    init_content(c);
-    c.registerNewUser.load(context());
+    forms::users::RegisterNew form;
+    form.load(context());
 
-    if(c.registerNewUser.validate()) {
+    if(form.validate()) {
         if (
             usersModel->add(
-                c.registerNewUser.username.value(),
-                c.registerNewUser.password.value(),
-                c.registerNewUser.email.value()
+                form.username.value(),
+                form.password.value(),
+                form.email.value()
             )
         ) {
-            response().set_redirect_header("/" + c.lang);
-            session()["name"] = c.registerNewUser.username.value();
+            response().set_redirect_header("/" + get_interface_lang());
+            session()["name"] = form.username.value();
             session().save();
             //std::cout << "user name: " << session()["name"] << std::endl;
             return;
