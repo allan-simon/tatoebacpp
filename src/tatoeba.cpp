@@ -91,22 +91,25 @@ void Tatoeba::main(std::string url) {
      * @todo implement the default language in order check the session, coockie
      * navigator
      */
-	booster::smatch matches;
-	booster::regex_match(url, matches, lang_regex);
+    booster::smatch matches;
+    booster::regex_match(url, matches, lang_regex);
     std::map<std::string,std::string>::const_iterator p = lang_map.find(
         std::string(matches[1])
     );
     session().load();
     // if we known the language
     if (p != lang_map.end()) {
-	    context().locale(p->second);
+        //TODO replace this by something more generic
+        // This line permit to set in which format date, number etc. will be rendered
+        context().locale("en_US.UTF-8");
+        
         session()["lang"] = p->first;
         // if the other part of the url is random crap => 404
          
          
-	    if (!dispatcher().dispatch(matches[2])) {
-		    response().make_error_response(cppcms::http::response::not_found);
-	    }
+        if (!dispatcher().dispatch(matches[2])) {
+            response().make_error_response(cppcms::http::response::not_found);
+        }
     // if we don't know the lang / the lang is missing in the url
     } else {
         // we set it to english
@@ -124,7 +127,7 @@ void Tatoeba::main(std::string url) {
         //TODO maybe we can avoid redirection if we know that
         //the produced url will lead to nowhere
         //but doing this :
-	    //if (dispatcher().dispatch(toDispatch)) {
+        //if (dispatcher().dispatch(toDispatch)) {
         //   redirect
         //} else { 
         //  404
