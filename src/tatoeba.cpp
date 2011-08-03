@@ -56,6 +56,7 @@ Tatoeba::Tatoeba(cppcms::service &serv) :
     adminApi(serv)
 {
 
+    //TODO maybe move the matching string as a an attribute of the controller?
     add(sentencesApi, "^/api/sentences(.*)", 1);
     add(sentences, "^/sentences(.*)", 1);
     add(users, "^/users(.*)", 1);
