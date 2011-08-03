@@ -56,12 +56,7 @@ namespace forms {
         EditLangSentence(std::string id = "0", std::string lang = "") {
             *this + sentenceId + newLang + submit;
 
-
-            ISOToNameMap isoToName = Languages::get_instance()->get_iso_to_name_map();
-            ISOToNameMap::iterator itr;
-            for(itr = isoToName.begin(); itr != isoToName.end(); ++itr){
-                newLang.add(itr->second,itr->first);
-            }
+            Languages::get_instance()->fill_form_select(newLang);
             newLang.selected_id(lang);
 
             

@@ -58,11 +58,7 @@ namespace forms {
 
             sentenceString.name("str");
 
-            ISOToNameMap isoToName = Languages::get_instance()->get_iso_to_name_map();
-            ISOToNameMap::iterator itr;
-            for(itr = isoToName.begin(); itr != isoToName.end(); ++itr){
-                sentenceLang.add(itr->second,itr->first);
-            }
+            Languages::get_instance()->fill_form_select(sentenceLang);
 
             submit.name("Add sentence");
             submit.value("add");
