@@ -52,7 +52,9 @@ class Users : public SqliteModel {
         cppdb::statement getIdFromUsername;
         cppdb::statement getUserFromUsername;
         cppdb::statement getDescriptionFromUsername;
+        cppdb::statement getHomepageFromUsername;
         cppdb::statement updateDescriptionFromUsername;
+        cppdb::statement updateHomepageFromUsername;
 
     public:
         /**
@@ -122,6 +124,18 @@ class Users : public SqliteModel {
         );
 
         /**
+        * @brief Get the user homepage from his
+        *        username
+        *
+        * @param username Name of the user for whom we want the homepage
+        *
+        * @return The user homepage as a string
+        */
+        std::string get_homepage_from_username(
+            const std::string &username
+        );
+
+        /**
         * @brief Update the description of the given user
         *
         * @param username Name of the user we want to update the description of
@@ -131,6 +145,18 @@ class Users : public SqliteModel {
         void update_description(
             const std::string &username,
             const std::string &newDescription
+        );
+
+        /**
+        * @brief Update the homepage of the given user
+        *
+        * @param username Name of the user we want to update the homepage of
+        * @param newHomepage The new homepage
+        *
+        */
+        void update_homepage(
+            const std::string &username,
+            const std::string &newHomepage
         );
 };
 

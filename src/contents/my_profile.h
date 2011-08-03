@@ -28,6 +28,7 @@
 
 #include "contents/content.h"
 #include "contents/forms/my_profile/edit_description.h"
+#include "contents/forms/my_profile/edit_homepage.h"
 
 #include "results/users.h"
 
@@ -35,9 +36,9 @@ namespace contents {
 namespace my_profile {
 
 /**
- * @struct RegisterNew
- * @brief  content used by the Users::register_new
- *         contain the info for the register new user page
+ * @struct EditDescription
+ * @brief  content used by the MyProfile::edit_description
+ *         contain the info to edit one's description
  */
 struct EditDescription : public BaseContent {
     forms::my_profile::EditDescription form;
@@ -54,6 +55,32 @@ struct EditDescription : public BaseContent {
         const std::string &description = ""
     ) :
         form(description),
+        username(username)
+    {
+    };
+};
+
+
+/**
+ * @struct EditHomepage
+ * @brief  content used by the MyProfile::edit_homepage
+ *         contain the info to edit one's homepage
+ */
+struct EditHomepage : public BaseContent {
+    forms::my_profile::EditHomepage form;
+    std::string username;
+
+    /**
+    * @brief             Constructor
+    *
+    * @param username    name of the current user
+    * @param description his homepage (empty if not precised)
+    */
+    EditHomepage(
+        const std::string &username,
+        const std::string &homepage = ""
+    ) :
+        form(homepage),
         username(username)
     {
     };

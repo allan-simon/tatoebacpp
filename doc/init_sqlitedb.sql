@@ -6,6 +6,7 @@ CREATE TABLE users (
 "email" text not null unique,    -- his email address
 "password" blob not null,        -- his password in binary md5 
 "since" integer not null,        -- his registering date
+"homepage" text default "",      -- his personnal webpage/website
 "description" text default ""    -- his self-written description
 
 );

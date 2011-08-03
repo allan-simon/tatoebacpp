@@ -60,6 +60,13 @@ Users::Users(cppdb::session sqliteDb) : SqliteModel(sqliteDb) {
         "WHERE username = ? "
     );
 
+    updateHomepageFromUsername = sqliteDb.prepare(
+        "UPDATE users SET homepage = ?"
+        "WHERE username = ? "
+    );
+
+
+
     getUsers = sqliteDb.prepare(
         "SELECT * FROM users LIMIT 20 OFFSET ? "
     );
@@ -80,6 +87,12 @@ Users::Users(cppdb::session sqliteDb) : SqliteModel(sqliteDb) {
         "SELECT description FROM users WHERE username = ? LIMIT 1 "
     );
 
+    getHomepageFromUsername = sqliteDb.prepare(
+        "SELECT homepage FROM users WHERE username = ? LIMIT 1 "
+    );
+
+
+    
 }
 
 
@@ -209,6 +222,7 @@ results::User Users::get_user_from_username(
     user.username = res.get<std::string>("username");
     user.description = res.get<std::string>("description");
     user.email = res.get<std::string>("email");
+    user.homepage = res.get<std::string>("homepage");
     user.since = res.get<long long>("since");
 
 
@@ -227,6 +241,19 @@ std::string Users::get_description_from_username(
     
 }
 
+/**
+ * @todo throw exception if user does not exist
+ */
+std::string Users::get_homepage_from_username(
+    const std::string &username
+) {
+    getHomepageFromUsername.reset();
+    getHomepageFromUsername.bind(username);
+    return getHomepageFromUsername.row().get<std::string>("homepage");
+    
+}
+
+
 
 /**
  * @todo throw exception if user does not exist
@@ -243,6 +270,22 @@ void Users::update_description(
     updateDescriptionFromUsername.bind(username);
     updateDescriptionFromUsername.exec();
     
+}
+
+
+/**
+ * @TODO throw exception if user does not exist
+ */
+void Users::update_homepage(
+    const std::string &username,
+    const std::string &newHomepage
+) {
+    // don't forget to reset the statement
+    updateHomepageFromUsername.reset();
+    updateHomepageFromUsername.bind(newHomepage);
+    updateHomepageFromUsername.bind(username);
+    updateHomepageFromUsername.exec();
+
 }
 
 } // end of namespace models

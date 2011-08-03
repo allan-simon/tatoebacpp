@@ -43,6 +43,11 @@ class MyProfile : public Controller {
          *  @brief Model class for user, used to access the database
          */
         models::Users *usersModel;
+
+        /**
+         * @brief set the http header to redirect the current user's profile
+         */
+        void go_to_profile_page();
 	public:
         /**
          * @brief Constructor, will attach the url to the dispatcher
@@ -70,6 +75,19 @@ class MyProfile : public Controller {
         *        description
         */
         void edit_description_treat();
+
+
+        /**
+        * @brief Display a form to edit current user's homepage
+        */
+        void edit_homepage();
+
+        /**
+        * @brief Will treat the data send to change current's users
+        *        homepage
+        */
+        void edit_homepage_treat();
+
 };
 
 

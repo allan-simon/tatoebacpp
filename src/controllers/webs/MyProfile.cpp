@@ -45,6 +45,8 @@ MyProfile::MyProfile(cppcms::service &serv) : Controller(serv) {
     d->assign("/show$", &MyProfile::show, this);
     d->assign("/edit-description$", &MyProfile::edit_description, this);
     d->assign("/edit-description_treat$", &MyProfile::edit_description_treat, this);
+    d->assign("/edit-homepage$", &MyProfile::edit_homepage, this);
+    d->assign("/edit-homepage_treat$", &MyProfile::edit_homepage_treat, this);
 }
 
 /**
@@ -110,9 +112,63 @@ void MyProfile::edit_description_treat() {
         );
     }
 
-    
-    go_back_to_previous_page();
+    go_to_profile_page();
+}
 
+
+
+
+
+/**
+ *
+ */
+void MyProfile::edit_homepage() {
+    CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
+
+
+    std::string username = session()["name"];
+    contents::my_profile::EditHomepage c (
+        username,
+        usersModel->get_homepage_from_username(
+            username
+        )
+    );
+    init_content(c);
+
+
+    render("my_profile_edit_homepage", c);
+
+}
+
+
+/**
+ *
+ */
+void MyProfile::edit_homepage_treat() {
+    TREAT_PAGE();
+    forms::my_profile::EditHomepage form;
+    form.load(context());
+
+    if (form.validate()) {
+        usersModel->update_homepage(
+            session()["name"],
+            form.homepage.value()
+        );
+    }
+
+    go_to_profile_page();
+
+}
+
+
+/**
+ *
+ */
+inline void MyProfile::go_to_profile_page() {
+    response().set_redirect_header(
+        "/" + get_interface_lang() +
+        "/my-profile/show"
+    );
 }
 
 } // End namespace webs 
