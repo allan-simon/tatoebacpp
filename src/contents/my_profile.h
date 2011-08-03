@@ -29,6 +29,7 @@
 #include "contents/content.h"
 #include "contents/forms/my_profile/edit_description.h"
 #include "contents/forms/my_profile/edit_homepage.h"
+#include "contents/forms/my_profile/add_spoken_lang.h"
 
 #include "results/users.h"
 
@@ -85,6 +86,19 @@ struct EditHomepage : public BaseContent {
     {
     };
 };
+
+
+/**
+ * @struct AddSpokenLang
+ * @brief  content used by the MyProfile::add_spoken_lang
+ *         contain the info needed for a user to add a language he speaks
+ */
+struct AddSpokenLang : public BaseContent {
+
+    forms::my_profile::AddSpokenLang form;
+
+};
+
 
 
 

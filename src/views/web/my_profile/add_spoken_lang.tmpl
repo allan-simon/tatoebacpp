@@ -1,0 +1,81 @@
+<% c++ #include "contents/my_profile.h" %>
+<% skin %>
+<% view my_profile_add_spoken_lang uses contents::my_profile::AddSpokenLang extends master %>
+
+/**
+ * @brief Page's title
+ */
+<% template title() %>
+    <% gt "Add a language you study/speak" %>
+<% end template %>
+
+
+/**
+ * @brief Load the CSS specific to this page
+ */
+<% template css() %>
+<link
+    rel="stylesheet"
+    type="text/css"
+    href="http://css.tatoeba.org/css/user/edit_profile.css?1"
+/>
+
+<% end template %>
+
+
+
+/**
+ * @brief All the content that will be displayed in the main div
+ *        of the page
+ */
+<% template main_content() %>
+<div id="description" class="module" >
+
+    <h2><% gt "Add a language you study/speak" %></h2>
+    <form
+        id="NyProfileAddSpokenLang"
+        method="post"
+        action="<% url "/my-profile/add-spoken-lang_treat" %>"
+    >
+        <div>
+            <% form as_p form %>
+        </div>
+
+    </form>
+</div>
+<% end template %>
+
+
+
+/**
+ * @brief This module give a short paragraph explaining the meaning of each
+ *        proeficiency level, to help users choose the correct one
+ *
+ * @TODO  fill it
+ */
+<% template category_explanation_module() %>
+
+    <div class="module">
+    </div>
+<% end template%>
+
+
+/**
+ * @brief Display all the annexe modules
+ *
+ */
+<% template annexe_content() %>
+    <div class="module">
+        <p>
+            TODO: add a little message that native != master in a language
+            <br/> and also that all the sentences added in language with
+            proefiency set less than a certain level will be automatically tagged
+            as "Need native check", and precise that even with this, Tatoeba is
+            not first aimed to add sentence in a language one has just started
+            to learn
+        </p>
+    </div>
+<% end template %>
+
+<% end view %>
+<% end skin %>

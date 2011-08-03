@@ -31,6 +31,7 @@
 #include <map>
 #include "Singleton.h"
 #include <cppcms/json.h>
+#include <cppcms/form.h>
 
 //TODO maybe replace all these maps by something smarter
 typedef std::map<std::string, std::string> ISOToNameMap;
@@ -57,7 +58,7 @@ class Languages : public Singleton<Languages> {
         /**
          * Map associating  English name of a language to its ISO code
          **/
-        ISOToNameMap nameToIso;
+        NameToISOMap nameToIso;
 
 
 
@@ -105,6 +106,13 @@ class Languages : public Singleton<Languages> {
          */
         bool iso_exists(const std::string &isoCode);
 
+        /**
+         * @brief Fill a html form's select and fill it with all the supported
+         *        languages
+         *
+         * @param select The cppcms select to fill
+         */
+        void fill_form_select(cppcms::widgets::select &select);
 
 };
 

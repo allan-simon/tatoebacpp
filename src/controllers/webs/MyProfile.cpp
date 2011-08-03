@@ -22,6 +22,9 @@
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
+#include <sstream>
+#include <string>
+
 #include <cppcms/session_interface.h>
 
 #include "MyProfile.h"
@@ -29,6 +32,7 @@
 #include "contents/users.h"
 
 #include "models/Users.h"
+#include "models/UsersSpokenLangs.h"
 #include "contents/Config.h"
 
 namespace controllers {
@@ -38,15 +42,34 @@ namespace webs {
  */
 MyProfile::MyProfile(cppcms::service &serv) : Controller(serv) {
 
-    usersModel = new models::Users(cppdb::session(
-        "sqlite3:db=" + Config::get_instance()->sqlite3Path
-    ));
+    usersModel = new models::Users(
+        cppdb::session(
+            "sqlite3:db=" + Config::get_instance()->sqlite3Path
+        )
+    );
+
+    usersSpokenLangsModel= new models::UsersSpokenLangs(
+        cppdb::session(
+            "sqlite3:db=" + Config::get_instance()->sqlite3Path
+        )
+    );
+
+
+
     cppcms::url_dispatcher* d = &dispatcher();
     d->assign("/show$", &MyProfile::show, this);
     d->assign("/edit-description$", &MyProfile::edit_description, this);
     d->assign("/edit-description_treat$", &MyProfile::edit_description_treat, this);
+
     d->assign("/edit-homepage$", &MyProfile::edit_homepage, this);
     d->assign("/edit-homepage_treat$", &MyProfile::edit_homepage_treat, this);
+
+    d->assign("/add-spoken-lang$", &MyProfile::add_spoken_lang, this);
+    d->assign("/add-spoken-lang_treat$", &MyProfile::add_spoken_lang_treat, this);
+    //d->assign("/delete-spoken-lang_treat$", &MyProfile::delete_spoken_lang_treat, this);
+
+    //d->assign("/edit-lang-proeficiency/(\\w+)$", &MyProfile::edit_lang_proeficiency, this, 1);
+    //d->assign("/edit-lang-proeficiency_treat$", &MyProfile::edit_lang_proeficiency, this);
 }
 
 /**
@@ -54,6 +77,7 @@ MyProfile::MyProfile(cppcms::service &serv) : Controller(serv) {
  */
 MyProfile::~MyProfile() {
     delete usersModel;
+    delete usersSpokenLangsModel;
 }
 
 
@@ -159,6 +183,52 @@ void MyProfile::edit_homepage_treat() {
     go_to_profile_page();
 
 }
+
+
+/**
+ *
+ */
+void MyProfile::add_spoken_lang() {
+    CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
+
+    contents::my_profile::AddSpokenLang c;
+    init_content(c);
+
+
+    render("my_profile_add_spoken_lang", c);
+
+}
+
+
+/**
+ *
+ */
+void MyProfile::add_spoken_lang_treat() {
+    TREAT_PAGE();
+    forms::my_profile::AddSpokenLang form;
+    form.load(context());
+
+    if (form.validate()) {
+
+        int proefLevel = 0;
+        int userId = 0;
+        std::istringstream(form.proeficiencyLevel.selected_id()) >> proefLevel;
+        std::istringstream(session()["userId"]) >> userId;
+
+        usersSpokenLangsModel->add(
+            userId,
+            form.spokenLang.selected_id(),
+            proefLevel,
+            form.isNative.value()
+        );
+    }
+
+    go_to_profile_page();
+
+}
+
+
+
 
 
 /**

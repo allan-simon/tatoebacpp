@@ -30,6 +30,7 @@
 
 namespace models {
     class Users;
+    class UsersSpokenLangs;
 }
 namespace controllers {
 namespace webs { 
@@ -43,6 +44,10 @@ class MyProfile : public Controller {
          *  @brief Model class for user, used to access the database
          */
         models::Users *usersModel;
+        /**
+         *  @brief Model class for languages spoken by the current user
+         */
+        models::UsersSpokenLangs *usersSpokenLangsModel;
 
         /**
          * @brief set the http header to redirect the current user's profile
@@ -87,6 +92,18 @@ class MyProfile : public Controller {
         *        homepage
         */
         void edit_homepage_treat();
+
+        /**
+        * @brief Display a form for the user to add a language he speaks 
+        */
+        void add_spoken_lang();
+
+        /**
+        * @brief Will treat the data send to add a language the user speaks 
+        *        in his profile
+        */
+        void add_spoken_lang_treat();
+
 
 };
 

@@ -98,3 +98,14 @@ bool Languages::iso_exists(const std::string &isoCode) {
     return isoToId.find(isoCode) != isoToId.end();
 }
 
+/**
+ *
+ */
+void Languages::fill_form_select(cppcms::widgets::select &select) {
+    ISOToNameMap::iterator itr;
+    for(itr = nameToIso.begin(); itr != nameToIso.end(); ++itr){
+        //TODO l10n the language name
+        select.add(itr->first, itr->second);
+    }
+
+}
