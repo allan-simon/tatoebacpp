@@ -63,7 +63,17 @@ namespace results {
         /**
          * Text of the sentence
          */
-        std::string text;
+        std::string& string() {
+            return text;
+        }
+        
+        /**
+         * Text of the sentence
+         */
+        const std::string& string() const {
+            return text;
+        }
+        
         /**
          * ISO code of the language in which the sentence is written
          */
@@ -96,7 +106,7 @@ namespace results {
             /**
              * Default constructor, will construct an empty sentence
              */
-            Sentence(): text(""),lang(""),flags(0),id(0){};
+            Sentence(): lang(""),flags(0),id(0),text(""){};
 
             /**
              * Constructor that will create a sentence with the correct
@@ -108,10 +118,10 @@ namespace results {
                 const std::string& lang,
                 int flags
             ):
-                text(text),
                 lang(lang),
-                flags(flags),
-                id(id) {
+                flags(flags),                
+                id(id),
+                text(text) {
             };
             
             /**
@@ -119,10 +129,10 @@ namespace results {
              * id, text, lang and flags and no translations using char*
              */
             Sentence(int id, char* text, char* lang, int flags):
-                text(std::string(text)),
                 lang(std::string(lang)),
                 flags(flags),
-                id(id) {
+                id(id),
+                text(std::string(text)) {
             };
 
             /*
@@ -151,6 +161,11 @@ namespace results {
              * Id of the sentence in tatodb
              */
             unsigned int id;
+            
+            /**
+             * Text of the sentence
+             */
+            std::string text;
 
     };
 }

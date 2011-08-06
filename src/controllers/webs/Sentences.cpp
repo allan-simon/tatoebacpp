@@ -337,7 +337,7 @@ void Sentences::edit_text(std::string sentenceId) {
         //value of the sentence
         contents::SentencesEditText c(
             sentenceId,
-            shc.sentences[0].text  
+            shc.sentences[0].string()
         );
         init_content(c);
     

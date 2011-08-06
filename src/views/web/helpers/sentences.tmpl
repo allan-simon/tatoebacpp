@@ -66,7 +66,7 @@
                 <% include sentence_lang(sentence.lang) %>
             </a>
             <div class="sentenceContent">
-                <div><% sentence.text %></div>
+                <div><% sentence.string() %></div>
             </div>
         </div>
     <% end template%>
@@ -166,7 +166,7 @@
                 >
                     <% depth %>
                     -
-                    <% sentence.text%>
+                    <% sentence.string() %>
                 </a>
             </div>
             <br />
