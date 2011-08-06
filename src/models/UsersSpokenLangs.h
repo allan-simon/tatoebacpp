@@ -37,6 +37,12 @@ namespace models {
  *
  */
 class UsersSpokenLangs : public SqliteModel {
+
+    private:
+        results::SpokenLangsVector treat_spoken_langs_result(
+            cppdb::result &res
+        );
+
     public:
         /**
          * @brief Constructor
@@ -68,7 +74,8 @@ class UsersSpokenLangs : public SqliteModel {
         *
         * @return The list of spoken languages
         */
-        ::results::SpokenLangsVector get_from_user_id(const int userId);
+        results::SpokenLangsVector get_from_user(const int userId);
+        results::SpokenLangsVector get_from_user(const std::string &username);
 
 
         /**

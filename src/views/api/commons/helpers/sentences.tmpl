@@ -16,7 +16,7 @@
 
     <% template main_sentence(results::Sentence &sentence) %>
         <mainsentence tatoid="<% sentence.id%>" lang="<% sentence.lang %>">
-                <text><![CDATA[<% sentence.text %>]]></text>
+                <text><% sentence.text %></text>
         </mainsentence>
     <% end template%>
 
@@ -51,7 +51,7 @@
             tatoid="<% sentence.id %>"
             lang="<% sentence.lang %>"
         >
-            <text><![CDATA[<% sentence.text  %>]]></text>
+            <text><% sentence.text  %></text>
         </sentence>
 
     <% end template %>

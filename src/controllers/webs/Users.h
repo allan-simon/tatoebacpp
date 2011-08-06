@@ -30,6 +30,7 @@
 
 namespace models {
     class Users;
+    class UsersSpokenLangs;
 }
 namespace controllers {
 namespace webs { 
@@ -42,6 +43,10 @@ class Users : public Controller {
          * Model class for user, used to access the database
          */
         models::Users *usersModel;
+        /**
+         *  @brief Model class for languages spoken by the current user
+         */
+        models::UsersSpokenLangs *usersSpokenLangsModel;
 	public:
         /**
          * Constructor, will attach the url to the dispatcher

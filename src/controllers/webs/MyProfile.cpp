@@ -100,7 +100,7 @@ void MyProfile::show() {
     int userId = 0;
     std::istringstream(session()["userId"]) >> userId;
 
-    c.user.spokenLangs =usersSpokenLangsModel->get_from_user_id(
+    c.user.spokenLangs =usersSpokenLangsModel->get_from_user(
         userId
     );
 

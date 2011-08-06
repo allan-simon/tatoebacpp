@@ -28,8 +28,71 @@
  */
 <% template main_content() %>
     <% include profile_summary_module() %>
+    <% include spoken_language_module() %>
     <% include description_module() %>
 <% end %>
+
+<% template spoken_language_module() %>
+    <div class="module profileSummary">
+        <h2><% gt "Languages this user speaks/studies:"%></h2>
+        
+        <% foreach spokenLang in user.spokenLangs %>
+        <table id="spokenlangs">
+            <tr> 
+                <th><% gt "Language:"%></th>
+                <th><% gt "Level:"%></th>
+                <th><% gt "Is this user a native ?:"%></th>
+            </tr>
+
+            <% item %>
+            <tr>
+                <td>
+                    <!--TODO find a nice way to replace it by the human name -->
+                    <% c++ out() << Languages::get_instance()->get_name_from_iso(spokenLang.langISO); %>
+                </td>
+                <td> 
+                    <% include proeficiency(spokenLang.proeficiency) %>
+
+                </td>
+                <td>
+                    <% if spokenLang.isNative%>
+                        <% gt "Yes"%>
+                    <% else %>
+                        <% gt "No" %>
+                    <% end %>
+
+                </td>
+            </tr>
+            <% end %>
+        </table>
+        <% end foreach %>
+
+    </div>
+
+<% end template %>
+
+/**
+ * @brief display the "Human" reable name of the level
+ *
+ * @param level The level of the user in that language
+ */
+<% template proeficiency(int level)%>
+
+    <% if (level == 0)  %>
+        <span class="proeficiencylevel">C2</span>
+    <% elif (level == 1)%>
+        <span class="proeficiencylevel">C1</span>
+    <% elif (level == 2)%>
+        <span class="proeficiencylevel">B2</span>
+    <% elif (level == 3)%>
+        <span class="proeficiencylevel">B1</span>
+    <% elif (level == 4)%>
+        <span class="proeficiencylevel">A2</span>
+    <% elif (level == 5)%>
+        <span class="proeficiencylevel">A1</span>
+    <%end%>
+<% end template %>
+
 
 /**
  * @brief All the information of the given user are briefly presented
