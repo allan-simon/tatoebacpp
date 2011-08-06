@@ -237,8 +237,8 @@ results::User Users::get_user_from_username(
 std::string Users::get_description_from_username(
     const std::string &username
 ) {
-    getDescriptionFromUsername.bind(username);
     getDescriptionFromUsername.reset();
+    getDescriptionFromUsername.bind(username);
     return getDescriptionFromUsername.row().get<std::string>("description");
     
 }
@@ -249,8 +249,8 @@ std::string Users::get_description_from_username(
 std::string Users::get_homepage_from_username(
     const std::string &username
 ) {
-    getHomepageFromUsername.bind(username);
     getHomepageFromUsername.reset();
+    getHomepageFromUsername.bind(username);
     return getHomepageFromUsername.row().get<std::string>("homepage");
     
 }
