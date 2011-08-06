@@ -84,16 +84,40 @@ results::SpokenLangsVector UsersSpokenLangs::get_from_user(
     cppdb::statement getFromUser = sqliteDb.prepare(
         "SELECT * FROM users_spoken_langs "
         "WHERE user_id = ( "
-        "   SELECT id FROM users WHERE username = ? LIMIT 1"
+        "   SELECT id FROM users WHERE username = ? "
         ");"
     );
     getFromUser.bind(username);
+
+    // this function does the reset for us
+    return get_spoken_langs_result(getFromUser);
+
+}
+
+/**
+ *
+ */
+results::SpokenLangsVector UsersSpokenLangs::get_spoken_langs_result(
+    cppdb::statement &getFromUser
+) {
+
+    results::SpokenLangsVector spokenLangs;
+
     cppdb::result res = getFromUser.query(); 
 
-    // don't forget to reset the statement
-    getFromUser.reset(); 
+    while (res.next()) {
+        results::SpokenLang tempSpokenLang;
+        tempSpokenLang.langISO = res.get<std::string>("lang");
+        tempSpokenLang.proeficiency = res.get<int>("proeficiency");
+        tempSpokenLang.isNative = res.get<int>("is_native") == 1;
 
-    return treat_spoken_langs_result(res);
+        spokenLangs.push_back(tempSpokenLang);
+    
+    }
+    getFromUser.reset(); 
+    return spokenLangs;
+
+
 }
 
 /**
@@ -107,36 +131,13 @@ results::SpokenLangsVector UsersSpokenLangs::get_from_user(
         "SELECT * FROM users_spoken_langs WHERE user_id = ?;"
     );
     getFromUser.bind(userId);
-    cppdb::result res = getFromUser.query(); 
 
-    // don't forget to reset the statement
-    getFromUser.reset(); 
-
-    return treat_spoken_langs_result(res);
+    // this function does the reset for us
+    return get_spoken_langs_result(getFromUser);
 }
 
 
 
-/**
- * 
- */
-results::SpokenLangsVector UsersSpokenLangs::treat_spoken_langs_result(
-    cppdb::result &res
-) {
-    results::SpokenLangsVector spokenLangs;
-
-    while (res.next()) {
-        results::SpokenLang tempSpokenLang;
-        tempSpokenLang.langISO = res.get<std::string>("lang");
-        tempSpokenLang.proeficiency = res.get<int>("proeficiency");
-        tempSpokenLang.isNative = res.get<int>("is_native") == 1;
-
-        spokenLangs.push_back(tempSpokenLang);
-    
-    }
-
-    return spokenLangs;
-}
 
 /**
  * @TODO throw exception if language has already been added for that

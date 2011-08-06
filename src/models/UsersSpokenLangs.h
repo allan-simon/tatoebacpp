@@ -39,8 +39,18 @@ namespace models {
 class UsersSpokenLangs : public SqliteModel {
 
     private:
-        results::SpokenLangsVector treat_spoken_langs_result(
-            cppdb::result &res
+
+        /**
+        * @brief Factoring function which take an already prepared and bind
+        *        statement and execute it and return the results 
+        *        NOTE: this function reset the statement at the end
+        *
+        * @param statement The statement to execute and extract the results from
+        *
+        * @return A list of spoken langs
+        */
+        results::SpokenLangsVector get_spoken_langs_result(
+            cppdb::statement &statement
         );
 
     public:
