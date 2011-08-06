@@ -85,7 +85,8 @@ results::SpokenLangsVector UsersSpokenLangs::get_from_user(
         "SELECT * FROM users_spoken_langs "
         "WHERE user_id = ( "
         "   SELECT id FROM users WHERE username = ? "
-        ");"
+        ")"
+        "ORDER BY proeficiency;"
     );
     getFromUser.bind(username);
 
@@ -128,7 +129,8 @@ results::SpokenLangsVector UsersSpokenLangs::get_from_user(
 ) {
 
     cppdb::statement getFromUser = sqliteDb.prepare(
-        "SELECT * FROM users_spoken_langs WHERE user_id = ?;"
+        "SELECT * FROM users_spoken_langs WHERE user_id = ?"
+        "ORDER BY proeficiency;"
     );
     getFromUser.bind(userId);
 
