@@ -114,6 +114,17 @@ class Languages : public Singleton<Languages> {
          */
         void fill_form_select(cppcms::widgets::select &select);
 
+        /**
+        * @brief Return the localized name of the language with the given iso
+        *        code
+        *
+        * @param isoCode ISO code of the language of which we want the name
+        *
+        * @todo i18n it
+        *
+        * @return The localized name of the language
+        */
+        std::string get_name_from_iso(std::string isoCode);
 };
 
 #endif

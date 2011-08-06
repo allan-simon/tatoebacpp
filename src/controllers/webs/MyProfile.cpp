@@ -66,10 +66,11 @@ MyProfile::MyProfile(cppcms::service &serv) : Controller(serv) {
 
     d->assign("/add-spoken-lang$", &MyProfile::add_spoken_lang, this);
     d->assign("/add-spoken-lang_treat$", &MyProfile::add_spoken_lang_treat, this);
-    //d->assign("/delete-spoken-lang_treat$", &MyProfile::delete_spoken_lang_treat, this);
+    
+    d->assign("/remove-spoken-lang/(\\w+)$", &MyProfile::remove_spoken_lang, this, 1);
 
-    //d->assign("/edit-lang-proeficiency/(\\w+)$", &MyProfile::edit_lang_proeficiency, this, 1);
-    //d->assign("/edit-lang-proeficiency_treat$", &MyProfile::edit_lang_proeficiency, this);
+    d->assign("/edit-spoken-lang/(\\w+)$", &MyProfile::edit_spoken_lang, this, 1);
+    d->assign("/edit-spoken-lang_treat$", &MyProfile::edit_spoken_lang_treat, this);
 }
 
 /**
@@ -91,8 +92,16 @@ void MyProfile::show() {
     contents::users::Profile c;
     init_content(c);
 
+
     c.user = usersModel->get_user_from_username(
         session()["name"]
+    );
+
+    int userId = 0;
+    std::istringstream(session()["userId"]) >> userId;
+
+    c.user.spokenLangs =usersSpokenLangsModel->get_from_user_id(
+        userId
     );
 
     render("my_profile_show", c);
@@ -210,15 +219,13 @@ void MyProfile::add_spoken_lang_treat() {
 
     if (form.validate()) {
 
-        int proefLevel = 0;
         int userId = 0;
-        std::istringstream(form.proeficiencyLevel.selected_id()) >> proefLevel;
         std::istringstream(session()["userId"]) >> userId;
 
         usersSpokenLangsModel->add(
             userId,
             form.spokenLang.selected_id(),
-            proefLevel,
+            form.proeficiencyLevel.selected(),
             form.isNative.value()
         );
     }
@@ -227,7 +234,73 @@ void MyProfile::add_spoken_lang_treat() {
 
 }
 
+/**
+ *
+ */
+void MyProfile::remove_spoken_lang(std::string langISO) {
+    CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
 
+    int userId = 0;
+    std::istringstream(session()["userId"]) >> userId;
+
+    usersSpokenLangsModel->remove(
+        userId,
+        langISO
+    );
+
+    go_to_profile_page();
+
+}
+
+/**
+ *
+ */
+void MyProfile::edit_spoken_lang(std::string langISO) {
+    CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
+
+    int userId = 0;
+    std::istringstream(session()["userId"]) >> userId;
+
+    //TODO redirect if lang does not exist for that user
+
+    results::SpokenLang langToEdit = usersSpokenLangsModel->get_one(
+        userId,
+        langISO
+    );
+
+    contents::my_profile::EditSpokenLang c(langToEdit);
+
+    init_content(c);
+
+    render("my_profile_edit_spoken_lang", c);
+
+}
+
+
+/**
+ *
+ */
+void MyProfile::edit_spoken_lang_treat() {
+    TREAT_PAGE();
+    forms::my_profile::EditSpokenLang form;
+    form.load(context());
+
+    if (form.validate()) {
+
+        int userId = 0;
+        std::istringstream(session()["userId"]) >> userId;
+
+        usersSpokenLangsModel->edit(
+            userId,
+            form.spokenLang.value(),
+            form.proeficiencyLevel.selected(),
+            form.isNative.value()
+        );
+    }
+
+    go_to_profile_page();
+
+}
 
 
 

@@ -30,8 +30,10 @@
 #include "contents/forms/my_profile/edit_description.h"
 #include "contents/forms/my_profile/edit_homepage.h"
 #include "contents/forms/my_profile/add_spoken_lang.h"
+#include "contents/forms/my_profile/edit_spoken_lang.h"
 
 #include "results/users.h"
+#include "results/spoken_langs.h"
 
 namespace contents {
 namespace my_profile {
@@ -67,7 +69,7 @@ struct EditDescription : public BaseContent {
  * @brief  content used by the MyProfile::edit_homepage
  *         contain the info to edit one's homepage
  */
-struct EditHomepage : public BaseContent {
+struct EditHomepage : public contents::BaseContent {
     forms::my_profile::EditHomepage form;
     std::string username;
 
@@ -90,14 +92,42 @@ struct EditHomepage : public BaseContent {
 
 /**
  * @struct AddSpokenLang
- * @brief  content used by the MyProfile::add_spoken_lang
+ * @brief  content used the MyProfile::add_spoken_lang
  *         contain the info needed for a user to add a language he speaks
  */
-struct AddSpokenLang : public BaseContent {
+struct AddSpokenLang : public contents::BaseContent {
 
     forms::my_profile::AddSpokenLang form;
 
 };
+
+/**
+ * @struct EditSpokenLang
+ * @brief  content used by MyProfile::edit_spoken_lang
+ *         contain the info needed for a user to edit a language he speaks
+ */
+struct EditSpokenLang : public BaseContent {
+
+    /**
+     * @brief Form to edit a language a user told he can speaks
+     */
+    forms::my_profile::EditSpokenLang form;
+    /**
+     * @brief Localized name of the language to edit
+     */
+    std::string langName;
+
+    EditSpokenLang(const results::SpokenLang &langToEdit) :
+        form(langToEdit) 
+    {
+        langName = Languages::get_instance()->get_name_from_iso(
+            langToEdit.langISO
+        );
+    }
+
+};
+
+
 
 
 

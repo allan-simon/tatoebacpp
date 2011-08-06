@@ -27,6 +27,7 @@
 #define TATOEBACPP_RESULTS_USERS_H
 
 #include "results/pagination.h"
+#include "results/spoken_langs.h"
 
 namespace results {
     struct User {
@@ -44,6 +45,7 @@ namespace results {
         //std::string image;
         //std::string country_id;
         //bool is_public;
+        SpokenLangsVector spokenLangs;
     };
 
 typedef PagiVector<User> PagiUsers;
@@ -51,4 +53,5 @@ typedef PagiVector<User> PagiUsers;
 }
 
 #endif
+
 

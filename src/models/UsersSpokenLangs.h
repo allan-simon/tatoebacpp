@@ -24,6 +24,7 @@
  */ 
 
 #include "models/SqliteModel.h"
+#include "results/spoken_langs.h"
 
 namespace models {
 
@@ -36,12 +37,6 @@ namespace models {
  *
  */
 class UsersSpokenLangs : public SqliteModel {
-    private:
-        /**
-         * @brief Statement to add a new language in the list of language a
-         *        user speaks
-         */
-        cppdb::statement addSpokenLang; 
     public:
         /**
          * @brief Constructor
@@ -59,14 +54,72 @@ class UsersSpokenLangs : public SqliteModel {
         * @TODO  Should throw an exception if we try to add language that is
         *        already present
         */
-        void add(
+        bool add(
             const int userId,
             const std::string &langISO,
-            const int proeficiencyLevel,
+            const int proeficiency,
             const bool isNative
         );
- 
+         
+        /**
+        * @brief Get all the languages a user entered he can speaks
+        *
+        * @param userId Id of the user we want the languages of
+        *
+        * @return The list of spoken languages
+        */
+        ::results::SpokenLangsVector get_from_user_id(const int userId);
 
+
+        /**
+        * @brief Remove the given language from the list of languages
+        *        the given user speaks
+        * @param userId  Id of the user we want to remove the language from the
+        *                list of 
+        * @param langISO ISO code of the language we want to remove
+        *
+        * @return True if no problems, false otherwise
+        */
+        bool remove(
+            const int userId,
+            const std::string &langISO
+        );
+
+        /**
+        * @brief Retrieve all the information about a given user toward
+        *        a given language
+        *
+        * @param userId  The user want to get the info about
+        * @param langISO ISO of the language we want the information of
+        *
+        * @return The information about how good the user can speak
+        *         that lang, if he's a native etc.
+        */
+
+        SpokenLang get_one(
+            const int userId,
+            const std::string &langISO
+        );
+
+        /**
+        * @brief Permit to change the information a given user as entered about
+        *        a given language
+        *        
+        *
+        * @param userId       User we want to edit the info about one of the
+        *                     language he speaks
+        * @param langISO      ISO code of the language to change the infos of
+        * @param proeficiency The new proeficiency to set
+        * @param isNative     The new "is native or not"
+        *
+        * @return             If there was no problem or some 
+        */
+        bool edit(
+            const int userId,
+            const std::string &langISO,
+            const int proeficiency,
+            const bool isNative
+        );
 };
 
 } // end namespace models 

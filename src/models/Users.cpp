@@ -210,8 +210,6 @@ results::User Users::get_user_from_username(
 
     results::User user; 
 
-    // don't forget to reset the statement
-    getUserFromUsername.reset();
     // attach the username to the sql statement
     getUserFromUsername.bind(username);   
  
@@ -225,6 +223,10 @@ results::User Users::get_user_from_username(
     user.homepage = res.get<std::string>("homepage");
     user.since = res.get<long long>("since");
 
+    // don't forget to reset the statement
+    // NOTE: we put the reset at the end to avoid SQLITE to
+    // to stay in a locked state
+    getUserFromUsername.reset();
 
     return user;
 }

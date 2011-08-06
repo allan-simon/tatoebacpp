@@ -104,6 +104,29 @@ class MyProfile : public Controller {
         */
         void add_spoken_lang_treat();
 
+        /**
+        * @brief Display nothing, only remove the given language from the list of langs current
+        *        speaks
+        *
+        * @param langISO ISO code of the language to remove from the list
+        *
+        */
+        void remove_spoken_lang(std::string langISO);
+
+        /**
+        * @brief Display the form to edit the given language from the list of langs current
+        *        speaks
+        *
+        * @param langISO ISO code of the language to edit
+        *
+        */
+
+        void edit_spoken_lang(std::string langISO);
+
+        /**
+        * @brief Will treat the data send to edit a language the user speaks 
+        */
+        void edit_spoken_lang_treat();
 
 };
 

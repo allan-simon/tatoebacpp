@@ -40,32 +40,148 @@ namespace models {
 UsersSpokenLangs::UsersSpokenLangs(cppdb::session sqliteDb) :
     SqliteModel(sqliteDb)
 {
-    addSpokenLang = sqliteDb.prepare(
+}
+
+/**
+ * @TODO throw exception if language has already been added for that
+ *       user
+ */
+bool UsersSpokenLangs::add(
+    const int userId,
+    const std::string &langISO,
+    const int proeficiencyLevel,
+    const bool isNative
+) {
+    cppdb::statement addSpokenLang = sqliteDb.prepare(
         "INSERT INTO users_spoken_langs("
             "user_id, lang, proeficiency, is_native"
         ")"
         "VALUES(?,?,?,?)"
     );
 
+    addSpokenLang.bind(userId);
+    addSpokenLang.bind(langISO);
+    addSpokenLang.bind(proeficiencyLevel);
+    addSpokenLang.bind(isNative);
+    try {
+        addSpokenLang.exec();
+    } catch (cppdb::cppdb_error const &e) {
+        //TODO add something better to handle erros
+        // at least log it
+        std::cout << e.what() << std::endl;
+        return false;
+    }
+    return true;
 }
+
+/**
+ *
+ */
+results::SpokenLangsVector UsersSpokenLangs::get_from_user_id(const int userId) {
+    results::SpokenLangsVector spokenLangs;
+
+    cppdb::statement getFromUserId = sqliteDb.prepare(
+        "SELECT * FROM users_spoken_langs;"
+    );
+    cppdb::result res = getFromUserId.query(); 
+
+    while (res.next()) {
+        results::SpokenLang tempSpokenLang;
+        tempSpokenLang.langISO = res.get<std::string>("lang");
+        tempSpokenLang.proeficiency = res.get<int>("proeficiency");
+        tempSpokenLang.isNative = res.get<int>("is_native") == 1;
+
+        spokenLangs.push_back(tempSpokenLang);
+    
+    }
+    // don't forget to reset the statement
+    getFromUserId.reset(); 
+
+    return spokenLangs;
+}
+
 /**
  * @TODO throw exception if language has already been added for that
  *       user
  */
-void UsersSpokenLangs::add(
+bool UsersSpokenLangs::remove(
+    const int userId,
+    const std::string &langISO
+) {
+    cppdb::statement removeSpokenLang = sqliteDb.prepare(
+        "DELETE FROM users_spoken_langs"
+        "   WHERE user_id = ? AND lang = ?"
+    );
+
+    removeSpokenLang.bind(userId);
+    removeSpokenLang.bind(langISO);
+    try {
+        removeSpokenLang.exec();
+    } catch (cppdb::cppdb_error const &e) {
+        //TODO add something better to handle erros
+        std::cout << e.what() << std::endl;
+        return false;
+    }
+    return true;
+}
+
+/**
+ *
+ */
+results::SpokenLang UsersSpokenLangs::get_one(
+    const int userId,
+    const std::string &langISO
+) {
+
+    cppdb::statement getOne = sqliteDb.prepare(
+        "SELECT * FROM users_spoken_langs "
+        "WHERE user_id = ? AND lang = ?"
+    );
+    getOne.bind(userId);
+    getOne.bind(langISO);
+
+
+    results::SpokenLang spokenLang;
+    cppdb::result res = getOne.row(); 
+
+    spokenLang.langISO = res.get<std::string>("lang");
+    spokenLang.proeficiency = res.get<int>("proeficiency");
+    spokenLang.isNative = res.get<int>("is_native") == 1;
+
+    
+    getOne.reset(); 
+
+    return spokenLang;
+}
+
+
+/**
+ * @TODO throw exception if language was not existing for that user
+ */
+bool UsersSpokenLangs::edit(
     const int userId,
     const std::string &langISO,
     const int proeficiencyLevel,
     const bool isNative
 ) {
-    // don't forget to reset the statement
-    addSpokenLang.reset();
-    addSpokenLang.bind(userId);
-    addSpokenLang.bind(langISO);
-    addSpokenLang.bind(proeficiencyLevel);
-    addSpokenLang.bind(isNative);
-    addSpokenLang.exec();
+    cppdb::statement editSpokenLang = sqliteDb.prepare(
+        "UPDATE users_spoken_langs SET "
+        "    proeficiency = ?,"
+        "    is_native = ? "
+        "WHERE user_id = ? AND lang = ?"
+    );
+
+    editSpokenLang.bind(proeficiencyLevel);
+    editSpokenLang.bind(isNative);
+    editSpokenLang.bind(userId);
+    editSpokenLang.bind(langISO);
+    editSpokenLang.exec();
+
+    return true;
 }
+
+
+
 
 } // end namespace models
 

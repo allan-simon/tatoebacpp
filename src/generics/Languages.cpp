@@ -82,6 +82,14 @@ int Languages::get_id_from_iso(std::string isoCode) {
     return isoToId[isoCode];
 }
 
+/**
+ *
+ */
+std::string Languages::get_name_from_iso(std::string isoCode) {
+    //TODO i18n this
+    return isoToName[isoCode];
+}
+
 
 /**
  *
@@ -97,6 +105,7 @@ std::string Languages::get_iso_from_id(int id) {
 bool Languages::iso_exists(const std::string &isoCode) {
     return isoToId.find(isoCode) != isoToId.end();
 }
+
 
 /**
  *

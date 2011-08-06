@@ -43,22 +43,22 @@ namespace my_profile {
 	struct AddSpokenLang : public cppcms::form {
         
         /**
-         * @brief 
+         * @brief Field to select the language to add
          */
         cppcms::widgets::select spokenLang;
 
         /**
-         * @brief 
+         * @brief Select to change the level of that user in this language
          */
         cppcms::widgets::select proeficiencyLevel;
 
         /**
-         * @brief 
+         * @brief To select if the user is or not a native in that language
          */
         cppcms::widgets::checkbox isNative;
 
         /**
-         * @brief 
+         * @brief Button to submit the form
          */
         cppcms::widgets::submit submit;        
         /**
@@ -70,11 +70,13 @@ namespace my_profile {
             Languages::get_instance()->fill_form_select(spokenLang);
             
             
-            proeficiencyLevel.add("1");
-            proeficiencyLevel.add("2");
-            proeficiencyLevel.add("3");
-            proeficiencyLevel.add("4");
-            proeficiencyLevel.name("proeflevel");
+            proeficiencyLevel.add("C2");
+            proeficiencyLevel.add("C1");
+            proeficiencyLevel.add("B2");
+            proeficiencyLevel.add("B1");
+            proeficiencyLevel.add("A2");
+            proeficiencyLevel.add("A1");
+            proeficiencyLevel.name("proeficiency");
             proeficiencyLevel.message(
                 "Grade your proeficiency in this language:"
             );

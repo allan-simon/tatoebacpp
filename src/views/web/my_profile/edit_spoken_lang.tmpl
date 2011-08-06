@@ -1,0 +1,50 @@
+<% c++ #include "contents/my_profile.h" %>
+<% skin %>
+// TODO it will be best to have an intermediate master between master
+// and edit/add spoken language to factorize the common templates
+<% view my_profile_edit_spoken_lang uses contents::my_profile::EditSpokenLang extends master %>
+
+/**
+ * @brief Page's title
+ */
+<% template title() %>
+    <% gt "Edit a language you study/speak" %>
+<% end template %>
+
+/**
+ * @brief All the content that will be displayed in the main div
+ *        of the page
+ */
+<% template main_content() %>
+<div id="description" class="module" >
+
+    <h2><% gt "Edit the language : {1}" using langName %></h2>
+    <form
+        id="NyProfileEditSpokenLang"
+        method="post"
+        action="<% url "/my-profile/edit-spoken-lang_treat" %>"
+    >
+        <div>
+            <% form as_p form %>
+        </div>
+
+    </form>
+</div>
+<% end template %>
+
+/**
+ * @brief Display all the annexe modules
+ *
+ */
+<% template annexe_content() %>
+    <div class="module">
+        <a href="<% url "/my-profile/show" %>">
+            <% gt "Go back to profile" %>
+        </a>
+    </div>
+<% end template %>
+
+
+<% end view %>
+<% end skin %>
+
