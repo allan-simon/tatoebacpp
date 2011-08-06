@@ -12,7 +12,7 @@
         <form method="POST" action="<% url "/sentences/translate_treat" %>" >
             <% form as_p transSentence %>
         </form>
-        <% c++ sh.all_translations(content.shc.sentences[0].translations, content.id) ;%>
+        <% c++ sh.all_translations(content.shc.sentences[0].getTranslations(), content.id) ;%>
     <% else %>
         This sentence does not exist
     <% end %>

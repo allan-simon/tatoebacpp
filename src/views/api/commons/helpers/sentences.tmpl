@@ -8,21 +8,21 @@
     <% template sentences_group(results::Sentence &mainSentence) %>
         <sentencesset>
         <% include main_sentence(mainSentence) %>
-        <% include all_translations(mainSentence.translations, mainSentence.id) %>
+        <% include all_translations(mainSentence.getTranslations(), mainSentence.getId()) %>
 
         </sentencesset>
 
     <% end template %>
 
     <% template main_sentence(results::Sentence &sentence) %>
-        <mainsentence tatoid="<% sentence.id%>" lang="<% sentence.lang %>">
-                <text><% sentence.text %></text>
+        <mainsentence tatoid="<% sentence.getId()%>" lang="<% sentence.getLanguageCode() %>">
+                <text><% sentence.string() %></text>
         </mainsentence>
     <% end template%>
 
 
     
-    <% template all_translations(TransVector &translations, int mainSentenceId) %>
+    <% template all_translations(TransVector translations, int mainSentenceId) %>
         <% foreach transOfDepthN in translations %>
             <translations>
             <% c++ int depth = 1; %>
@@ -48,10 +48,10 @@
         
     <% template generic_sentence(results::Sentence &sentence, int mainSentenceId) %>
         <sentence
-            tatoid="<% sentence.id %>"
-            lang="<% sentence.lang %>"
+            tatoid="<% sentence.getId() %>"
+            lang="<% sentence.getLanguageCode() %>"
         >
-            <text><% sentence.text  %></text>
+            <text><% sentence.string()  %></text>
         </sentence>
 
     <% end template %>

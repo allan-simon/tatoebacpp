@@ -34,6 +34,10 @@ namespace results {
     struct Sentence;
 }
 
+namespace models {
+    class Sentences;
+}
+
 typedef std::vector<results::Sentence> SentencesVector;
 typedef std::vector<SentencesVector> TransVector; 
 
@@ -54,25 +58,26 @@ namespace results {
      */
     struct Sentence {
         /**
-         * Id of the sentence in tatodb
+         * Returns the id
          */
-        unsigned int id;
+        unsigned int getId() const { 
+            return id;
+        }
+        
         /**
          * Text of the sentence
          */
-        std::string text;
+        std::string& string() {
+            return text;
+        }
+        
         /**
-         * ISO code of the language in which the sentence is written
+         * Text of the sentence
          */
-        std::string lang;
-        /**
-         * List of binary flags store in a unsigned int
-         */
-        unsigned int flags; //TODO replace this by tatohyperdb type
-        /**
-         * Map containing the metas information on this sentence
-         */
-        MetasMap metas;
+        const std::string& string() const {
+            return text;
+        }
+        
         /**
          * Vector of vector of Translation sentences of this sentence
          * organized the following way
@@ -86,14 +91,33 @@ namespace results {
          *
          *  NOTE: this solution does not permit to view the "path" between
          *  one sentence and Nth indirect translation
+         */        
+         
+         TransVector getTranslations() {
+             return translations;
+         }
+        
+        /**
+         * ISO code of the language in which the sentence is written
          */
-        TransVector translations;
+        std::string getLanguageCode() const {
+            return lang;
+        }
+    
+        /**
+         * List of binary flags store in a unsigned int
+         */
+        unsigned int flags; //TODO replace this by tatohyperdb type
+        /**
+         * Map containing the metas information on this sentence
+         */
+        MetasMap metas;
 
         public:
             /**
              * Default constructor, will construct an empty sentence
              */
-            Sentence(): id(0),text(""),lang(""),flags(0){};
+            Sentence(): flags(0),id(0),text(""),lang(""){};
 
             /**
              * Constructor that will create a sentence with the correct
@@ -105,10 +129,10 @@ namespace results {
                 const std::string& lang,
                 int flags
             ):
+                flags(flags),                
                 id(id),
                 text(text),
-                lang(lang),
-                flags(flags) {
+                lang(lang) {
             };
             
             /**
@@ -116,10 +140,10 @@ namespace results {
              * id, text, lang and flags and no translations using char*
              */
             Sentence(int id, char* text, char* lang, int flags):
+                flags(flags),
                 id(id),
                 text(std::string(text)),
-                lang(std::string(lang)),
-                flags(flags) {
+                lang(std::string(lang)) {
             };
 
             /*
@@ -142,7 +166,23 @@ namespace results {
             bool exists() const {
                 return id > 0;
             }
-
+        
+        private:    
+            /**
+             * Id of the sentence in tatodb
+             */
+            unsigned int id;
+            
+            /**
+             * Text of the sentence
+             */
+            std::string text;
+                
+            TransVector translations;
+            
+            std::string lang;
+            
+            friend class models::Sentences; // Sentences::pack_translations modify this
     };
 }
 
@@ -150,7 +190,7 @@ namespace results {
 namespace std {
     template<> struct less<results::Sentence> {
         bool operator() (const results::Sentence& lhs, const results::Sentence& rhs) {
-            return lhs.id < rhs.id;
+            return lhs.getId() < rhs.getId();
         }
     };
 

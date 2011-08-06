@@ -7,9 +7,9 @@
 
     <% template sentences_group(results::Sentence &mainSentence) %>
         <div class="sentences_set" >
-        <% include menu(mainSentence.id) %>
+        <% include menu(mainSentence.getId()) %>
         <% include main_sentence(mainSentence) %>
-        <% include all_translations(mainSentence.translations, mainSentence.id) %>
+        <% include all_translations(mainSentence.getTranslations(), mainSentence.getId()) %>
 
         </div>
 
@@ -50,7 +50,7 @@
         <div class="sentence mainSentence">
             <a
                 class="infoIcon"
-                href="<% url "/sentences/show/{1}" using sentence.id %>"
+                href="<% url "/sentences/show/{1}" using sentence.getId() %>"
             >
                 <img
                     width="16"
@@ -61,19 +61,19 @@
             </a>
             <a
                 class="languageFlag"
-                href="<% url "/sentences/edit-lang/{1}" using sentence.id %>"
+                href="<% url "/sentences/edit-lang/{1}" using sentence.getId() %>"
             >
-                <% include sentence_lang(sentence.lang) %>
+                <% include sentence_lang(sentence.getLanguageCode()) %>
             </a>
             <div class="sentenceContent">
-                <div><% sentence.text %></div>
+                <div><% sentence.string() %></div>
             </div>
         </div>
     <% end template%>
 
 
     
-    <% template all_translations(TransVector &translations, int mainSentenceId) %>
+    <% template all_translations(TransVector translations, int mainSentenceId) %>
         <% foreach transOfDepthN in translations %>
             <div class="translations" >
             <% c++ int depth = 1; %>
@@ -120,7 +120,7 @@
                 <% if (depth == 1) %>
                     <a
                         class="delete link button"
-                        href="<% url "/sentences/unlink/{1}/{2}" using mainSentenceId, sentence.id %>"
+                        href="<% url "/sentences/unlink/{1}/{2}" using mainSentenceId, sentence.getId() %>"
                     >
                         <img
                             width="16"
@@ -133,7 +133,7 @@
                 <% else %>
                     <a
                         class="add link button"
-                        href="<% url "/sentences/link/{1}/{2}" using mainSentenceId, sentence.id %>"
+                        href="<% url "/sentences/link/{1}/{2}" using mainSentenceId, sentence.getId() %>"
                     >
                         <img
                             width="16"
@@ -147,7 +147,7 @@
                 <% end %>
             <% end if %>
 
-            <% include sentence_lang(sentence.lang) %>
+            <% include sentence_lang(sentence.getLanguageCode()) %>
             <% c++ sentence_content(sentence, depth); %>
         </div>
 
@@ -162,11 +162,11 @@
             <div>
                 <a
                     class="text"
-                    href="<% url "/sentences/show/{1}" using sentence.id %>"
+                    href="<% url "/sentences/show/{1}" using sentence.getId() %>"
                 >
                     <% depth %>
                     -
-                    <% sentence.text%>
+                    <% sentence.string() %>
                 </a>
             </div>
             <br />

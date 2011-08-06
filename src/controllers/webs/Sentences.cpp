@@ -175,7 +175,7 @@ void Sentences::add_treat() {
 
         if (sentence.exists()) {
             std::ostringstream oss;
-            oss << sentence.id;
+            oss << sentence.getId();
 
             response().set_redirect_header(
                 "/" + get_interface_lang() +
@@ -251,7 +251,7 @@ void Sentences::translate_treat() {
             userId
         );
 
-        translationId = sentence.id;
+        translationId = sentence.getId();
 
     } catch (const models::SentDupliException & e) {
         //TODO display the message to the user
@@ -337,7 +337,7 @@ void Sentences::edit_text(std::string sentenceId) {
         //value of the sentence
         contents::SentencesEditText c(
             sentenceId,
-            shc.sentences[0].text  
+            shc.sentences[0].string()
         );
         init_content(c);
     
@@ -415,7 +415,7 @@ void Sentences::edit_lang(std::string sentenceId) {
         //language of the sentence
         contents::SentencesEditLang c(
             sentenceId,
-            shc.sentences[0].lang 
+            shc.sentences[0].getLanguageCode() 
         );
         init_content(c);
     
