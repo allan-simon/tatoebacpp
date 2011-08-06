@@ -77,13 +77,53 @@ bool UsersSpokenLangs::add(
 /**
  *
  */
-results::SpokenLangsVector UsersSpokenLangs::get_from_user_id(const int userId) {
-    results::SpokenLangsVector spokenLangs;
+results::SpokenLangsVector UsersSpokenLangs::get_from_user(
+    const std::string &username
+) {
 
-    cppdb::statement getFromUserId = sqliteDb.prepare(
-        "SELECT * FROM users_spoken_langs;"
+    cppdb::statement getFromUser = sqliteDb.prepare(
+        "SELECT * FROM users_spoken_langs "
+        "WHERE user_id = ( "
+        "   SELECT id FROM users WHERE username = ? LIMIT 1"
+        ");"
     );
-    cppdb::result res = getFromUserId.query(); 
+    getFromUser.bind(username);
+    cppdb::result res = getFromUser.query(); 
+
+    // don't forget to reset the statement
+    getFromUser.reset(); 
+
+    return treat_spoken_langs_result(res);
+}
+
+/**
+ *
+ */
+results::SpokenLangsVector UsersSpokenLangs::get_from_user(
+    const int userId
+) {
+
+    cppdb::statement getFromUser = sqliteDb.prepare(
+        "SELECT * FROM users_spoken_langs WHERE user_id = ?;"
+    );
+    getFromUser.bind(userId);
+    cppdb::result res = getFromUser.query(); 
+
+    // don't forget to reset the statement
+    getFromUser.reset(); 
+
+    return treat_spoken_langs_result(res);
+}
+
+
+
+/**
+ * 
+ */
+results::SpokenLangsVector UsersSpokenLangs::treat_spoken_langs_result(
+    cppdb::result &res
+) {
+    results::SpokenLangsVector spokenLangs;
 
     while (res.next()) {
         results::SpokenLang tempSpokenLang;
@@ -94,8 +134,6 @@ results::SpokenLangsVector UsersSpokenLangs::get_from_user_id(const int userId) 
         spokenLangs.push_back(tempSpokenLang);
     
     }
-    // don't forget to reset the statement
-    getFromUserId.reset(); 
 
     return spokenLangs;
 }

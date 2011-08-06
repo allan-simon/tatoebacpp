@@ -27,6 +27,7 @@
 #include "Users.h"
 #include "contents/users.h"
 #include "models/Users.h"
+#include "models/UsersSpokenLangs.h"
 #include "contents/Config.h"
 
 namespace controllers {
@@ -39,6 +40,14 @@ Users::Users(cppcms::service &serv) : Controller(serv) {
     usersModel = new models::Users(cppdb::session(
         "sqlite3:db=" + Config::get_instance()->sqlite3Path
     ));
+
+    usersSpokenLangsModel= new models::UsersSpokenLangs(
+        cppdb::session(
+            "sqlite3:db=" + Config::get_instance()->sqlite3Path
+        )
+    );
+
+
     cppcms::url_dispatcher* d = &dispatcher();
     d->assign("/register-new", &Users::register_new, this);
     d->assign("/register-new_treat", &Users::register_new_treat, this);
@@ -54,6 +63,7 @@ Users::Users(cppcms::service &serv) : Controller(serv) {
  */
 Users::~Users() {
     delete usersModel;
+    delete usersSpokenLangsModel;
 }
 
 /**
@@ -202,6 +212,10 @@ void Users::profile(std::string userName) {
     init_content(c);
 
     c.user = usersModel->get_user_from_username(
+        userName
+    );
+
+    c.user.spokenLangs = usersSpokenLangsModel->get_from_user(
         userName
     );
 
