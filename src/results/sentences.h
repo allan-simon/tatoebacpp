@@ -34,6 +34,10 @@ namespace results {
     struct Sentence;
 }
 
+namespace models {
+    class Sentences;
+}
+
 typedef std::vector<results::Sentence> SentencesVector;
 typedef std::vector<SentencesVector> TransVector; 
 
@@ -75,18 +79,6 @@ namespace results {
         }
         
         /**
-         * ISO code of the language in which the sentence is written
-         */
-        std::string lang;
-        /**
-         * List of binary flags store in a unsigned int
-         */
-        unsigned int flags; //TODO replace this by tatohyperdb type
-        /**
-         * Map containing the metas information on this sentence
-         */
-        MetasMap metas;
-        /**
          * Vector of vector of Translation sentences of this sentence
          * organized the following way
          *
@@ -99,8 +91,24 @@ namespace results {
          *
          *  NOTE: this solution does not permit to view the "path" between
          *  one sentence and Nth indirect translation
+         */        
+         
+         TransVector getTranslations() {
+             return translations;
+         }
+        
+        /**
+         * ISO code of the language in which the sentence is written
          */
-        TransVector translations;
+        std::string lang;
+        /**
+         * List of binary flags store in a unsigned int
+         */
+        unsigned int flags; //TODO replace this by tatohyperdb type
+        /**
+         * Map containing the metas information on this sentence
+         */
+        MetasMap metas;
 
         public:
             /**
@@ -166,7 +174,10 @@ namespace results {
              * Text of the sentence
              */
             std::string text;
-
+                
+            TransVector translations;
+            
+            friend class models::Sentences; // Sentences::pack_translations modify this
     };
 }
 

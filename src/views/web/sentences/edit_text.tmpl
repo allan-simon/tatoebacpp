@@ -12,7 +12,7 @@
             <% form as_p editText %>
         </form>
         <% c++ sentences_helper sh(out(), content.shc); %>
-        <% c++ sh.all_translations(content.shc.sentences[0].translations, content.id) ;%>
+        <% c++ sh.all_translations(content.shc.sentences[0].getTranslations(), content.id) ;%>
     <% else %>
         This sentence does not exist
     <% end %>

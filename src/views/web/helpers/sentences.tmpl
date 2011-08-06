@@ -9,7 +9,7 @@
         <div class="sentences_set" >
         <% include menu(mainSentence.getId()) %>
         <% include main_sentence(mainSentence) %>
-        <% include all_translations(mainSentence.translations, mainSentence.getId()) %>
+        <% include all_translations(mainSentence.getTranslations(), mainSentence.getId()) %>
 
         </div>
 
@@ -73,7 +73,7 @@
 
 
     
-    <% template all_translations(TransVector &translations, int mainSentenceId) %>
+    <% template all_translations(TransVector translations, int mainSentenceId) %>
         <% foreach transOfDepthN in translations %>
             <div class="translations" >
             <% c++ int depth = 1; %>

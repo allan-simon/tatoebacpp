@@ -8,7 +8,7 @@
     <% template sentences_group(results::Sentence &mainSentence) %>
         <sentencesset>
         <% include main_sentence(mainSentence) %>
-        <% include all_translations(mainSentence.translations, mainSentence.getId()) %>
+        <% include all_translations(mainSentence.getTranslations(), mainSentence.getId()) %>
 
         </sentencesset>
 
@@ -22,7 +22,7 @@
 
 
     
-    <% template all_translations(TransVector &translations, int mainSentenceId) %>
+    <% template all_translations(TransVector translations, int mainSentenceId) %>
         <% foreach transOfDepthN in translations %>
             <translations>
             <% c++ int depth = 1; %>
