@@ -63,7 +63,7 @@
                 class="languageFlag"
                 href="<% url "/sentences/edit-lang/{1}" using sentence.getId() %>"
             >
-                <% include sentence_lang(sentence.lang) %>
+                <% include sentence_lang(sentence.getLanguageCode()) %>
             </a>
             <div class="sentenceContent">
                 <div><% sentence.string() %></div>
@@ -147,7 +147,7 @@
                 <% end %>
             <% end if %>
 
-            <% include sentence_lang(sentence.lang) %>
+            <% include sentence_lang(sentence.getLanguageCode()) %>
             <% c++ sentence_content(sentence, depth); %>
         </div>
 

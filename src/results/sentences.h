@@ -100,7 +100,10 @@ namespace results {
         /**
          * ISO code of the language in which the sentence is written
          */
-        std::string lang;
+        std::string getLanguageCode() const {
+            return lang;
+        }
+    
         /**
          * List of binary flags store in a unsigned int
          */
@@ -114,7 +117,7 @@ namespace results {
             /**
              * Default constructor, will construct an empty sentence
              */
-            Sentence(): lang(""),flags(0),id(0),text(""){};
+            Sentence(): flags(0),id(0),text(""),lang(""){};
 
             /**
              * Constructor that will create a sentence with the correct
@@ -126,10 +129,10 @@ namespace results {
                 const std::string& lang,
                 int flags
             ):
-                lang(lang),
                 flags(flags),                
                 id(id),
-                text(text) {
+                text(text),
+                lang(lang) {
             };
             
             /**
@@ -137,10 +140,10 @@ namespace results {
              * id, text, lang and flags and no translations using char*
              */
             Sentence(int id, char* text, char* lang, int flags):
-                lang(std::string(lang)),
                 flags(flags),
                 id(id),
-                text(std::string(text)) {
+                text(std::string(text)),
+                lang(std::string(lang)) {
             };
 
             /*
@@ -176,6 +179,8 @@ namespace results {
             std::string text;
                 
             TransVector translations;
+            
+            std::string lang;
             
             friend class models::Sentences; // Sentences::pack_translations modify this
     };

@@ -15,7 +15,7 @@
     <% end template %>
 
     <% template main_sentence(results::Sentence &sentence) %>
-        <mainsentence tatoid="<% sentence.getId()%>" lang="<% sentence.lang %>">
+        <mainsentence tatoid="<% sentence.getId()%>" lang="<% sentence.getLanguageCode() %>">
                 <text><% sentence.string() %></text>
         </mainsentence>
     <% end template%>
@@ -49,7 +49,7 @@
     <% template generic_sentence(results::Sentence &sentence, int mainSentenceId) %>
         <sentence
             tatoid="<% sentence.getId() %>"
-            lang="<% sentence.lang %>"
+            lang="<% sentence.getLanguageCode() %>"
         >
             <text><% sentence.string()  %></text>
         </sentence>
