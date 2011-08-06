@@ -96,7 +96,7 @@ class UsersSpokenLangs : public SqliteModel {
         *         that lang, if he's a native etc.
         */
 
-        SpokenLang get_one(
+        results::SpokenLang get_one(
             const int userId,
             const std::string &langISO
         );
