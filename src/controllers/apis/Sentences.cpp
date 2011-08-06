@@ -94,7 +94,7 @@ void Sentences::show_random() {
 	contents::helpers::Sentences shc(
         sentencesModel->get_random(5)
     );
-    c.id = shc.sentences[0].id;
+    c.id = shc.sentences[0].getId();
     shc.lang = c.lang;
     shc.currentUserHelper = c.usersHelper;
     c.shc = shc;
@@ -119,7 +119,7 @@ void Sentences::show_random_in(std::string isoCode) {
 	contents::helpers::Sentences shc(
         sentencesModel->get_random(isoCode, 5)
     );
-    c.id = shc.sentences[0].id;
+    c.id = shc.sentences[0].getId();
     shc.lang = c.lang;
     shc.currentUserHelper = c.usersHelper;
     c.shc = shc;
@@ -179,7 +179,7 @@ void Sentences::add_treat() {
 
         if (sentence.exists()) {
             std::ostringstream oss;
-            oss << sentence.id;
+            oss << sentence.getId();
 
             response().set_redirect_header(
                 "/" + get_interface_lang() +
@@ -254,7 +254,7 @@ void Sentences::translate_treat() {
             userId
         );
 
-        translationId = sentence.id;
+        translationId = sentence.getId();
 
     } catch (const models::SentDupliException & e) {
         //TODO display the message to the user

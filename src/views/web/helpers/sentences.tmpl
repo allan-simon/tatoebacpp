@@ -7,9 +7,9 @@
 
     <% template sentences_group(results::Sentence &mainSentence) %>
         <div class="sentences_set" >
-        <% include menu(mainSentence.id) %>
+        <% include menu(mainSentence.getId()) %>
         <% include main_sentence(mainSentence) %>
-        <% include all_translations(mainSentence.translations, mainSentence.id) %>
+        <% include all_translations(mainSentence.translations, mainSentence.getId()) %>
 
         </div>
 
@@ -50,7 +50,7 @@
         <div class="sentence mainSentence">
             <a
                 class="infoIcon"
-                href="<% url "/sentences/show/{1}" using sentence.id %>"
+                href="<% url "/sentences/show/{1}" using sentence.getId() %>"
             >
                 <img
                     width="16"
@@ -61,7 +61,7 @@
             </a>
             <a
                 class="languageFlag"
-                href="<% url "/sentences/edit-lang/{1}" using sentence.id %>"
+                href="<% url "/sentences/edit-lang/{1}" using sentence.getId() %>"
             >
                 <% include sentence_lang(sentence.lang) %>
             </a>
@@ -120,7 +120,7 @@
                 <% if (depth == 1) %>
                     <a
                         class="delete link button"
-                        href="<% url "/sentences/unlink/{1}/{2}" using mainSentenceId, sentence.id %>"
+                        href="<% url "/sentences/unlink/{1}/{2}" using mainSentenceId, sentence.getId() %>"
                     >
                         <img
                             width="16"
@@ -133,7 +133,7 @@
                 <% else %>
                     <a
                         class="add link button"
-                        href="<% url "/sentences/link/{1}/{2}" using mainSentenceId, sentence.id %>"
+                        href="<% url "/sentences/link/{1}/{2}" using mainSentenceId, sentence.getId() %>"
                     >
                         <img
                             width="16"
@@ -162,7 +162,7 @@
             <div>
                 <a
                     class="text"
-                    href="<% url "/sentences/show/{1}" using sentence.id %>"
+                    href="<% url "/sentences/show/{1}" using sentence.getId() %>"
                 >
                     <% depth %>
                     -

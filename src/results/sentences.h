@@ -54,9 +54,12 @@ namespace results {
      */
     struct Sentence {
         /**
-         * Id of the sentence in tatodb
+         * Returns the id
          */
-        unsigned int id;
+        unsigned int getId() const { 
+            return id;
+        }
+        
         /**
          * Text of the sentence
          */
@@ -93,7 +96,7 @@ namespace results {
             /**
              * Default constructor, will construct an empty sentence
              */
-            Sentence(): id(0),text(""),lang(""),flags(0){};
+            Sentence(): text(""),lang(""),flags(0),id(0){};
 
             /**
              * Constructor that will create a sentence with the correct
@@ -105,10 +108,10 @@ namespace results {
                 const std::string& lang,
                 int flags
             ):
-                id(id),
                 text(text),
                 lang(lang),
-                flags(flags) {
+                flags(flags),
+                id(id) {
             };
             
             /**
@@ -116,10 +119,10 @@ namespace results {
              * id, text, lang and flags and no translations using char*
              */
             Sentence(int id, char* text, char* lang, int flags):
-                id(id),
                 text(std::string(text)),
                 lang(std::string(lang)),
-                flags(flags) {
+                flags(flags),
+                id(id) {
             };
 
             /*
@@ -142,6 +145,12 @@ namespace results {
             bool exists() const {
                 return id > 0;
             }
+        
+        private:    
+            /**
+             * Id of the sentence in tatodb
+             */
+            unsigned int id;
 
     };
 }
@@ -150,7 +159,7 @@ namespace results {
 namespace std {
     template<> struct less<results::Sentence> {
         bool operator() (const results::Sentence& lhs, const results::Sentence& rhs) {
-            return lhs.id < rhs.id;
+            return lhs.getId() < rhs.getId();
         }
     };
 

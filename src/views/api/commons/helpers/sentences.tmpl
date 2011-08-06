@@ -8,14 +8,14 @@
     <% template sentences_group(results::Sentence &mainSentence) %>
         <sentencesset>
         <% include main_sentence(mainSentence) %>
-        <% include all_translations(mainSentence.translations, mainSentence.id) %>
+        <% include all_translations(mainSentence.translations, mainSentence.getId()) %>
 
         </sentencesset>
 
     <% end template %>
 
     <% template main_sentence(results::Sentence &sentence) %>
-        <mainsentence tatoid="<% sentence.id%>" lang="<% sentence.lang %>">
+        <mainsentence tatoid="<% sentence.getId()%>" lang="<% sentence.lang %>">
                 <text><% sentence.text %></text>
         </mainsentence>
     <% end template%>
@@ -48,7 +48,7 @@
         
     <% template generic_sentence(results::Sentence &sentence, int mainSentenceId) %>
         <sentence
-            tatoid="<% sentence.id %>"
+            tatoid="<% sentence.getId() %>"
             lang="<% sentence.lang %>"
         >
             <text><% sentence.text  %></text>
