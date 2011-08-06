@@ -47,8 +47,6 @@ class Users : public SqliteModel {
          * SQL statement to add a user in the database
          */
         cppdb::statement addUser;
-        cppdb::statement getUsers;
-        cppdb::statement getUsersCount;
         cppdb::statement getIdFromUsername;
         cppdb::statement getUserFromUsername;
         cppdb::statement getDescriptionFromUsername;

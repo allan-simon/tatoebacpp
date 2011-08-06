@@ -67,13 +67,6 @@ Users::Users(cppdb::session sqliteDb) : SqliteModel(sqliteDb) {
 
 
 
-    getUsers = sqliteDb.prepare(
-        "SELECT * FROM users LIMIT 20 OFFSET ? "
-    );
-
-    getUsersCount = sqliteDb.prepare(
-        "SELECT count(*) as total FROM users "
-    );
 
     getIdFromUsername = sqliteDb.prepare(
         "SELECT id FROM users WHERE username = ? LIMIT 1"
@@ -178,6 +171,13 @@ results::PagiUsers Users::get_all_users(
     const int page
 ) {
     results::PagiUsers pagiUsers;
+    cppdb::statement getUsers = sqliteDb.prepare(
+        "SELECT * FROM users LIMIT 20 OFFSET ? "
+    );
+
+    cppdb::statement getUsersCount = sqliteDb.prepare(
+        "SELECT count(*) as total FROM users "
+    );
 
     pagiUsers.maxsize = getUsersCount.row().get<int>("total");
 
@@ -195,8 +195,8 @@ results::PagiUsers Users::get_all_users(
         pagiUsers.push_back(user);
     }
 
-
     getUsers.reset();
+    getUsersCount.reset();
 
     return pagiUsers;
 }
@@ -237,8 +237,8 @@ results::User Users::get_user_from_username(
 std::string Users::get_description_from_username(
     const std::string &username
 ) {
-    getDescriptionFromUsername.reset();
     getDescriptionFromUsername.bind(username);
+    getDescriptionFromUsername.reset();
     return getDescriptionFromUsername.row().get<std::string>("description");
     
 }
@@ -249,8 +249,8 @@ std::string Users::get_description_from_username(
 std::string Users::get_homepage_from_username(
     const std::string &username
 ) {
-    getHomepageFromUsername.reset();
     getHomepageFromUsername.bind(username);
+    getHomepageFromUsername.reset();
     return getHomepageFromUsername.row().get<std::string>("homepage");
     
 }
@@ -267,10 +267,10 @@ void Users::update_description(
     std::cout << "[DEBUG] username :" << username << " description :" << newDescription << std::endl;
 
     // don't forget to reset the statement
-    updateDescriptionFromUsername.reset();
     updateDescriptionFromUsername.bind(newDescription);
     updateDescriptionFromUsername.bind(username);
     updateDescriptionFromUsername.exec();
+    updateDescriptionFromUsername.reset();
     
 }
 
@@ -283,11 +283,10 @@ void Users::update_homepage(
     const std::string &newHomepage
 ) {
     // don't forget to reset the statement
-    updateHomepageFromUsername.reset();
     updateHomepageFromUsername.bind(newHomepage);
     updateHomepageFromUsername.bind(username);
     updateHomepageFromUsername.exec();
-
+    updateHomepageFromUsername.reset();
 }
 
 } // end of namespace models
