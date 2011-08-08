@@ -26,6 +26,7 @@
 
 #include <iostream>
 
+
 #include <cppcms/service.h>
 #include <cppcms/applications_pool.h>
 #include <cppdb/frontend.h>
@@ -48,7 +49,6 @@ int main(int argc,char ** argv)
     //TODO send notice message to logs instead of cout
 
     service app(argc, argv);
-
     /*load some conf defined variables*/
     Config *conf = Config::get_instance();
     conf->cssPath = app.settings().get<string>("tatoeba.css");
@@ -72,13 +72,6 @@ int main(int argc,char ** argv)
     Languages::get_instance()->init(
         app.settings().at("tatoeba.languages").object()
     );
-
-    /*start the search engine*/
-    //SearchEngine::get_instance();
-    //SearchEngine::get_instance()->init_indexed_metas(
-    //    app.settings().at("tatoeba.indexedMetas").object()
-    //);
-    //cout << "[NOTICE] search engine loaded" << endl;
 
     //singletons::ActionId::get_instance();
     /*instantiate the website application*/

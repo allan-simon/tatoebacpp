@@ -38,7 +38,6 @@ namespace my_profile {
      * Form to upload a new image to be used as avatar 
      *
      * @TODO: i18n it
-     * @TODO: override 
      */
 	struct ChangeAvatar : public cppcms::form {
         
