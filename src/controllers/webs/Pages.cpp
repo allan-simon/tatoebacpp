@@ -50,7 +50,9 @@ void Pages::homepage() {
 
     models::Sentences sentencesModel;
 	contents::helpers::Sentences shc(
-        sentencesModel.get_random()
+        sentencesModel.get_random(
+            get_depth()
+        )
     );
     shc.lang = c.lang;
     shc.currentUserHelper = c.usersHelper;

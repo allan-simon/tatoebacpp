@@ -152,6 +152,7 @@ void Users::login_treat() {
     ) {
         session()["name"] = username;
         session()["userId"] = usersModel->get_id_from_name<std::string>(username);
+        session()["depth"] = usersModel->get_depth<std::string>(username);
         session().save();
 
         // we redirect to the page the user was before going

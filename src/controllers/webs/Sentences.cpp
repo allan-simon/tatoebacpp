@@ -70,8 +70,6 @@ Sentences::~Sentences() {
 }
 
 
-
-
 /**
  * 
  */
@@ -81,7 +79,7 @@ void Sentences::show(std::string sentence_id) {
 	contents::SentencesShow c;
     init_content(c);
 	contents::helpers::Sentences shc(
-        sentencesModel->get_by_id(id, 20)
+        sentencesModel->get_by_id(id, get_depth())
     );
     c.id = id;
     shc.lang = c.lang;
@@ -199,7 +197,7 @@ void Sentences::translate(std::string toTranslateId) {
 
     CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
 	contents::helpers::Sentences shc(
-        sentencesModel->get_by_id(id, 5)
+        sentencesModel->get_by_id(id, get_depth())
     );
 
     if (!shc.empty()) {
@@ -329,7 +327,7 @@ void Sentences::edit_text(std::string sentenceId) {
     // TODO add a check so that only moderator or owner can modify it
     CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
 	contents::helpers::Sentences shc(
-        sentencesModel->get_by_id(id, 5)
+        sentencesModel->get_by_id(id, get_depth())
     );
 
     if (!shc.empty()) {
@@ -407,7 +405,7 @@ void Sentences::edit_lang(std::string sentenceId) {
     // TODO add a check so that only moderator or owner can modify it
     CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
 	contents::helpers::Sentences shc(
-        sentencesModel->get_by_id(id, 5)
+        sentencesModel->get_by_id(id, get_depth())
     );
 
     if (!shc.empty()) {

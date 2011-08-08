@@ -460,25 +460,5 @@ bool Users::update_depth(
 
 }
 
-/**       
- *        
- */       
-int Users::get_depth(
-    const std::string &username
-) {
-    cppdb::statement getDepth= sqliteDb.prepare(
-        "SELECT depth FROM users WHERE username = ? LIMIT 1;"
-    );
-    getDepth.bind(username);
-
-    int depth = getDepth.row().get<int>("depth");
-
-    getDepth.reset();
-
-    return depth;
-}
-
-
-
 
 } // end of namespace models

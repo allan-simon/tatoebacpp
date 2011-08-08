@@ -223,7 +223,7 @@ class Users : public SqliteModel {
         *
         * @return The defined depth of translations wanted
         */
-        int get_depth(
+        template <class T> T get_depth(
             const std::string &username
         );
 
@@ -252,6 +252,26 @@ template <class T> T models::Users::get_id_from_name(
     getIdFromUsername.reset();
     
     return userId;
+
+}
+
+/**
+ *
+ */
+template <class T> T models::Users::get_depth(
+    const std::string &username
+) {
+    cppdb::statement getDepth= sqliteDb.prepare(
+        "SELECT depth FROM users WHERE username = ? LIMIT 1;"
+    );
+    getDepth.bind(username);
+
+    T depth = getDepth.row().get<T>("depth");
+
+    getDepth.reset();
+
+    return depth;
+
 
 }
 

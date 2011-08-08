@@ -421,7 +421,7 @@ void MyProfile::change_depth() {
 
     std::string username = session()["name"];
     contents::my_profile::ChangeDepth c (
-        usersModel->get_depth(
+        usersModel->get_depth<int>(
             username
         )
     );
@@ -442,10 +442,14 @@ void MyProfile::change_depth_treat() {
     form.load(context());
 
     if (form.validate()) {
+        int newDepth = form.newDepth.value();
         usersModel->update_depth(
             session()["name"],
-            form.newDepth.value()
+            newDepth
         );
+        std::ostringstream oss;
+        oss << newDepth;
+        session()["depth"] = oss.str();
     }
 
     go_to_profile_page();

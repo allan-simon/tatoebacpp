@@ -83,6 +83,13 @@ class Controller : public controllers::generics::Controller {
 	protected:
 
         /**
+         * @brief Get the depth configurated for that user,
+         *        simple visitor have a restricted one, and 
+         *        registered user can change it on their user panel
+         */
+        int get_depth();
+
+        /**
          * Wrapping function that will initialize content send to the
          * view with common values (such as interface language etc.)
          */

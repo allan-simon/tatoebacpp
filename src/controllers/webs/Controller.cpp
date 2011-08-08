@@ -131,6 +131,20 @@ int Controller::get_current_user_id() {
     return atoi(session()["userId"].c_str());
 }
 
+/**
+ *
+ */
+int Controller::get_depth() {
+    if (is_logged()) {
+        int depth = 0;
+        std::istringstream(session()["depth"]) >> depth;
+        return depth; 
+    }
+
+    return 5; // TODO magic number powaaa
+}
+
+
 
 } // End namespace webs
 } // End namespace controllers

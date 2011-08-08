@@ -47,7 +47,7 @@ namespace controllers {
 namespace webs {
 /**
  * @class Controller class to handle pages related to sentences
- * TODO : maybe need to inherit from both generics/sentences and apis/controller?
+ * TODO : maybe need to inherit from both generics/sentences and webs/controller?
  */
 class Sentences : public Controller {
     private:
