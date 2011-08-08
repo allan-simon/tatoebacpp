@@ -43,7 +43,10 @@
 <% template user_div(results::User &user) %>
     <div class="user"> 
         <div class="image">
-            <!-- TODO fill it with the correct image -->
+            <img 
+                src="http://imgtato.sysko.fr/avatars/36/<% user.image %>.png"
+                alt="<% user.username %>"
+            />
         </div>
 
         <div class="username">

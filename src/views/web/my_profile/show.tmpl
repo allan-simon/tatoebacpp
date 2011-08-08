@@ -48,7 +48,7 @@
         </div>
 
         <img
-            src="http://flags.tatoeba.org/img/profiles_128/482065fb0fce0e1fccc523a28143d7f7.png"
+            src="http://imgtato.sysko.fr/avatars/128/<% user.image %>.png"
             alt="sysko"
         />
 
@@ -90,7 +90,22 @@
                 <span class="value"><% gt "{1,date=f}" using user.since %></span>
             </div>
 
+            <div>
+                <span class="edit">
+                    <a href="<% url "/my-profile/change-avatar" %>">
+                        <% gt "Change personnal picture "%>
+                    </a>
+                </span>
 
+            </div>
+            <div>
+                <span class="edit">
+                    <a href="<% url "/my-profile/change-password" %>">
+                        <% gt "Change your password"%>
+                    </a>
+                </span>
+
+            </div>
 
         </div>
 

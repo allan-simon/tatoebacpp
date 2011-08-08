@@ -156,6 +156,52 @@ class Users : public SqliteModel {
             const std::string &username,
             const std::string &newHomepage
         );
+
+        /**
+        * @brief Get the avatar identifier of a user
+        *
+        * @param username Name of the user for whom we want the image of
+        *
+        * @return The user image name as a string
+        */
+        std::string get_avatar(
+            const std::string &username
+        );
+
+        /**
+        * @brief change the avatar (will save/resize/convert it) of the current
+        *        user
+        *
+        * @param username Name of the user of whom the avatar will be changed
+        * @param filename Temporary name of the file, to know which file open
+        *
+        * @todo Find a way to open from memory so that we don't need to first
+        *       save to the disk
+        * @todo Permit the user to go back to a "no avatar" state
+        *
+        * @return True if the avatar was successfuly updated, False otherwise
+        */
+        bool update_avatar(
+            const std::string &username,
+            const std::string &filename
+        );
+
+        /**
+        * @brief Change the password of a user by a new one
+        *
+        * @param username     The user of which we're changing the password
+        * @param oldpassword  The old password to check
+        * @param newpassword  The new password to set
+        *
+        * @return True if the password was succefully update , false otherwise
+        *         (wrong couple(username.oldpassword) for example)
+        */
+        bool update_password(
+            const std::string &username,
+            const std::string &oldpassword,
+            const std::string &newpassword
+        );
+
 };
 
 

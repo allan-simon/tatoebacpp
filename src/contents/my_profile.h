@@ -31,6 +31,8 @@
 #include "contents/forms/my_profile/edit_homepage.h"
 #include "contents/forms/my_profile/add_spoken_lang.h"
 #include "contents/forms/my_profile/edit_spoken_lang.h"
+#include "contents/forms/my_profile/change_avatar.h"
+#include "contents/forms/my_profile/change_password.h"
 
 #include "results/users.h"
 #include "results/spoken_langs.h"
@@ -126,6 +128,47 @@ struct EditSpokenLang : public BaseContent {
     }
 
 };
+
+
+/**
+ * @structChangeAvatar 
+ * @brief  content used by MyProfile::change_avatar
+ *         
+ */
+struct ChangeAvatar : public BaseContent {
+
+    /**
+     * @brief Form to upload a new avatar (pictures)
+     */
+    forms::my_profile::ChangeAvatar form;
+    /**
+     * @brief name of the current avatar
+     */
+    std::string imageName;
+
+    ChangeAvatar(const std::string &imageName) :
+        imageName(imageName) 
+    {
+    }
+
+};
+
+
+/**
+ * @struct ChangePassword
+ * @brief  content used by MyProfile::change_password
+ *         
+ */
+struct ChangePassword : public BaseContent {
+
+    /**
+     * @brief Form to change the current password
+     */
+    forms::my_profile::ChangePassword form;
+
+};
+
+
 
 
 

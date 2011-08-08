@@ -26,6 +26,11 @@
 #include <iostream>
 #include <sstream>
 #include <vector>
+
+#include "cv.h"
+#include "highgui.h"
+
+#include <cppcms/util.h>
 #include <cppcms/crypto.h>
 #include <cppdb/frontend.h>
 #include <booster/posix_time.h>
@@ -88,24 +93,77 @@ Users::Users(cppdb::session sqliteDb) : SqliteModel(sqliteDb) {
     
 }
 
+/**
+ * @brief will resize an already opened image to fit inside a squarre
+ *        while keeping the ratio, and will save the reized image
+ */
+static void resize(
+    const IplImage* source,
+    const int maxSize,
+    const std::string &resizedFileName
+) {
+
+    int destWidth = 0;
+    int destHeight = 0;
+
+    if (source->width > source->height) {
+        destWidth = maxSize;
+        destHeight = source->height * ((float)maxSize/(float)source->width);
+    } else {
+        destWidth = source->width * ((float)maxSize /(float)source->height);
+        destHeight = maxSize;
+    }
+
+    // declare a destination IplImage object with correct size,
+    //depth and channels
+    IplImage *destination = cvCreateImage(
+        cvSize(
+            destWidth,
+            destHeight
+        ),
+        source->depth,
+        source->nChannels
+    );
+
+    cvResize(source, destination);
+
+    cvSaveImage(
+        resizedFileName.c_str(),
+        destination
+    );
+    cvReleaseImage(&destination);
+}
+
+
+
+
 
 /**
- *
+ * @brief Will resize a given image into all the needed format/size
+ *        and all these derivated images will follow the same naming
+ *        pattern
  */
-static std::string binary_md5(
-    const std::string toHash
+static void resize_all_format(
+    const std::string &filename,
+    const std::string &newFileName
 ) {
-    // we generate the md5 of the password
-    std::auto_ptr<message_digest> d(message_digest::md5());
+        IplImage *source = cvLoadImage(filename.c_str());
+        
 
-    char buf[16];
-    d->append(toHash.c_str(), toHash.size());
-    d->readout(buf);
+        //TODO the / is not windows friendly
+        resize(
+            source,
+            128,
+            "../ressources/img/avatars/128/" + newFileName + ".png"
+        );
+        resize(
+            source,
+            36,
+            "../ressources/img/avatars/36/" + newFileName + ".png"
+        );
 
-    std::stringstream in;
-    in.write(buf, 16);
- 
-    return in.str();
+        cvReleaseImage(&source);
+
 }
 
 /**
@@ -119,7 +177,7 @@ bool Users::is_login_correct(
    
     checkPasswd.bind(login);
     checkPasswd.bind(
-        binary_md5(pass)
+        cppcms::util::md5hex(pass)
     );
     cppdb::result res = checkPasswd.row();
    
@@ -147,7 +205,7 @@ bool Users::add(
           
     addUser.bind(login);
     addUser.bind(
-        binary_md5(pass)
+        cppcms::util::md5hex(pass)
     );
     addUser.bind(email);
     addUser.bind(
@@ -172,7 +230,8 @@ results::PagiUsers Users::get_all_users(
 ) {
     results::PagiUsers pagiUsers;
     cppdb::statement getUsers = sqliteDb.prepare(
-        "SELECT * FROM users LIMIT 20 OFFSET ? "
+        "SELECT id, username, email, image "
+        "FROM users LIMIT 20 OFFSET ? "
     );
 
     cppdb::statement getUsersCount = sqliteDb.prepare(
@@ -190,6 +249,7 @@ results::PagiUsers Users::get_all_users(
         user.id = res.get<int>("id");
         user.username = res.get<std::string>("username");
         user.email = res.get<std::string>("email");
+        user.image = res.get<std::string>("image");
         //std::tm sinceTime = res.get<std::tm>("since");
         //user.since = asctime(&sinceTime);
         pagiUsers.push_back(user);
@@ -221,6 +281,7 @@ results::User Users::get_user_from_username(
     user.description = res.get<std::string>("description");
     user.email = res.get<std::string>("email");
     user.homepage = res.get<std::string>("homepage");
+    user.image = res.get<std::string>("image");
     user.since = res.get<long long>("since");
 
     // don't forget to reset the statement
@@ -230,6 +291,27 @@ results::User Users::get_user_from_username(
 
     return user;
 }
+
+          
+/**       
+ *        
+ */       
+std::string Users::get_avatar(
+    const std::string &username
+) {
+    cppdb::statement getAvatar = sqliteDb.prepare(
+        "SELECT image FROM users WHERE username = ? LIMIT 1;"
+    );
+    getAvatar.bind(username);
+
+    std::string imageName = getAvatar.row().get<std::string>("image");
+
+    getAvatar.reset();
+
+    return imageName;
+}
+
+
 
 /**
  * @todo throw exception if user does not exist
@@ -288,5 +370,71 @@ void Users::update_homepage(
     updateHomepageFromUsername.exec();
     updateHomepageFromUsername.reset();
 }
+
+
+/**       
+ *        
+ */       
+bool Users::update_password(
+    const std::string &username,
+    const std::string &oldPassword,
+    const std::string &newPassword
+) {
+    cppdb::statement updatePassword = sqliteDb.prepare(
+        "UPDATE users "
+        "SET password = ? "
+        "WHERE username = ? AND password = ?;"
+    );
+    updatePassword.bind(
+        cppcms::util::md5hex(newPassword)
+    );
+    updatePassword.bind(username);
+    updatePassword.bind(
+        cppcms::util::md5hex(oldPassword)
+    );
+
+    updatePassword.exec();
+    int affected = updatePassword.affected();
+    updatePassword.reset();
+
+    return affected == 1;
+}
+
+/**       
+ *        
+ */       
+bool Users::update_avatar(
+    const std::string &username,
+    const std::string &filename
+) { 
+    cppdb::statement updatePassword = sqliteDb.prepare(
+        "UPDATE users "
+        "SET image = ? "
+        "WHERE username = ? ;"
+    );
+
+    std::string usernameHashed = cppcms::util::md5hex(username);
+
+    updatePassword.bind(usernameHashed);
+    updatePassword.bind(username);
+    updatePassword.exec();
+
+    int affected = updatePassword.affected();
+    updatePassword.reset();
+
+
+    resize_all_format(
+        filename,
+        usernameHashed
+    );
+
+    return affected == 1;
+
+
+}
+    
+
+
+
 
 } // end of namespace models

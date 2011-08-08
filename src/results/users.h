@@ -42,7 +42,7 @@ namespace results {
         //int birthday;
         std::string description;
         std::string homepage;
-        //std::string image;
+        std::string image;
         //std::string country_id;
         //bool is_public;
         SpokenLangsVector spokenLangs;

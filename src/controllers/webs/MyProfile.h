@@ -105,8 +105,8 @@ class MyProfile : public Controller {
         void add_spoken_lang_treat();
 
         /**
-        * @brief Display nothing, only remove the given language from the list of langs current
-        *        speaks
+        * @brief Display nothing, only remove the given language from the
+        *        list of langs the current user speaks
         *
         * @param langISO ISO code of the language to remove from the list
         *
@@ -114,13 +114,12 @@ class MyProfile : public Controller {
         void remove_spoken_lang(std::string langISO);
 
         /**
-        * @brief Display the form to edit the given language from the list of langs current
-        *        speaks
+        * @brief Display the form to edit the given language from the
+        *        list of langs the current user speaks
         *
         * @param langISO ISO code of the language to edit
         *
         */
-
         void edit_spoken_lang(std::string langISO);
 
         /**
@@ -128,6 +127,29 @@ class MyProfile : public Controller {
         */
         void edit_spoken_lang_treat();
 
+        
+        /**
+         * @brief Display a form for the user to change his avatar
+         */
+        void change_avatar();
+        /**
+         * @brief Will treat the data send by the form to change an avatar
+         *        it will upload/replace/resize and convert the updloaded fie
+         *        (and of course check before if it's a correctly formatted
+         *        image)
+         */
+        void change_avatar_treat();
+
+        /**
+         * @brief Display a form for the user to change his password
+         */
+        void change_password();
+
+        /**
+         * @brief Will treat the data send by the form to change one user's
+         *        password
+         */
+        void change_password_treat();
 };
 
 

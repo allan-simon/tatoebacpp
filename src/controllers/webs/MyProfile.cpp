@@ -22,10 +22,17 @@
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
+#include <cstdio>
+
 #include <sstream>
 #include <string>
 
+
+#include "cv.h"
+#include "highgui.h"
+
 #include <cppcms/session_interface.h>
+#include <cppcms/http_file.h>
 
 #include "MyProfile.h"
 #include "contents/my_profile.h"
@@ -71,6 +78,12 @@ MyProfile::MyProfile(cppcms::service &serv) : Controller(serv) {
 
     d->assign("/edit-spoken-lang/(\\w+)$", &MyProfile::edit_spoken_lang, this, 1);
     d->assign("/edit-spoken-lang_treat$", &MyProfile::edit_spoken_lang_treat, this);
+
+    d->assign("/change-avatar$", &MyProfile::change_avatar, this);
+    d->assign("/change-avatar_treat$", &MyProfile::change_avatar_treat, this);
+
+    d->assign("/change-password$", &MyProfile::change_password, this);
+    d->assign("/change-password_treat$", &MyProfile::change_password_treat, this);
 }
 
 /**
@@ -301,6 +314,103 @@ void MyProfile::edit_spoken_lang_treat() {
     go_to_profile_page();
 
 }
+
+
+/**
+ *
+ */
+void MyProfile::change_avatar() {
+    CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
+
+
+    std::string username = session()["name"];
+    contents::my_profile::ChangeAvatar c (
+        usersModel->get_avatar(
+            username
+        )
+    );
+    init_content(c);
+
+
+    render("my_profile_change_avatar", c);
+
+}
+/**
+ *
+ */
+void MyProfile::change_avatar_treat() {
+    TREAT_PAGE();
+    forms::my_profile::ChangeAvatar form;
+    form.load(context());
+    if (form.validate()) {
+
+        std::string filename = form.avatar.value()->filename(); 
+
+        form.avatar.value()->save_to(
+            filename
+        );
+        
+        usersModel->update_avatar(
+            session()["name"],
+            filename
+        );
+       
+        std::remove(filename.c_str());
+
+    } else {
+        //TODO implement something to be able to show it
+        // on the html (session based ?)
+        std::cout << "error" << std::endl;
+    }
+
+    go_to_profile_page();
+
+}
+
+
+/**
+ *
+ */
+void MyProfile::change_password() {
+    CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
+
+    contents::my_profile::ChangePassword c ;
+    init_content(c);
+
+    render("my_profile_change_password", c);
+
+}
+
+
+/**
+ *
+ */
+void MyProfile::change_password_treat() {
+    TREAT_PAGE();
+    forms::my_profile::ChangePassword form;
+    form.load(context());
+    if (form.validate()) {
+        
+        bool updated = usersModel->update_password(
+            session()["name"],
+            form.previous.value(),
+            form.newPassword.value()
+        );
+
+        //TODO replace this by something better
+        // (old password wrong ? not typed two time the same pass? etc.)
+        if (!updated) {
+            std::cout << "[DEBUG]: update password faield" <<  std::endl;
+        }
+
+    }
+
+    go_to_profile_page();
+
+}
+
+
+
 
 
 

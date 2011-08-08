@@ -5,6 +5,12 @@ include_directories(
     src
 )
 
+
+include(FindPkgConfig)
+FIND_PACKAGE( OpenCV REQUIRED )
+
+
+
 file(
     GLOB
     controllers_files
@@ -63,6 +69,8 @@ target_link_libraries(
     sqlite3
     #tokyodystopia
     sphinxclient
+    cv
+    highgui
 )
 
 #add_executable(

@@ -1,12 +1,13 @@
 -- script to create tables used by tatoebacpp
 CREATE TABLE users (
 "id"          integer primary key not null , 
-"username"    text    not null unique, -- his nickname 
-"email"       text    not null unique, -- his email address
-"password"    blob    not null,        -- his password in binary md5 
-"since"       integer not null,        -- his registering date
-"homepage"    text    default "",      -- his personnal webpage/website
-"description" text    default ""       -- his self-written description
+"username"    text    not null unique,             -- his nickname 
+"email"       text    not null unique,             -- his email address
+"image"       text    not null default "unknown" , -- his personnal image 
+"password"    text    not null,                    -- his password hashed
+"since"       integer not null,                    -- his registering date
+"homepage"    text    default "",                  -- his personnal webpage/website
+"description" text    default ""                   -- his self-written description
 
 );
 CREATE INDEX users_username_idx ON users (username);

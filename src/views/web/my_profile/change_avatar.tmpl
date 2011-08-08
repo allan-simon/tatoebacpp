@@ -1,0 +1,67 @@
+<% c++ #include "contents/my_profile.h" %>
+<% skin %>
+<% view my_profile_change_avatar uses contents::my_profile::ChangeAvatar extends master %>
+
+/**
+ * @brief Page's title
+ */
+<% template title() %>
+    <% gt "Change your personnal picture" %>
+<% end template %>
+
+
+/**
+ * @brief Load the CSS specific to this page
+ */
+<% template css() %>
+<link
+    rel="stylesheet"
+    type="text/css"
+    href="http://css.tatoeba.org/css/user/edit_profile.css?1"
+/>
+
+<% end template %>
+
+
+
+/**
+ * @brief All the content that will be displayed in the main div
+ *        of the page
+ */
+<% template main_content() %>
+<div id="personnalpicture" class="module" >
+
+    <h2><% gt "Personnal picture" %></h2>
+    <form
+        id="NyProfileEditHomepage"
+        method="post"
+        enctype="multipart/form-data"
+        action="<% url "/my-profile/change-avatar_treat" %>"
+    >
+        <div>
+            <% form input form.avatar %>
+        </div>
+        <div class="submit>">
+            <% form input form.submit %>
+        </div>
+
+    </form>
+</div>
+<% end template %>
+
+
+/**
+ * @brief Display all the annexe modules
+ *
+ */
+<% template annexe_content() %>
+    <div class="module">
+        <p>
+            TODO: you're image should be a jpeg or a png and must not exceed
+            XXXm
+        </p>
+    </div>
+<% end template %>
+
+<% end view %>
+<% end skin %>
