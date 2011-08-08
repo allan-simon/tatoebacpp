@@ -52,6 +52,12 @@ namespace contents {
          * sentence
          */
         int id;
+
+        /**
+         * @brief max depth of translations displayed + 1
+         */
+        int oneMoreDepth;
+
     };
 
     /**

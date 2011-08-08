@@ -76,12 +76,31 @@ Sentences::~Sentences() {
 void Sentences::show(std::string sentence_id) {
 	int id = atoi(sentence_id.c_str());
 
+    int depth = -1;
+    if (request().request_method() == "GET") {
+        cppcms::http::request::form_type getData = request().get();
+        cppcms::http::request::form_type::const_iterator it;
+
+        GET_INT_FIELD(depth, "depth");
+        if (depth > MAX_DEPTH) {
+            depth = MAX_DEPTH;
+        }
+    }
+    // if the depth was not forced by setting a GET variable
+    // then we use the user's depth
+    if (depth == -1) {
+        depth = get_depth();
+    }
+
+
 	contents::SentencesShow c;
     init_content(c);
 	contents::helpers::Sentences shc(
-        sentencesModel->get_by_id(id, get_depth())
+        sentencesModel->get_by_id(id, depth)
     );
     c.id = id;
+    c.oneMoreDepth = depth + 1;
+
     shc.lang = c.lang;
     shc.currentUserHelper = c.usersHelper;
     c.shc = shc;

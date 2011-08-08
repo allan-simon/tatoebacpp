@@ -33,6 +33,8 @@
 
 #include "controllers/generics/Controller.h"
 
+#define MAX_DEPTH 5
+
 //#include "contents/content.h"
 
 #define CHECK_PERMISSION_OR_GO_TO_LOGIN() \

@@ -10,6 +10,9 @@
             <h2>Sentence nº <% shc.sentences.front().getId() %></h2>
             <% c++ sentences_helper sh(out(), content.shc); %>
             <% c++ sh.sentences_group(content.shc.sentences[0]) ;%>
+            <a href="<% url "/sentences/show/{1}?depth={2}" using id, oneMoreDepth %>">
+                <% gt "view one more depth of translation" %>
+            </a>
         <% else %>
             This sentence does not exist
         <% end %>

@@ -141,7 +141,7 @@ int Controller::get_depth() {
         return depth; 
     }
 
-    return 5; // TODO magic number powaaa
+    return MAX_DEPTH; 
 }
 
 
