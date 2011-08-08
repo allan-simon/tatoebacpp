@@ -1,0 +1,66 @@
+<% c++ #include "contents/my_profile.h" %>
+<% skin %>
+<% view my_profile_change_depth uses contents::my_profile::ChangeDepth extends master %>
+
+/**
+ * @brief Page's title
+ */
+<% template title() %>
+    <% gt "Change the displayed depth of translation" %>
+<% end template %>
+
+
+/**
+ * @brief Load the CSS specific to this page
+ */
+<% template css() %>
+<link
+    rel="stylesheet"
+    type="text/css"
+    href="http://css.tatoeba.org/css/user/edit_profile.css?1"
+/>
+
+<% end template %>
+
+
+
+/**
+ * @brief All the content that will be displayed in the main div
+ *        of the page
+ */
+<% template main_content() %>
+<div id="personnalpicture" class="module" >
+
+    <h2><% gt "Change the displayed depth of translation" %></h2>
+    <form
+        id="MyProfileChangeDepth"
+        method="post"
+        action="<% url "/my-profile/change-depth_treat" %>"
+    >
+        <div>
+            <% form input form.newDepth %>
+        </div>
+        <div class="submit>">
+            <% form input form.submit %>
+        </div>
+
+    </form>
+</div>
+<% end template %>
+
+
+/**
+ * @brief Display all the annexe modules
+ *
+ */
+<% template annexe_content() %>
+    <div class="module">
+        <p>
+        <% gt "This number must be between 0 (only the sentence) and 6."%>   
+        </p>
+    </div>
+<% end template %>
+
+<% end view %>
+<% end skin %>
+

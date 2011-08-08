@@ -202,6 +202,31 @@ class Users : public SqliteModel {
             const std::string &newpassword
         );
 
+        /**
+        * @brief Update the maximun depth of translation displayed for a user
+        *
+        * @param username The user of which we're changing the password
+        * @param newDepth The new depth to set
+        *
+        * @return True if the new depth was succefully updated, false otherwise
+        *
+        */
+        bool update_depth(
+            const std::string &username,
+            const int newDepth
+        );
+
+        /**
+        * @brief Get the depth of translations configurated for a user
+        *
+        * @param username Name of the user for whom we want the depth of
+        *
+        * @return The defined depth of translations wanted
+        */
+        int get_depth(
+            const std::string &username
+        );
+
 };
 
 

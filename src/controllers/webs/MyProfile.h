@@ -150,6 +150,19 @@ class MyProfile : public Controller {
          *        password
          */
         void change_password_treat();
+
+        /**
+         * @brief Display a form for the user to change the maximun depth of
+         *        translations displayed for a sentence
+         */
+        void change_depth();
+
+        /**
+         * @brief Will treat the data send by the form to change one user's
+         *        default depth of translations
+         */
+        void change_depth_treat();
+
 };
 
 

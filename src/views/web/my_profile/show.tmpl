@@ -70,6 +70,7 @@
             </div>
 
             <!-- TODO add birthday -->
+
             <div>
                 <!-- TODO add status -->
                 <span class="field"><% gt "Homepage" %></span>
@@ -83,13 +84,26 @@
                         <% gt "Edit "%>
                     </a>
                 </span>
+
             </div>
             <div>
                 <!-- TODO add status -->
                 <span class="field"><% gt "Member since" %></span>
                 <span class="value"><% gt "{1,date=f}" using user.since %></span>
             </div>
+            <div>
+                <!-- TODO add status -->
+                <span class="field"><% gt "Depth of translations:" %></span>
+                <span class="value">
+                    <% user.depth %>
+                </span>
+                <span class="edit">
+                    <a href="<% url "/my-profile/change-depth" %>">
+                        <% gt "Edit "%>
+                    </a>
+                </span>
 
+            </div>
             <div>
                 <span class="edit">
                     <a href="<% url "/my-profile/change-avatar" %>">

@@ -36,6 +36,7 @@ namespace results {
         std::string email;
         //std::string lang;
         long long since;
+        int depth;
         //int last_time_active;
         //bool send_notifications;
         std::string name;

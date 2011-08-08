@@ -28,8 +28,6 @@
 #include <string>
 
 
-#include "cv.h"
-#include "highgui.h"
 
 #include <cppcms/session_interface.h>
 #include <cppcms/http_file.h>
@@ -84,6 +82,10 @@ MyProfile::MyProfile(cppcms::service &serv) : Controller(serv) {
 
     d->assign("/change-password$", &MyProfile::change_password, this);
     d->assign("/change-password_treat$", &MyProfile::change_password_treat, this);
+
+    d->assign("/change-depth$", &MyProfile::change_depth, this);
+    d->assign("/change-depth_treat$", &MyProfile::change_depth_treat, this);
+
 }
 
 /**
@@ -403,6 +405,47 @@ void MyProfile::change_password_treat() {
             std::cout << "[DEBUG]: update password faield" <<  std::endl;
         }
 
+    }
+
+    go_to_profile_page();
+
+}
+
+
+/**
+ *
+ */
+void MyProfile::change_depth() {
+    CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
+
+
+    std::string username = session()["name"];
+    contents::my_profile::ChangeDepth c (
+        usersModel->get_depth(
+            username
+        )
+    );
+    init_content(c);
+
+
+    render("my_profile_change_depth", c);
+
+}
+
+
+/**
+ *
+ */
+void MyProfile::change_depth_treat() {
+    TREAT_PAGE();
+    forms::my_profile::ChangeDepth form;
+    form.load(context());
+
+    if (form.validate()) {
+        usersModel->update_depth(
+            session()["name"],
+            form.newDepth.value()
+        );
     }
 
     go_to_profile_page();

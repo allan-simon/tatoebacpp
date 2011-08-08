@@ -33,6 +33,7 @@
 #include "contents/forms/my_profile/edit_spoken_lang.h"
 #include "contents/forms/my_profile/change_avatar.h"
 #include "contents/forms/my_profile/change_password.h"
+#include "contents/forms/my_profile/change_depth.h"
 
 #include "results/users.h"
 #include "results/spoken_langs.h"
@@ -165,6 +166,23 @@ struct ChangePassword : public BaseContent {
      * @brief Form to change the current password
      */
     forms::my_profile::ChangePassword form;
+
+};
+
+/**
+ * @struct ChangeDepth
+ * @brief  content used by MyProfile::change_depth
+ *         
+ */
+struct ChangeDepth : public BaseContent {
+
+    /**
+     * @brief Form to change the current depth of translations
+     *        shown when we display a sentence
+     */
+    forms::my_profile::ChangeDepth form;
+
+    ChangeDepth(const int depth): form(depth){};
 
 };
 

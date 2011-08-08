@@ -5,6 +5,7 @@ CREATE TABLE users (
 "email"       text    not null unique,             -- his email address
 "image"       text    not null default "unknown" , -- his personnal image 
 "password"    text    not null,                    -- his password hashed
+"depth"       integer not null default 2,          -- the default depth of translation
 "since"       integer not null,                    -- his registering date
 "homepage"    text    default "",                  -- his personnal webpage/website
 "description" text    default ""                   -- his self-written description
@@ -16,7 +17,7 @@ CREATE TABLE users_spoken_langs (
     "user_id"       integer not null, -- id of the user 
     "lang"          text    not null, -- ... language he speaks
     "proeficiency"  integer not null, -- ... with which proeficiency
-    "is_native"      boolean not null  -- ... if he's a native of that language
+    "is_native"     boolean not null  -- ... if he's a native of that language
 );
 CREATE INDEX users_spoken_langs_user_id_idx
     ON users_spoken_langs (user_id);

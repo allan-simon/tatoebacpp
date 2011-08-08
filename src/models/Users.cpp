@@ -281,6 +281,7 @@ results::User Users::get_user_from_username(
     user.description = res.get<std::string>("description");
     user.email = res.get<std::string>("email");
     user.homepage = res.get<std::string>("homepage");
+    user.depth = res.get<int>("depth");
     user.image = res.get<std::string>("image");
     user.since = res.get<long long>("since");
 
@@ -433,6 +434,49 @@ bool Users::update_avatar(
 
 }
     
+
+/**       
+ *        
+ */       
+bool Users::update_depth(
+    const std::string &username,
+    const int newDepth
+) { 
+    cppdb::statement updateDepth = sqliteDb.prepare(
+        "UPDATE users "
+        "SET depth = ? "
+        "WHERE username = ? ;"
+    );
+
+
+    updateDepth.bind(newDepth);
+    updateDepth.bind(username);
+    updateDepth.exec();
+
+    int affected = updateDepth.affected();
+    updateDepth.reset();
+
+    return affected == 1;
+
+}
+
+/**       
+ *        
+ */       
+int Users::get_depth(
+    const std::string &username
+) {
+    cppdb::statement getDepth= sqliteDb.prepare(
+        "SELECT depth FROM users WHERE username = ? LIMIT 1;"
+    );
+    getDepth.bind(username);
+
+    int depth = getDepth.row().get<int>("depth");
+
+    getDepth.reset();
+
+    return depth;
+}
 
 
 
