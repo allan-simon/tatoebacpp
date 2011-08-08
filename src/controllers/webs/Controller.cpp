@@ -141,7 +141,7 @@ int Controller::get_depth() {
         return depth; 
     }
 
-    return MAX_DEPTH; 
+    return DEFAULT_DEPTH; 
 }
 
 

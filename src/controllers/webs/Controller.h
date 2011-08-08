@@ -34,6 +34,7 @@
 #include "controllers/generics/Controller.h"
 
 #define MAX_DEPTH 5
+#define DEFAULT_DEPTH 2
 
 //#include "contents/content.h"
 
