@@ -244,6 +244,8 @@ void MyProfile::add_spoken_lang_treat() {
         int userId = 0;
         std::istringstream(session()["userId"]) >> userId;
 
+        invalidate_spoken_langs_cache();
+
         usersSpokenLangsModel->add(
             userId,
             form.spokenLang.selected_id(),
@@ -259,11 +261,22 @@ void MyProfile::add_spoken_lang_treat() {
 /**
  *
  */
+void MyProfile::invalidate_spoken_langs_cache() {
+    cache().rise(
+        "langs_" + session()["name"]
+    );
+}
+
+/**
+ *
+ */
 void MyProfile::remove_spoken_lang(std::string langISO) {
     CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
 
     int userId = 0;
     std::istringstream(session()["userId"]) >> userId;
+
+    invalidate_spoken_langs_cache();
 
     usersSpokenLangsModel->remove(
         userId,
@@ -311,6 +324,8 @@ void MyProfile::edit_spoken_lang_treat() {
 
         int userId = 0;
         std::istringstream(session()["userId"]) >> userId;
+        
+        invalidate_spoken_langs_cache();
 
         usersSpokenLangsModel->edit(
             userId,

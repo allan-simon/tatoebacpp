@@ -50,6 +50,11 @@ class MyProfile : public Controller {
         models::UsersSpokenLangs *usersSpokenLangsModel;
 
         /**
+         * @brief invalidate the cache that store the spoken languages
+         *       that user
+         */
+        void invalidate_spoken_langs_cache();
+        /**
          * @brief set the http header to redirect the current user's profile
          */
         void go_to_profile_page();
