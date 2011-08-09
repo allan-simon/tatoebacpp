@@ -56,6 +56,10 @@ void Controller::init_content(contents::BaseContent& content) {
     response().content_encoding("UTF-8");
     response().set_content_header("text/html; charset=UTF-8");
 
+    content.searchesSimple.set_langs(
+        get_current_user_spoken_langs()
+    );
+
     content.lang = get_interface_lang();
     //std::cout << "user name: " << session()["name"] << std::endl;
     if (session().is_set("name")) {

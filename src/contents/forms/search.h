@@ -59,24 +59,15 @@ namespace forms {
          */
 		cppcms::widgets::submit submit;
 		
+		
 		SearchesSimple() {
             *this + query + sentencesLang + translatedInLang + submit;
 
             query.name("query");
 
-            // We fill the HTML select with supported languages 
-            // @TODO it should be possible to subclass widges::select 
-            // in order to have a languageSelect in order to not duplicate
-            // this piece of code everywhere we need a language select
-            NameToISOMap nameToIso = Languages::get_instance()->get_name_to_iso_map();
-            NameToISOMap::iterator itr;
-
             sentencesLang.add("Any","und");
             translatedInLang.add("Any","und");
-            for(itr = nameToIso.begin(); itr != nameToIso.end(); ++itr){
-                sentencesLang.add(itr->first,itr->second);
-                translatedInLang.add(itr->first,itr->second);
-            }
+
 
             submit.name("search");
             submit.value("Search");
@@ -88,6 +79,8 @@ namespace forms {
             translatedInLang.non_empty();
         };
 
+
+
         /**
          * Test if the form is correctly filled
          */
@@ -97,6 +90,39 @@ namespace forms {
 			}
 			return true;
 		}
+
+        void set_langs() {
+            NameToISOMap nameToIso = Languages::get_instance()->get_name_to_iso_map();
+            NameToISOMap::const_iterator itr;
+            for(itr = nameToIso.begin(); itr != nameToIso.end(); ++itr){
+                sentencesLang.add(itr->first,itr->second);
+                translatedInLang.add(itr->first,itr->second);
+            }
+
+        }
+
+        void set_langs(std::vector<std::string> userLangs) {
+            if (!userLangs.empty()) {
+                // we iterate over the user vector and call
+                // get_name_from_iso rather iterating over the map
+                // because usually the user vector is very short (around
+                // 3~5 elements against 100 elements for the map
+                // and more in the future
+                std::vector<std::string>::const_iterator itr;
+                for(itr = userLangs.begin(); itr != userLangs.end(); ++itr){
+                    const std::string &iso = *itr;
+                    const std::string name = Languages::get_instance()->get_name_from_iso(
+                        iso
+                    );
+                    sentencesLang.add(name, iso);
+                    translatedInLang.add(name, iso);
+                }
+            } else {
+
+                set_langs();
+            }
+
+        }
 		
 	};
 
