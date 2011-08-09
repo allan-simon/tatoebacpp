@@ -101,15 +101,19 @@ int Sentences::get_random_id(
 ) {
     int id = 0;
     TatoDb *tatoDb = GET_DB_POINTER();
-   
+    TatoItem * item = NULL;
     if (langsToKeep.empty()) {
-        return tato_db_item_rand(tatoDb)->id;
+        item = tato_db_item_rand(tatoDb);
+    } else {
+        item = tato_db_item_rand_with_lang(
+            tatoDb,
+            langsToKeep[std::rand()%langsToKeep.size()].c_str()
+        );
+    } 
+
+    if (item != NULL) {
+        id = item->id;
     }
-    id = tato_db_item_rand_with_lang(
-        tatoDb,
-        langsToKeep[std::rand()%langsToKeep.size()].c_str()
-    )->id;
-    
 
     return id;
 }
@@ -119,13 +123,17 @@ int Sentences::get_random_id(
  */
 int Sentences::get_random_id(std::string isoCode) {
 
+    int id = 0;
+
     TatoDb *tatoDb = GET_DB_POINTER();
     TatoItem *randSentence = tato_db_item_rand_with_lang(
         tatoDb,
         isoCode.c_str()
     );
-
-    return randSentence->id;
+    if (randSentence != NULL) {
+        id = randSentence->id;
+    }
+    return id;
 }
 
 
@@ -147,6 +155,9 @@ results::Sentence Sentences::get_random(
             langsToKeep[std::rand()%langsToKeep.size()].c_str()
         );
     }
+    if (randItem == NULL) {
+        return results::Sentence();
+    }
     
     return sentence_from_item(randItem, depthLimit, langsToKeep);
 
@@ -167,6 +178,9 @@ results::Sentence Sentences::get_random(
         isoCode.c_str()
     );
 
+    if (randItem == NULL) {
+        return results::Sentence();
+    }
 
     return sentence_from_item(randItem, depthLimit, langsToKeep);
 
