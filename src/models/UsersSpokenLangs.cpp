@@ -222,6 +222,30 @@ bool UsersSpokenLangs::edit(
 }
 
 
+std::vector<std::string> UsersSpokenLangs::get_iso_code_vector(
+    std::string username
+) {
+    cppdb::statement getIsosFromUser = sqliteDb.prepare(
+        "SELECT lang FROM users_spoken_langs "
+        "WHERE user_id = ( "
+        "   SELECT id FROM users WHERE username = ? "
+        ")"
+        "ORDER BY proeficiency;"
+    );
+    getIsosFromUser.bind(username);
+    
+    std::vector<std::string> isos;
+
+    cppdb::result res = getIsosFromUser.query(); 
+    while (res.next()) {
+        isos.push_back(res.get<std::string>("lang"));
+    }
+
+    getIsosFromUser.reset();
+
+    return isos;
+}
+
 
 
 } // end namespace models

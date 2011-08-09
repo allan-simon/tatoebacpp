@@ -51,7 +51,8 @@ void Pages::homepage() {
     models::Sentences sentencesModel;
 	contents::helpers::Sentences shc(
         sentencesModel.get_random(
-            get_depth()
+            get_depth(),
+            get_current_user_spoken_langs()
         )
     );
     shc.lang = c.lang;

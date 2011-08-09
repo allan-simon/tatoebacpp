@@ -13,6 +13,12 @@
             <a href="<% url "/sentences/show/{1}?depth={2}" using id, oneMoreDepth %>">
                 <% gt "view one more depth of translation" %>
             </a>
+            <br/>
+            <!--TODO make something to be able to use both "all languages" and "custom depth" -->
+            <!-- maybe only do this javascript -->
+            <a href="<% url "/sentences/show/{1}?no_langs_filter=1" using id%>">
+                <% gt "view all translations (even languages you don't study)" %>
+            </a>
         <% else %>
             This sentence does not exist
         <% end %>

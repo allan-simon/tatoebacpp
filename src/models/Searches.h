@@ -17,6 +17,9 @@ namespace models {
 */
 class Searches {
     private:
+        /**
+         * @brief permit to connect to a sphinx search server
+         */
         SphinxClient sphinxClient;
 
     public:
@@ -24,36 +27,54 @@ class Searches {
 
 
         /**
-        * @brief 
+        * @brief Perform a search using a query language that permit 
+        *        advance request (i.e not only strict match search)
         *
-        * @param query
-        * @param 
+        * @param query       The query to the search engine
+        * @param fromLang    The lang in which we're searching ("und"
+        *                    for every languages)
         *
-        * @return 
+        * @param toLang      To restrict the result to sentences which have
+        *                    a translation in that language
+        * @param langsTokeep The results sentences will keep only the
+        *                    translations in one of these languages
+        *
+        * @return            The first page of sentences that match the query
         */
 
         results::PagiSentences advance(
             const std::string &query,
             const std::string &fromLang,
-            const std::string &toLang
+            const std::string &toLang,
+            const std::vector<std::string> &langsToKeep = std::vector<std::string>()
         );
 
+
         /**
-        * @brief 
+        * @brief Perform a search using a query language that permit 
+        *        advance request (i.e not only strict match search)
+        *        with pagination
         *
-        * @param query
-        * @param lang
-        * @param size
-        * @param 
+        * @param query       The query to the search engine
+        * @param fromLang    The lang in which we're searching ("und"
+        *                    for every languages)
         *
-        * @return 
+        * @param toLang      To restrict the result to sentences which have
+        *                    a translation in that language
+        * @param size        The maximun number of result we want
+        * @param offset      The number of results to skip
+        * @param langsTokeep The results sentences will keep only the
+        *                    translations in one of these languages
+        *
+        * @return            A page of sentences that match the query
         */
         results::PagiSentences advance(
             const std::string &query,
             const std::string &fromLang,
             const std::string &toLang,
             const int size,
-            const int offset
+            const int offset,
+            const std::vector<std::string> &langsToKeep = std::vector<std::string>()
         );
 
 

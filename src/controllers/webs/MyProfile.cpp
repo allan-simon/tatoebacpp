@@ -40,6 +40,9 @@
 #include "models/UsersSpokenLangs.h"
 #include "contents/Config.h"
 
+
+
+
 namespace controllers {
 namespace webs {
 /**
@@ -112,6 +115,8 @@ void MyProfile::show() {
         session()["name"]
     );
 
+
+
     int userId = 0;
     std::istringstream(session()["userId"]) >> userId;
 
@@ -171,10 +176,12 @@ void MyProfile::edit_description_treat() {
  *
  */
 void MyProfile::edit_homepage() {
+
     CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
 
 
     std::string username = session()["name"];
+
     contents::my_profile::EditHomepage c (
         username,
         usersModel->get_homepage_from_username(

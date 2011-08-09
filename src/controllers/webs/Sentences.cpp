@@ -96,7 +96,11 @@ void Sentences::show(std::string sentence_id) {
 	contents::SentencesShow c;
     init_content(c);
 	contents::helpers::Sentences shc(
-        sentencesModel->get_by_id(id, depth)
+        sentencesModel->get_by_id(
+            id,
+            depth,
+            get_current_user_spoken_langs()
+        )
     );
     c.id = id;
     c.oneMoreDepth = depth + 1;
@@ -115,7 +119,9 @@ void Sentences::show(std::string sentence_id) {
  */
 void Sentences::show_random() {
     std::ostringstream oss;
-    oss << sentencesModel->get_random_id();
+    oss << sentencesModel->get_random_id(
+        get_current_user_spoken_langs()
+    );
 
     response().set_redirect_header(
         "/" + get_interface_lang() +

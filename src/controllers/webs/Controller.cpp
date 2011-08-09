@@ -25,10 +25,15 @@
 
 
 #include "Controller.h"
+#include <cppcms/serialization_classes.h>
+#include <cppcms/archive_traits.h>
 #include <cppcms/session_interface.h>
 #include <cppcms/filters.h>
 
 #include "contents/content.h"
+
+#include "models/UsersSpokenLangs.h"
+#include "contents/Config.h"
 
 namespace controllers {
 namespace webs {
@@ -130,6 +135,75 @@ int Controller::get_current_user_id() {
     //std::cout << "[NOTICE] current id:" << session()["userId"] << std::endl;
     return atoi(session()["userId"].c_str());
 }
+
+
+/**
+ *
+ */
+std::vector<std::string> Controller::get_current_user_spoken_langs() {
+
+    // will contain the iso codes of the languages to keep
+    std::vector<std::string> isos;
+
+    std::string username = session()["name"];
+    std::string key = "langs_" + username;
+
+    // if not logged => no filtering
+    if (username.empty()) {
+        return isos;
+    }
+    
+    // if not "no_langs_filter" set as get parameter
+    // => no filtering
+    if (request().get().find("no_langs_filter") !=  request().get().end()) {
+        return isos; 
+    }
+
+    std::string data;
+    // we first check if we have this vector in cache
+    cache().fetch_frame(
+        key,
+        data,
+        true
+    );
+    // if not we regenerate it
+    if (data.empty()) {
+        models::UsersSpokenLangs usersSpokenLangsModel =  models::UsersSpokenLangs(
+            cppdb::session(
+                "sqlite3:db=" + Config::get_instance()->sqlite3Path
+            )
+        );
+
+        isos = usersSpokenLangsModel.get_iso_code_vector(
+                username
+        );
+        
+        // we serliazed and save it for later use
+        cppcms::archive a;
+        a & isos;
+        std::set<std::string> tags;
+        tags.insert(key);
+        cache().store_frame(
+            key,
+            a.str(),
+            tags,
+            -1,
+            true
+        );
+
+
+    // otherwise we just read the seriliazed data
+    } else {
+        cppcms::archive a; 
+        a.mode(cppcms::archive::load_from_archive);
+        a.str(data);
+        a >> isos;
+    }
+    return isos;
+
+}
+
+
 
 /**
  *

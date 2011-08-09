@@ -132,6 +132,15 @@ class Controller : public controllers::generics::Controller {
          * represent the current user
          */
         int get_current_user_id();
+
+        /**
+         * @brief Get all the iso code of the languages a user studies/speas
+         * 
+         * @return A vector of all the iso codes
+         *
+         * @todo maybe move this into a dedicated class for current user
+         */
+        std::vector<std::string> get_current_user_spoken_langs();
 	public:
 		Controller(cppcms::service &serv);
 };

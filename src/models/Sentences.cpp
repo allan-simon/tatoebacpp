@@ -23,12 +23,15 @@
  * @link     http://tatoeba.org
  */
 
+#include <cstdlib>
 #include <iostream>
 
 
 #include <sstream>
+#include <vector>
 #include <queue>
 #include <set>
+#include <algorithm>
 #include <exception>
 #include <cstring>
 #include "models/Sentences.h"
@@ -76,12 +79,16 @@ Sentences::Sentences():
 /**
  *
  */
-results::Sentence Sentences::get_by_id(int id, int depth) {
+results::Sentence Sentences::get_by_id(
+    int id,
+    int depth,
+    const std::vector<std::string> &langsToKeep
+) {
     TatoDb *tatoDb = GET_DB_POINTER();
     TatoItem *item = tato_db_item_find(tatoDb, id);
 
     if (item != NULL) { 
-        return sentence_from_item(item, depth);
+        return sentence_from_item(item, depth, langsToKeep);
     } else {
         return results::Sentence();
     }
@@ -89,14 +96,20 @@ results::Sentence Sentences::get_by_id(int id, int depth) {
 /**
  *
  */
-int Sentences::get_random_id() {
+int Sentences::get_random_id(
+    const std::vector<std::string> &langsToKeep 
+) {
     int id = 0;
     TatoDb *tatoDb = GET_DB_POINTER();
-    TatoItem *randSentence = tato_db_item_rand(tatoDb);
-
-    std::stringstream ss;
-    ss << randSentence->id;
-    ss >> id;
+   
+    if (langsToKeep.empty()) {
+        return tato_db_item_rand(tatoDb)->id;
+    }
+    id = tato_db_item_rand_with_lang(
+        tatoDb,
+        langsToKeep[std::rand()%langsToKeep.size()].c_str()
+    )->id;
+    
 
     return id;
 }
@@ -105,18 +118,14 @@ int Sentences::get_random_id() {
  *
  */
 int Sentences::get_random_id(std::string isoCode) {
-    int id = 0;
+
     TatoDb *tatoDb = GET_DB_POINTER();
     TatoItem *randSentence = tato_db_item_rand_with_lang(
         tatoDb,
         isoCode.c_str()
     );
 
-    std::stringstream ss;
-    ss << randSentence->id;
-    ss >> id;
-
-    return id;
+    return randSentence->id;
 }
 
 
@@ -124,13 +133,22 @@ int Sentences::get_random_id(std::string isoCode) {
  *
  */
 results::Sentence Sentences::get_random(
-    const int depthLimit
+    const int depthLimit,
+    const std::vector<std::string> &langsToKeep 
 ) {
-
     TatoDb *tatoDb = GET_DB_POINTER();
-    TatoItem *randItem = tato_db_item_rand(tatoDb);
+    TatoItem *randItem = NULL;
 
-    return sentence_from_item(randItem, depthLimit);
+    if (langsToKeep.empty()) {
+        randItem = tato_db_item_rand(tatoDb);
+    } else {
+        randItem = tato_db_item_rand_with_lang(
+            tatoDb,
+            langsToKeep[std::rand()%langsToKeep.size()].c_str()
+        );
+    }
+    
+    return sentence_from_item(randItem, depthLimit, langsToKeep);
 
 }
 
@@ -139,7 +157,8 @@ results::Sentence Sentences::get_random(
  */
 results::Sentence Sentences::get_random(
     std::string isoCode,
-    const int depthLimit
+    const int depthLimit,
+    const std::vector<std::string> &langsToKeep 
 ) {
 
     TatoDb *tatoDb = GET_DB_POINTER();
@@ -149,7 +168,7 @@ results::Sentence Sentences::get_random(
     );
 
 
-    return sentence_from_item(randItem, depthLimit);
+    return sentence_from_item(randItem, depthLimit, langsToKeep);
 
 }
 
@@ -389,7 +408,12 @@ void Sentences::edit_lang(
 /**
  *
  */
-results::Sentence Sentences::sentence_from_item(TatoItem* item, int depth) {
+results::Sentence Sentences::sentence_from_item(
+    TatoItem* item,
+    const int depth,
+    const std::vector<std::string> &langsToKeep 
+
+) {
     results::Sentence sentence(
         item->id,
         item->str,
@@ -403,7 +427,12 @@ results::Sentence Sentences::sentence_from_item(TatoItem* item, int depth) {
     //TODO reintroduce metas
     //models::Metas metasModel;
     //sentence.metas = metasModel.get_all_metas_of_sentence(item); 
-    pack_translations(item, sentence.translations, depth);
+    pack_translations(
+        item,
+        sentence.translations,
+        depth,
+        langsToKeep
+    );
    
     return sentence; 
 }
@@ -414,7 +443,8 @@ results::Sentence Sentences::sentence_from_item(TatoItem* item, int depth) {
 void Sentences::pack_translations(
     TatoItem *item,
     TransVector &translations,
-    int maxDepth
+    const int maxDepth,
+    const std::vector<std::string> &langsToKeep 
 ) {
 
     std::set<int> visiteds;
@@ -427,42 +457,96 @@ void Sentences::pack_translations(
     TatoItem *lastItemForThisDistance = item;
 
     translations.push_back(SentencesVector());
-    
 
-    while (!itemsQueue.empty() && currentDepth < maxDepth) {
-        pivot = itemsQueue.front();
-        itemsQueue.pop();
-        
-        TatoRelationsNode *it;
-        TatoItem *tempChild = NULL;
-        TATO_RELATIONS_FOREACH(pivot->relations, it) {
+    //
+    // without language filtering
+    // 
+    if (langsToKeep.empty()) {
+        while (!itemsQueue.empty() && currentDepth < maxDepth) {
+            pivot = itemsQueue.front();
+            itemsQueue.pop();
+            
+            TatoRelationsNode *it;
+            TatoItem *tempChild = NULL;
+            TATO_RELATIONS_FOREACH(pivot->relations, it) {
 
-            tempChild = it->with;
-            // if we haven't visited this sentence before
-            if (visiteds.insert(tempChild->id).second) {
-                
-                itemsQueue.push(tempChild);
-                translations[currentDepth].push_back(
-                    results::Sentence(
-                        tempChild->id,
-                        tempChild->str,
-                        tempChild->lang->code,
-                        tempChild->flags
-                    )
-                );
+                tempChild = it->with;
+                // if we haven't visited this sentence before
+                if (visiteds.insert(tempChild->id).second) {
+                    
+                    itemsQueue.push(tempChild);
+                    translations[currentDepth].push_back(
+                        results::Sentence(
+                            tempChild->id,
+                            tempChild->str,
+                            tempChild->lang->code,
+                            tempChild->flags
+                        )
+                    );
+                }
+
             }
+            // if we have iterated over all the child of nodes of depth N-1
+            // it means we have finished depth N and that the next node will be of
+            // depth N + 1
+            if (pivot == lastItemForThisDistance) {
+                currentDepth++;
+                translations.push_back(SentencesVector());
+                lastItemForThisDistance = itemsQueue.back();
 
+            }
         }
-        // if we have iterated over all the child of nodes of depth N-1
-        // it means we have finished depth N and that the next node will be of
-        // depth N + 1
-        if (pivot == lastItemForThisDistance) {
-            currentDepth++;
-            translations.push_back(SentencesVector());
-            lastItemForThisDistance = itemsQueue.back();
+    //
+    // with language filtering
+    //
+    } else { 
+        while (!itemsQueue.empty() && currentDepth < maxDepth) {
+            pivot = itemsQueue.front();
+            itemsQueue.pop();
+            
+            TatoRelationsNode *it;
+            TatoItem *tempChild = NULL;
+            TATO_RELATIONS_FOREACH(pivot->relations, it) {
 
+                tempChild = it->with;
+                // if we haven't visited this sentence before
+                if (visiteds.insert(tempChild->id).second) {
+                    
+                    itemsQueue.push(tempChild);
+                    //TODO this if test is the only difference with the version
+                    // without filtering, so it's highly possible to factorize it
+                    if (
+                        std::find(
+                            langsToKeep.begin(),
+                            langsToKeep.end(),
+                            std::string(tempChild->lang->code)
+                        ) != langsToKeep.end()    
+                    ) {
+                        translations[currentDepth].push_back(
+                            results::Sentence(
+                                tempChild->id,
+                                tempChild->str,
+                                tempChild->lang->code,
+                                tempChild->flags
+                            )
+                        );
+                    }
+                }
+
+            }
+            // if we have iterated over all the child of nodes of depth N-1
+            // it means we have finished depth N and that the next node will be of
+            // depth N + 1
+            if (pivot == lastItemForThisDistance) {
+                currentDepth++;
+                translations.push_back(SentencesVector());
+                lastItemForThisDistance = itemsQueue.back();
+
+            }
         }
     }
+
+
 
     //TODO workaround; need to find why we have one or two last extra
     // empty vectors in the results vectors

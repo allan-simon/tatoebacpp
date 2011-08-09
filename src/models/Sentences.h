@@ -90,11 +90,17 @@ class Sentences {
         /**
          * get a sentence with a given ID and all its translations
          */
-        results::Sentence get_by_id(int id, int depth);
+        results::Sentence get_by_id(
+            int id,
+            const int depth,
+            const std::vector<std::string> &langsToKeep = std::vector<std::string>()
+        );
         /**
          * Return the id of a random existing sentence
          */
-        int get_random_id();
+        int get_random_id(
+            const std::vector<std::string> &langsToKeep = std::vector<std::string>()
+        );
 
         /**
          * Return the id of a random existing sentence in the language with
@@ -107,7 +113,8 @@ class Sentences {
          * get a random sentence and all its translations
          */
         results::Sentence get_random(
-            const int depthLimit = 20
+            const int depthLimit = 20,
+            const std::vector<std::string> &langsToKeep = std::vector<std::string>()
         );
 
         /**
@@ -116,7 +123,8 @@ class Sentences {
          */
         results::Sentence get_random(
             std::string isoCode,
-            const int depthLimit = 20
+            const int depthLimit = 20,
+            const std::vector<std::string> &langsToKeep = std::vector<std::string>()
         );
 
 
@@ -213,7 +221,11 @@ class Sentences {
          * return the results::Sentence object constructed with a given
          * TatoItem struct
          */
-        results::Sentence sentence_from_item(TatoItem* item, int depth);
+        results::Sentence sentence_from_item(
+            TatoItem* item,
+            const int depth,
+            const std::vector<std::string> &langsToKeep = std::vector<std::string>()
+        );
 
         /**
          * Will traverse the graph of translations starting from
@@ -225,7 +237,8 @@ class Sentences {
         void pack_translations(
             TatoItem* item,
             TransVector &translations,
-            int maxDepth
+            const int maxDepth,
+            const std::vector<std::string> &langsToKeep = std::vector<std::string>()
         );
 
 };

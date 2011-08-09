@@ -3,6 +3,10 @@
 		"api" : "http",
 		"port" : 4242
 	},
+
+    "cache" : {
+        "backend" : "thread_shared"
+    },
 	"http" : {
 		"script_names" : ["/tatoeba"]
 	},

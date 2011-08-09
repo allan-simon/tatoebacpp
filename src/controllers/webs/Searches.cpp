@@ -96,7 +96,8 @@ void Searches::show_result(
         fromLang,
         toLang,
         size,
-        offset
+        offset,
+        get_current_user_spoken_langs()
     );
     
     c.shc = shc;

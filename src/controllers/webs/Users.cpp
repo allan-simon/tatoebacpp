@@ -22,6 +22,11 @@
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
+
+#include <set>
+
+#include <cppcms/archive_traits.h>
+#include <cppcms/serialization_classes.h>
 #include <cppcms/session_interface.h>
 
 #include "Users.h"
@@ -154,6 +159,7 @@ void Users::login_treat() {
         session()["userId"] = usersModel->get_id_from_name<std::string>(username);
         session()["depth"] = usersModel->get_depth<std::string>(username);
         session().save();
+        
 
         // we redirect to the page the user was before going
         // on the login page

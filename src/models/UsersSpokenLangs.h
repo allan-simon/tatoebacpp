@@ -137,6 +137,17 @@ class UsersSpokenLangs : public SqliteModel {
             const int proeficiency,
             const bool isNative
         );
+
+        /**
+         * @brief Get the iso code of all the languages a user speaks/studies
+         *
+         * @param username Nickname of that user
+         *
+         * @return A vector of iso code
+         */
+        std::vector<std::string> get_iso_code_vector(
+            std::string username
+        );
 };
 
 } // end namespace models 

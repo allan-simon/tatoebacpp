@@ -19,14 +19,16 @@ Searches::Searches() :
 results::PagiSentences Searches::advance(
     const std::string &query,
     const std::string &fromLang,
-    const std::string &toLang 
+    const std::string &toLang,
+    const std::vector<std::string> &langsToKeep 
 ) {
     return advance(
         query,
         fromLang,
         toLang,
         10,
-        0
+        0,
+        langsToKeep
     );
 }
 results::PagiSentences Searches::advance(
@@ -34,7 +36,8 @@ results::PagiSentences Searches::advance(
     const std::string &fromLang,
     const std::string &toLang,
     const int size,
-    const int offset
+    const int offset,
+    const std::vector<std::string> &langsToKeep
 ) {
     /*
     results::Searches resultIds = SearchEngine::get_instance()->search(
@@ -61,7 +64,8 @@ results::PagiSentences Searches::advance(
     for (int i = 0; i < resultSize; ++i) {
         pagiSentences[i] = sentencesModel.get_by_id(
             resultIds[i],
-            3 //TODO magic number: max depth for search results
+            3, //TODO magic number: max depth for search results
+            langsToKeep
         );
     }
     pagiSentences.offset = offset;
