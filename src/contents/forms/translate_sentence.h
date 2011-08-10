@@ -65,11 +65,7 @@ namespace forms {
 
             transString.name("str");
 
-            ISOToNameMap isoToName = Languages::get_instance()->get_iso_to_name_map();
-            ISOToNameMap::iterator itr;
-            for(itr = isoToName.begin(); itr != isoToName.end(); ++itr){
-                transLang.add(itr->second,itr->first);
-            }
+            transLang.add("Unknown","und");
 
             submit.name("Translate sentence");
             submit.value("translate");
@@ -80,7 +76,19 @@ namespace forms {
             // selects to say "value must one the possible values of the select"
             transLang.non_empty();
         };
-
+        //TODO factorize this
+        void set_langs(
+            const std::vector<std::string> &userLangs
+        ) {
+            if (!userLangs.empty()) {
+                Languages::get_instance()->fill_form_select(
+                    transLang,
+                    userLangs
+                );
+            } else {
+                Languages::get_instance()->fill_form_select(transLang);
+            }
+        }
     };
 }
 

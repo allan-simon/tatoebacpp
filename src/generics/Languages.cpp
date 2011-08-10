@@ -118,3 +118,23 @@ void Languages::fill_form_select(cppcms::widgets::select &select) {
     }
 
 }
+
+/**
+ *
+ */
+void Languages::fill_form_select(
+    cppcms::widgets::select &select,
+    const std::vector<std::string> &userLangs
+) {
+
+    std::vector<std::string>::const_iterator itr;
+    for(itr = userLangs.begin(); itr != userLangs.end(); ++itr){
+        select.add(
+            get_name_from_iso(*itr),
+            *itr
+        );
+    }
+
+}
+
+

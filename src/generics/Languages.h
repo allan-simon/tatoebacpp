@@ -115,6 +115,20 @@ class Languages : public Singleton<Languages> {
         void fill_form_select(cppcms::widgets::select &select);
 
         /**
+         * @brief Fill a html form's select and fill it with all the supported
+         *        languages the user can speak
+         *
+         * @param select The cppcms select to fill
+         * @param userLangs the languages this user can speak
+         */
+
+        void fill_form_select(
+            cppcms::widgets::select &select,
+            const std::vector<std::string> &userLangs
+        );
+
+
+        /**
         * @brief Return the localized name of the language with the given iso
         *        code
         *

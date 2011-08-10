@@ -101,7 +101,9 @@ namespace forms {
 
         }
 
-        void set_langs(std::vector<std::string> userLangs) {
+        void set_langs(
+            const std::vector<std::string> &userLangs
+        ) {
             if (!userLangs.empty()) {
                 // we iterate over the user vector and call
                 // get_name_from_iso rather iterating over the map

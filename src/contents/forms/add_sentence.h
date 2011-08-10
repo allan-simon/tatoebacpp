@@ -58,7 +58,7 @@ namespace forms {
 
             sentenceString.name("str");
 
-            Languages::get_instance()->fill_form_select(sentenceLang);
+            sentenceLang.add("Unknown","und");
 
             submit.name("Add sentence");
             submit.value("add");
@@ -69,6 +69,19 @@ namespace forms {
             sentenceLang.non_empty();
         };
 
+        //TODO factorize this
+        void set_langs(
+            const std::vector<std::string> &userLangs
+        ) {
+            if (!userLangs.empty()) {
+                Languages::get_instance()->fill_form_select(
+                    sentenceLang,
+                    userLangs
+                );
+            } else {
+                Languages::get_instance()->fill_form_select(sentenceLang);
+            }
+        }
     };
 }
 

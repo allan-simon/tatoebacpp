@@ -157,6 +157,11 @@ void Sentences::add() {
     CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
 
 	contents::SentencesAdd c;
+
+    c.addSentence.set_langs(
+        get_current_user_spoken_langs()
+    );
+
     init_content(c);
 
     render("sentences_add",c);
@@ -232,6 +237,9 @@ void Sentences::translate(std::string toTranslateId) {
             toTranslateId
         );
         init_content(c);
+        c.transSentence.set_langs(
+            get_current_user_spoken_langs()
+        );
     
         shc.lang = c.lang;
         c.shc = shc;
