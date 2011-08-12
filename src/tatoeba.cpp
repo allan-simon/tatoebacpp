@@ -70,13 +70,14 @@ Tatoeba::Tatoeba(cppcms::service &serv) :
     add(pages, "(.*)", 1);
 
     // TODO move this in Languages singleton
-    cppcms::json::object langs = settings().at("tatoeba.interfacelangs").object();
+    cppcms::json::array langs = settings().at("tatoeba.interfacelangs").array();
     for (
-        cppcms::json::object::const_iterator p=langs.begin();
+        cppcms::json::array::const_iterator p=langs.begin();
         p!=langs.end();
         ++p
     ) {
-        lang_map[p->first]=p->second.str();
+        cppcms::json::array lang = p->array();
+        lang_map[lang[0].str()]=lang[1].str();
     }
 }
 

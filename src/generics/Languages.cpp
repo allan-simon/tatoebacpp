@@ -34,25 +34,29 @@ Languages::Languages() {}
  *
  */
 void Languages::init(
-    cppcms::json::object langsJson
+    cppcms::json::array langsJson
 ) {
-    cppcms::json::object::const_iterator end = langsJson.end();
+    cppcms::json::array::const_iterator end = langsJson.end();
 
     // we iterate over the json array which is of the following form
     // "wuu" : ["Shanghainese", 61],
     // "eng" : ["English",      17],
     for (
-        cppcms::json::object::const_iterator itr = langsJson.begin();
+        cppcms::json::array::const_iterator itr = langsJson.begin();
         itr != end;
         ++itr
     ) { 
-        cppcms::json::array lang = itr->second.array();
-        int langId = (int) lang[1].number();
+        cppcms::json::array lang = itr->array();
+        int langId = (int) lang[2].number();
+        
+        const std::string isoCode = lang[0].str();
+        const std::string naturalName = lang[1].str();
 
-        isoToName[itr->first] = lang[0].str(); 
-        isoToId[itr->first] = langId; 
-        nameToIso[lang[0].str()] = itr->first;
-        idToISO[langId] = itr->first;
+
+        isoToName[isoCode] = naturalName;
+        isoToId[isoCode] = langId; 
+        nameToIso[naturalName] = isoCode;
+        idToISO[langId] = isoCode;
 
     }
 }

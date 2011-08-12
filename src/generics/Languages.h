@@ -89,7 +89,7 @@ class Languages : public Singleton<Languages> {
         /**
          * Initialize the singleton with the data stored in config.js 
          */
-        void init(cppcms::json::object langsJson);
+        void init(cppcms::json::array langsJson);
 
         /**
          * Return the internal id associated to the ISO code of a given language
