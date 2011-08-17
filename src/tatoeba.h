@@ -38,6 +38,7 @@
 #include "controllers/apis/Sentences.h"
 #include "controllers/webs/Users.h"
 #include "controllers/webs/MyProfile.h"
+#include "controllers/webs/OfUser.h"
 #include "controllers/webs/Pages.h"
 #include "controllers/webs/Searches.h"
 #include "controllers/apis/Searches.h"
@@ -62,6 +63,7 @@ private:
     controllers::apis::Sentences sentencesApi;
     controllers::webs::Pages pages;
     controllers::webs::Users users;
+    controllers::webs::OfUser ofUser;
     controllers::webs::MyProfile myProfile;
     controllers::webs::Searches searches;
     controllers::apis::Searches searchesApi;

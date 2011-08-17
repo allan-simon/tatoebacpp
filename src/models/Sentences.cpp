@@ -162,12 +162,29 @@ results::Sentence Sentences::get_random(
     return sentence_from_item(randItem, depthLimit, langsToKeep);
 
 }
+/**
+ *
+ */
+bool Sentences::get_lang(
+    const int id,
+    std::string &sentenceLang
+) {
+    TatoDb *tatoDb = GET_DB_POINTER();
+    TatoItem *item = tato_db_item_find(tatoDb, id);
+    
+    if (item != NULL) {
+        sentenceLang = std::string(item->lang->code);
+        return true;
+    }
+    return false;
+}
+
 
 /**
  *
  */
 results::Sentence Sentences::get_random(
-    std::string isoCode,
+    const std::string &isoCode,
     const int depthLimit,
     const std::vector<std::string> &langsToKeep 
 ) {
@@ -190,21 +207,21 @@ results::Sentence Sentences::get_random(
  *
  */
 results::Sentence Sentences::add(
-    std::string lang,
-    std::string str,
-    int userId
+    const  std::string &lang,
+    const  std::string &str,
+    const  int userId
 ) throw(SentDupliException) {
     return add(lang, str, 0, userId);
 }
 
 results::Sentence Sentences::add(
-    std::string lang,
-    std::string str,
-    TatoItemFlags flags,
-    int userId
+    const std::string &lang,
+    const std::string &str,
+    const TatoItemFlags flags,
+    const int userId
 ) throw(SentDupliException) {
     TatoDb *tatoDb = GET_DB_POINTER(); 
-
+                                              
     TatoItem *item = tato_item_new(
         tato_tree_int_max(tatoDb->items) + 1,
         tato_db_lang_find_or_create(tatoDb, lang.c_str()),
@@ -232,6 +249,7 @@ results::Sentence Sentences::add(
 
  
     if (item != NULL) {
+        
         /*
         logs.insert_add_word(
             newItem->id,

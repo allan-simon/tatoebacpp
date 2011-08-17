@@ -13,6 +13,7 @@ CREATE TABLE users (
 );
 CREATE INDEX users_username_idx ON users (username);
 --
+--
 CREATE TABLE users_spoken_langs (
     "user_id"       integer not null, -- id of the user 
     "lang"          text    not null, -- ... language he speaks
@@ -25,4 +26,16 @@ CREATE INDEX users_spoken_langs_user_id_idx
 CREATE UNIQUE INDEX users_spoken_langs_user_id_lang_idx
     ON users_spoken_langs (user_id , lang);
 --
+--
+CREATE TABLE sentence_users (
+    "sentence_id"  integer primary key not null, -- id of the sentence
+    "user_id"      integer,                      -- id of the owner (can be null if orphan)
+    "lang_id"      integer                       -- id of the language of this sentence (can be null if unknown)
+);
+
+CREATE INDEX sentences_users_user_id_idx
+    ON sentence_users (user_id);
+
+CREATE INDEX sentences_users_user_id_lang_id_idx
+    ON sentence_users (user_id, lang_id);
 

@@ -49,6 +49,7 @@ Tatoeba::Tatoeba(cppcms::service &serv) :
     sentencesApi(serv),
     pages(serv),
     users(serv),
+    ofUser(serv),
     myProfile(serv),
     searches(serv),
     searchesApi(serv),
@@ -60,6 +61,7 @@ Tatoeba::Tatoeba(cppcms::service &serv) :
     add(sentencesApi, "^/api/sentences(.*)", 1);
     add(sentences, "^/sentences(.*)", 1);
     add(users, "^/users(.*)", 1);
+    add(ofUser, "^/of-user(.*)", 1);
     add(myProfile, "^/my-profile(.*)", 1);
     add(searchesApi, "^/api/searches(.*)", 1);
     add(searches, "^/searches(.*)", 1);

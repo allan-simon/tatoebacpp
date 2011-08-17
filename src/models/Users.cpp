@@ -215,6 +215,7 @@ bool Users::add(
     try {
         addUser.exec();    
     } catch (cppdb::cppdb_error const &e) {
+        //TODO log it
         addUser.reset();
         return false;
     }

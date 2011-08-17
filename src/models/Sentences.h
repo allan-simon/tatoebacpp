@@ -122,7 +122,7 @@ class Sentences {
          * and all its translations
          */
         results::Sentence get_random(
-            std::string isoCode,
+            const std::string &isoCode,
             const int depthLimit = 20,
             const std::vector<std::string> &langsToKeep = std::vector<std::string>()
         );
@@ -133,9 +133,9 @@ class Sentences {
          * and return it or thrown an exception if duplicate
          */
         results::Sentence add(
-            std::string lang,
-            std::string str,
-            int userId
+            const std::string &lang,
+            const std::string &str,
+            const int userId
         ) throw(SentDupliException);
 
         /**
@@ -143,10 +143,10 @@ class Sentences {
          * and return it or thrown an exception if duplicate
          */
         results::Sentence add(
-            std::string lang,
-            std::string str,
-            TatoItemFlags flags,
-            int userId
+            const std::string &lang,
+            const std::string &str,
+            const TatoItemFlags flags,
+            const int userId
         ) throw(SentDupliException);
 
         /**
@@ -167,6 +167,21 @@ class Sentences {
             int userId
         );
 
+        /**
+         * @brief Write the code of the lang of a given sentence in a variable
+         * 
+         * @param sentenceId   The id of the sentence to get the lang of
+         * @param sentenceLang The variable in which the code will be written
+         *
+         * @return True if something was written , false otherwise
+         * @since  17 August 2011
+         *
+         * @todo:  use exception when the sentence id does not exist
+         */
+        bool get_lang(
+            int sentenceId,
+            std::string &sentenceLang
+        );
 
         /**
          * Change the text of the sentence with the given id
