@@ -490,6 +490,7 @@ void Sentences::edit_lang_treat() {
         std::ostringstream oss;
         oss << e.get_original_id();
 
+        // TODO factorize this
         response().set_redirect_header(
             "/" + get_interface_lang() +
             "/sentences/show"
