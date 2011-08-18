@@ -43,8 +43,6 @@ class Sentences;
  * @since 17 August 2011
  */
 class OfUser : public SqliteModel {
-    private:
-        models::Sentences* sentencesModel;
 
     public:
         /**
@@ -53,6 +51,8 @@ class OfUser : public SqliteModel {
          * @since 17 August 2011
          */
         OfUser(cppdb::session sqliteDb);
+
+        OfUser();
 
         /**
          * @brief Destructor
@@ -93,9 +93,12 @@ class OfUser : public SqliteModel {
          * @since 17 August 2011
          */
         bool abandon_sentence(
-            const int sentenceId,
+            const int sentenceId
         );
     
+        std::string get_owner_name_of_sentence(
+            const int sentenceId
+        );
 };
 
 } // end of namespace models

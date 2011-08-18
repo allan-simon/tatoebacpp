@@ -36,16 +36,17 @@ OfUser::OfUser(cppdb::session sqliteDb):
     SqliteModel(sqliteDb)
 {
 
-    sentencesModel = new models::Sentences();
-
 }
 
+/**
+ *
+ */
+OfUser::OfUser(): SqliteModel() {}
 
 /**
  *
  */
 OfUser::~OfUser() {
-    delete sentencesModel;
 }
 
 
@@ -72,7 +73,7 @@ bool OfUser::adopt_sentence(
     const int userId
 ) {
     std::string sentenceLang;
-    if (!sentencesModel->get_lang(sentenceId,sentenceLang)) {
+    if (!Sentences::get_lang(sentenceId,sentenceLang)) {
         return false;
     }
 
@@ -108,15 +109,38 @@ bool OfUser::adopt_sentence(
  *
  */
 bool OfUser::abandon_sentence(
-    const int sentenceId,
-    const int userId
+    const int sentenceId
 ) {
 
 
     return false;
 }
 
+/**
+ *
+ */
+std::string OfUser::get_owner_name_of_sentence(
+    const int sentenceId
+) {
+    std::string ownerName("");
 
+    cppdb::statement getOwnerName = sqliteDb.prepare(
+        "SELECT username FROM users "
+        "    INNER JOIN sentence_users ON id = user_id "
+        "    WHERE sentence_id = ? "
+        "    LIMIT 1;"
+    );
+    getOwnerName.bind(sentenceId);
+
+    cppdb::result res = getOwnerName.row();
+    if (!res.empty()) {
+        ownerName = res.get<std::string>("username");
+    }
+
+    getOwnerName.reset();
+
+    return ownerName;
+}
 
 
 }// end namespace models

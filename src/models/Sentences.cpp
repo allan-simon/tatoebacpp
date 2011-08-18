@@ -35,6 +35,7 @@
 #include <exception>
 #include <cstring>
 #include "models/Sentences.h"
+#include "models/OfUser.h"
 #include "models/SphinxClient.h"
 namespace models {
 
@@ -51,7 +52,7 @@ SentDupliException::SentDupliException(int originalId):
  * 
  */
 const char* SentDupliException::what() const throw() {
-    return "The sentnece already exists";
+    return "The sentence already exists";
 }
 
 /**
@@ -451,6 +452,10 @@ results::Sentence Sentences::sentence_from_item(
         item->str,
         item->lang->code,
         item->flags
+    );
+    
+    sentence.set_owner_name(
+        OfUser().get_owner_name_of_sentence(item->id)
     );
 
     if (!sentence.exists()) {

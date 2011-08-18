@@ -178,7 +178,7 @@ class Sentences {
          *
          * @todo:  use exception when the sentence id does not exist
          */
-        bool get_lang(
+        static bool get_lang(
             int sentenceId,
             std::string &sentenceLang
         );
