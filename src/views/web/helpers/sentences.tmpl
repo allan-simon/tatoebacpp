@@ -7,17 +7,23 @@
 
     <% template sentences_group(results::Sentence &mainSentence) %>
         <div class="sentences_set" >
-        <% include menu(mainSentence.getId()) %>
+        <% include menu(mainSentence.get_id(), mainSentence.get_owner_name()) %>
         <% include main_sentence(mainSentence) %>
-        <% include all_translations(mainSentence.getTranslations(), mainSentence.getId()) %>
+        <% include all_translations(mainSentence.get_translations(), mainSentence.get_id()) %>
 
         </div>
 
     <% end template %>
 
-    <% template menu(int sentenceId) %>
+    <% template menu(int sentenceId, std::string owner) %>
         <ul class="menu" >
-            <li class="belongsTo"></li>
+            <% if not owner.empty() %>
+                <li class="belongsTo">
+                    <a href="<% url "/users/profile/{1}" using owner %>">
+                        <% gt "belongs to {1}" using owner %>
+                    </a>
+                </li>
+            <% end %>
             <li class="option translateLink">
                 <a href="<% url "/sentences/translate/{1}" using sentenceId%>" >
                 <img
@@ -60,7 +66,7 @@
         <div class="sentence mainSentence">
             <a
                 class="infoIcon"
-                href="<% url "/sentences/show/{1}" using sentence.getId() %>"
+                href="<% url "/sentences/show/{1}" using sentence.get_id() %>"
             >
                 <img
                     width="16"
@@ -71,9 +77,9 @@
             </a>
             <a
                 class="languageFlag"
-                href="<% url "/sentences/edit-lang/{1}" using sentence.getId() %>"
+                href="<% url "/sentences/edit-lang/{1}" using sentence.get_id() %>"
             >
-                <% include sentence_lang(sentence.getLanguageCode()) %>
+                <% include sentence_lang(sentence.get_language_code()) %>
             </a>
             <div class="sentenceContent">
                 <div><% sentence.string() %></div>
@@ -130,7 +136,7 @@
                 <% if (depth == 1) %>
                     <a
                         class="delete link button"
-                        href="<% url "/sentences/unlink/{1}/{2}" using mainSentenceId, sentence.getId() %>"
+                        href="<% url "/sentences/unlink/{1}/{2}" using mainSentenceId, sentence.get_id() %>"
                     >
                         <img
                             width="16"
@@ -143,7 +149,7 @@
                 <% else %>
                     <a
                         class="add link button"
-                        href="<% url "/sentences/link/{1}/{2}" using mainSentenceId, sentence.getId() %>"
+                        href="<% url "/sentences/link/{1}/{2}" using mainSentenceId, sentence.get_id() %>"
                     >
                         <img
                             width="16"
@@ -157,7 +163,7 @@
                 <% end %>
             <% end if %>
 
-            <% include sentence_lang(sentence.getLanguageCode()) %>
+            <% include sentence_lang(sentence.get_language_code()) %>
             <% c++ sentence_content(sentence, depth); %>
         </div>
 
@@ -172,7 +178,7 @@
             <div>
                 <a
                     class="text"
-                    href="<% url "/sentences/show/{1}" using sentence.getId() %>"
+                    href="<% url "/sentences/show/{1}" using sentence.get_id() %>"
                 >
                     <% depth %>
                     -

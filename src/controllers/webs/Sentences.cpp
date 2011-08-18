@@ -203,7 +203,7 @@ void Sentences::add_treat() {
 
         if (sentence.exists()) {
             std::ostringstream oss;
-            oss << sentence.getId();
+            oss << sentence.get_id();
 
             response().set_redirect_header(
                 "/" + get_interface_lang() +
@@ -282,7 +282,7 @@ void Sentences::translate_treat() {
             userId
         );
 
-        translationId = sentence.getId();
+        translationId = sentence.get_id();
 
     } catch (const models::SentDupliException & e) {
         //TODO display the message to the user
@@ -446,7 +446,7 @@ void Sentences::edit_lang(std::string sentenceId) {
         //language of the sentence
         contents::SentencesEditLang c(
             sentenceId,
-            shc.sentences[0].getLanguageCode() 
+            shc.sentences[0].get_language_code() 
         );
         init_content(c);
     

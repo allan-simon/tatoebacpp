@@ -60,7 +60,7 @@ namespace results {
         /**
          * Returns the id
          */
-        unsigned int getId() const { 
+        unsigned int get_id() const { 
             return id;
         }
         
@@ -93,16 +93,38 @@ namespace results {
          *  one sentence and Nth indirect translation
          */        
          
-         TransVector getTranslations() {
+         TransVector get_translations() {
              return translations;
          }
         
         /**
          * ISO code of the language in which the sentence is written
          */
-        std::string getLanguageCode() const {
+        std::string get_language_code() const {
             return lang;
         }
+        /**
+         * @brief return the owner name
+         *
+         * @return A string, the username
+         *
+         * @since 18 August 2011
+         */
+        std::string get_owner_name() const {
+            return owner;
+        };
+
+        /**
+         * @brief Set the owner name
+         *
+         * @return A string, the username
+         *
+         * @since 18 August 2011
+         */
+        void set_owner_name(std::string newOwner) {
+            owner = newOwner;
+        };
+    
     
         /**
          * List of binary flags store in a unsigned int
@@ -117,7 +139,7 @@ namespace results {
             /**
              * Default constructor, will construct an empty sentence
              */
-            Sentence(): flags(0),id(0),text(""),lang(""){};
+            Sentence(): flags(0),id(0),text(""),lang(""),owner(""){};
 
             /**
              * Constructor that will create a sentence with the correct
@@ -127,12 +149,16 @@ namespace results {
                 int id,
                 const std::string& text,
                 const std::string& lang,
-                int flags
+                int flags,
+                const std::string& ownerName = ""
+
             ):
                 flags(flags),                
                 id(id),
                 text(text),
-                lang(lang) {
+                lang(lang),
+                owner(ownerName) {
+
             };
             
             /**
@@ -143,7 +169,8 @@ namespace results {
                 flags(flags),
                 id(id),
                 text(std::string(text)),
-                lang(std::string(lang)) {
+                lang(std::string(lang)),
+                owner("") {
             };
 
             /*
@@ -177,11 +204,17 @@ namespace results {
              * Text of the sentence
              */
             std::string text;
+
                 
             TransVector translations;
             
             std::string lang;
-            
+            /**
+             * @brief Name of the owner, empty if the sentence is orphan
+             *
+             * @since 18 August 2011
+             */
+            std::string owner;        
             friend class models::Sentences; // Sentences::pack_translations modify this
     };
 }
@@ -190,7 +223,7 @@ namespace results {
 namespace std {
     template<> struct less<results::Sentence> {
         bool operator() (const results::Sentence& lhs, const results::Sentence& rhs) {
-            return lhs.getId() < rhs.getId();
+            return lhs.get_id() < rhs.get_id();
         }
     };
 
