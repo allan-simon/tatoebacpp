@@ -28,7 +28,6 @@
 #include "contents/sentences.h"
 
 #include "models/OfUser.h"
-#include "contents/Config.h"
 
 namespace controllers {
 namespace webs {
@@ -40,11 +39,7 @@ OfUser::OfUser(cppcms::service &serv) : Controller(serv) {
   	disp->assign("/sentences-of/(.*)", &OfUser::sentences_of, this, 1);
   	disp->assign("/adopt-sentence/(\\d+)", &OfUser::adopt_sentence, this, 1);
 
-    ofUsersModel = new models::OfUser(
-        cppdb::session(
-            "sqlite3:db=" + Config::get_instance()->sqlite3Path
-        )
-    );
+    ofUsersModel = new models::OfUser();
 }
 
 /**
