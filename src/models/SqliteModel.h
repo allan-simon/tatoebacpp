@@ -9,6 +9,7 @@ class SqliteModel {
     protected:
         cppdb::session sqliteDb;
     public:
+        SqliteModel();
         SqliteModel(cppdb::session sqliteDb);
 };
 
