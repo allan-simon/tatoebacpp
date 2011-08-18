@@ -94,6 +94,7 @@ bool OfUser::adopt_sentence(
 
     } catch (cppdb::cppdb_error const &e) {
         //TODO log it
+        std::cerr << e.what() << std::endl;
         adopt.reset();
         return false;
     }
