@@ -34,16 +34,30 @@
                 </a>
            
             </li>
-            <li class="option adopt add">
-                <a href="<% url "/of-user/adopt-sentence/{1}" using sentenceId%>" >
-                <img
-                    title="Adopt"
-                    alt="Adopt"
-                    src="http://flags.tatoeba.org/img/adopt.png"
-                > 
-                </a>
-           
-            </li>
+            <% if owner.empty() %>
+                <li class="option adopt add">
+                    <a href="<% url "/of-user/adopt-sentence/{1}" using sentenceId%>" >
+                    <img
+                        title="Adopt"
+                        alt="<% gt "Adopt" %>"
+                        src="http://flags.tatoeba.org/img/adopt.png"
+                    > 
+                    </a>
+               
+                </li>
+            <% else %>
+                <li class="option adopt remove">
+                    <a href="<% url "/of-user/abandon-sentence/{1}" using sentenceId%>" >
+                    <img
+                        title="Let go"
+                        alt="<% gt "Let go" %>"
+                        src="http://flags.tatoeba.org/img/let_go.png"
+                    > 
+                    </a>
+               
+                </li>
+
+            <% end %>
             <!-- TODO reimplement add to list/favorite/belongs to etc. -->
             <li class="option delete">
                 <a href="<% url "/sentences/delete/{1}" using sentenceId%>" >
