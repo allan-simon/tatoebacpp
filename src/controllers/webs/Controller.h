@@ -126,6 +126,7 @@ class Controller : public controllers::generics::Controller {
          *
          * @since 19 August 2011
          */
+        void go_to_sentence(int sentenceId);
         void go_to_sentence(std::string sentenceId);
 
         /**

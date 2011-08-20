@@ -92,10 +92,22 @@ inline bool Controller::is_logged() {
     return !session()["name"].empty();
 }
 
+
+inline void Controller::go_to_sentence(int sentenceId) {
+    std::ostringstream oss;
+    oss << sentenceId;
+
+    response().set_redirect_header(
+        "/" + get_interface_lang() +
+        "/sentences/show"
+        "/" + oss.str()
+    );
+}
+
 /**
  *
  */
-void Controller::go_to_sentence(std::string sentenceId) {
+inline void Controller::go_to_sentence(std::string sentenceId) {
 
     response().set_redirect_header(
         "/" + get_interface_lang() +

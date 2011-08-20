@@ -118,17 +118,12 @@ void Sentences::show(std::string sentence_id) {
  *
  */
 void Sentences::show_random() {
-    std::ostringstream oss;
-    oss << sentencesModel->get_random_id(
-        get_current_user_spoken_langs()
+    
+    go_to_sentence(
+        sentencesModel->get_random_id(
+            get_current_user_spoken_langs()
+        )
     );
-
-    response().set_redirect_header(
-        "/" + get_interface_lang() +
-        "/sentences/show"
-        "/" + oss.str()
-    );
-
 }
 
 
@@ -136,13 +131,9 @@ void Sentences::show_random() {
  *
  */
 void Sentences::show_random_in(std::string isoCode) {
-    std::ostringstream oss;
-    oss << sentencesModel->get_random_id(isoCode);
-
-    response().set_redirect_header(
-        "/" + get_interface_lang() +
-        "/sentences/show"
-        "/" + oss.str()
+    
+    go_to_sentence(
+        sentencesModel->get_random_id(isoCode)
     );
 
 }
@@ -189,27 +180,16 @@ void Sentences::add_treat() {
             );
         } catch (const models::SentDupliException & e) {
             //TODO display the message to the user
-            std::ostringstream oss;
-            oss << e.get_original_id();
+            go_to_sentence(e.get_original_id());
 
-            response().set_redirect_header(
-                "/" + get_interface_lang() +
-                "/sentences/show"
-                "/" + oss.str()
-            );
             return; 
 
         }
 
         if (sentence.exists()) {
-            std::ostringstream oss;
-            oss << sentence.get_id();
 
-            response().set_redirect_header(
-                "/" + get_interface_lang() +
-                "/sentences/show"
-                "/" + oss.str()
-            );
+            go_to_sentence(sentence.get_id());
+
             return; 
         }
     }
@@ -295,11 +275,7 @@ void Sentences::translate_treat() {
         get_current_user_id()
     );
 
-    response().set_redirect_header(
-        "/" + get_interface_lang() +
-        "/sentences/show"
-        "/" + translatedIdStr
-    );
+    go_to_sentence(translatedIdStr);
 }
 
 
@@ -317,12 +293,7 @@ void Sentences::link(std::string idOneStr, std::string idTwoStr) {
         get_current_user_id()
     );
 
-    response().set_redirect_header(
-        "/" + get_interface_lang() +
-        "/sentences/show"
-        "/" + idOneStr
-    );
-
+    go_to_sentence(idOneStr);
 }
 
 /**
@@ -340,12 +311,7 @@ void Sentences::unlink(std::string idOneStr, std::string idTwoStr) {
         get_current_user_id()
     );
 
-    response().set_redirect_header(
-        "/" + get_interface_lang() +
-        "/sentences/show"
-        "/" + idOneStr
-    );
-
+    go_to_sentence(idOneStr);
 }
 
 
@@ -409,23 +375,13 @@ void Sentences::edit_text_treat() {
         );
     } catch (const models::SentDupliException & e) {
         //TODO display the message to the user
-        std::ostringstream oss;
-        oss << e.get_original_id();
+        go_to_sentence(e.get_original_id());
 
-        response().set_redirect_header(
-            "/" + get_interface_lang() +
-            "/sentences/show"
-            "/" + oss.str()
-        );
         return; 
 
     }
 
-    response().set_redirect_header(
-        "/" + get_interface_lang() +
-        "/sentences/show"
-        "/" + idStr 
-    );
+    go_to_sentence(idStr);
 
 }
 
@@ -487,26 +443,13 @@ void Sentences::edit_lang_treat() {
         );
     } catch (const models::SentDupliException & e) {
         //TODO display the message to the user
-        std::ostringstream oss;
-        oss << e.get_original_id();
+        go_to_sentence(e.get_original_id());
 
-        // TODO factorize this
-        response().set_redirect_header(
-            "/" + get_interface_lang() +
-            "/sentences/show"
-            "/" + oss.str()
-        );
         return; 
 
     }
 
-    response().set_redirect_header(
-        "/" + get_interface_lang() +
-        "/sentences/show"
-        "/" + idStr 
-    );
-
-
+    go_to_sentence(idStr);
 }
 
 
