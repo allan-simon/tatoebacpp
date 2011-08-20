@@ -116,6 +116,19 @@ class Controller : public controllers::generics::Controller {
         bool check_permission();
 
         /**
+         * @brief Convenience function to do a http redirection to
+         *        the page of the given sentence
+         *
+         * @param sentenceId Id of the sentence we want to redirect to
+         *
+         * @note  this function write in the http header, so you're not
+         *        supposed to output anything else in the http body
+         *
+         * @since 19 August 2011
+         */
+        void go_to_sentence(std::string sentenceId);
+
+        /**
          * Convenience function to make an http redirection to the 
          * referer
          */

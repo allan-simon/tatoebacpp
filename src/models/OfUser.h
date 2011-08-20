@@ -61,13 +61,6 @@ class OfUser : public SqliteModel {
          */
         ~OfUser();
 
-        /*
-        bool adopt(
-            const int sentenceId,
-            const int userId,
-            const std::string &isoCode
-        );
-        */
 
         /**
          * @brief Set the owner of a sentence
@@ -90,12 +83,43 @@ class OfUser : public SqliteModel {
          * @param sentenceId Id of the sentence to abandon
          *
          * @return True if the sentence is correctly abandonned
+         *
          * @since 17 August 2011
          */
         bool abandon_sentence(
             const int sentenceId
         );
     
+        /**
+         * @brief Permits to know if the given sentence is owned by the given
+         *        user
+         *
+         * @param sentenceId Id of the sentence to check ownership of
+         * @param userId     Id of the user we want to check if he owns the
+         *                   given sentence
+         *
+         * @since 20 August 2011
+         *
+         * @return True if the sentence is owned by that user, false otherwise
+         *         or if an error happens
+         */
+        bool is_sentence_owner(
+            const int sentenceId,
+            const int userId
+        );
+
+
+        /**
+         * @brief Get the owner of a given sentence
+         *
+         * @param sentenceId Id of the sentence we want to know the owner of
+         *
+         * @since 20 August 2011
+         *
+         * @return The name of the user or an empty string if the sentence is
+         *         owned by no one
+         *
+         */
         std::string get_owner_name_of_sentence(
             const int sentenceId
         );

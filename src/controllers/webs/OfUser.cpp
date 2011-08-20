@@ -38,6 +38,7 @@ OfUser::OfUser(cppcms::service &serv) : Controller(serv) {
 
   	disp->assign("/sentences-of/(.*)", &OfUser::sentences_of, this, 1);
   	disp->assign("/adopt-sentence/(\\d+)", &OfUser::adopt_sentence, this, 1);
+  	disp->assign("/abandon-sentence/(\\d+)", &OfUser::abandon_sentence, this, 1);
 
     ofUsersModel = new models::OfUser();
 }
@@ -79,14 +80,41 @@ void OfUser::adopt_sentence(
         // TODO print an error message
     }
 
-    //TODO factorize this
-    response().set_redirect_header(
-        "/" + get_interface_lang() +
-        "/sentences/show"
-        "/" + sentenceIdStr
-    );
+    go_to_sentence(sentenceIdStr);
 }
 
+/**
+ *
+ */
+void OfUser::abandon_sentence(
+    std::string sentenceIdStr
+) {
+    CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
+    std::stringstream ss(sentenceIdStr);
+    int sentenceId = 0;
+    ss >> sentenceId;
+    
+    // TODO replace this by something more generic for right
+    // management 
+
+    const bool isOwner = ofUsersModel->is_sentence_owner(
+        sentenceId,
+        get_current_user_id()
+    );
+
+    if (isOwner) {
+     
+        const bool success = ofUsersModel->abandon_sentence(sentenceId);
+        if (!success) {
+            //TODO set an error message
+        }
+
+    } else {
+        //TODO set an error message
+    }
+
+    go_back_to_previous_page();
+}
 
 
 } // end of namespace webs

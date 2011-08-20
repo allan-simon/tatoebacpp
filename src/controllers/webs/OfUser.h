@@ -84,11 +84,16 @@ class OfUser : public Controller {
             std::string sentenceId
         );
 
-        /*
-        void orphan_sentence(
+        /**
+         * @brief Will try to remove the ownership of the given sentence
+         *
+         * @param sentenceId Id of the sentence the user wants to abandon
+         *
+         * @since 20 August 2011
+         */
+        void abandon_sentence(
            std::string sentenceId
         );
-        */
 
         /**
          * @brief Get all the sentences owned by a given user

@@ -92,6 +92,20 @@ inline bool Controller::is_logged() {
     return !session()["name"].empty();
 }
 
+/**
+ *
+ */
+void Controller::go_to_sentence(std::string sentenceId) {
+
+    response().set_redirect_header(
+        "/" + get_interface_lang() +
+        "/sentences/show"
+        "/" + sentenceId
+    );
+}
+
+
+
 
 /**
  *

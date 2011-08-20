@@ -112,9 +112,20 @@ bool OfUser::adopt_sentence(
 bool OfUser::abandon_sentence(
     const int sentenceId
 ) {
+    cppdb::statement abandonSent = sqliteDb.prepare(
+        "DELETE FROM sentence_users "
+        "   WHERE sentence_id = ?"
+    );
 
-
-    return false;
+    abandonSent.bind(sentenceId);
+    try {
+        abandonSent.exec();
+    } catch (cppdb::cppdb_error const &e) {
+        //TODO add something better to handle erros
+        std::cout << e.what() << std::endl;
+        return false;
+    }
+    return true;
 }
 
 /**
@@ -141,6 +152,32 @@ std::string OfUser::get_owner_name_of_sentence(
     getOwnerName.reset();
 
     return ownerName;
+}
+
+
+/**
+ *
+ */
+bool OfUser::is_sentence_owner(
+    const int sentenceId,
+    const int userId
+) {
+
+    cppdb::statement isSentOwnedBy = sqliteDb.prepare(
+        "SELECT 1 FROM sentence_users "
+        "    WHERE sentence_id = ? AND user_id = ? "
+        "    LIMIT 1;"
+    );
+    isSentOwnedBy.bind(sentenceId);
+    isSentOwnedBy.bind(userId);
+
+    cppdb::result res = isSentOwnedBy.row();
+
+    bool isOwned = !res.empty();
+        
+    isSentOwnedBy.reset();
+
+    return isOwned;
 }
 
 
