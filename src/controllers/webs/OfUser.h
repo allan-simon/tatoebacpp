@@ -97,16 +97,31 @@ class OfUser : public Controller {
 
         /**
          * @brief Get all the sentences owned by a given user
-         *        (paginated, lang filtered)
-         *        sentence
+         *        (paginated, lang filtered), in a simple listing
+         *        (no translation nor menu to translate etc.)
          *
          * @param username Name of the user we want the sentences of
          *
          * @since 17 August 2011
          */
+        /*
         void sentences_of(
             std::string username
         );
+        */
+
+        /**
+         * @brief Get all the sentences owned by a given user
+         *        (paginated, lang filtered), and their translations
+         *
+         * @param username Name of the user we want the sentences of
+         *
+         * @since 21 August 2011
+         */
+        void translate_sentences_of(
+            std::string username
+        );
+
 
 };
 

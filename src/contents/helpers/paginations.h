@@ -28,26 +28,63 @@
 
 #include <cmath>
 #include "helpers.h"
+#include "results/pagination.h"
 
 namespace contents {
 namespace helpers {
 
 /**
  * @struct Paginations
- * helper that will be used to display paginated content 
- * (pagination bar etc.)
+ * @brief content struct to be used in pagination helper (helper that is used
+ *        to display content on several pages)
+ *        This content is used to generate correctly the pagination header
+ *        (with "go to first page"  "previous page" etc.)        
+ *
  */
 struct Paginations : public Helpers {
 
-    int offset;
-    int size;
-    int max; 
+    /**
+     * @brief The current page we're displaying
+     */
     int currentPage;
-    int lastOffset; 
-    int nextOffset;
-    int prevOffset;
+    /**
+     * @brief The maximun number of element we're supposed to display per page
+     */
+    int pageNormalSize;
+    /**
+     * @brief The overall number of elements to display along all these pages
+     */
+    int totalNbrElements; 
+    /**
+     * @brief The number of the previous page (well simply a currentPage -1)
+     */
+    int prevPage;
+    /**
+     * @brief The number of the next page (well simply a currentPage + 1)
+     */
+    int nextPage;
+    /**
+     * @brief The last page number (if we have 99 result and a page size of 10
+     *        lastPage will be equal to 9)
+     */
+    int lastPage;
+
+    /**
+     * @brief first page number to be displayed in the pagination header
+     *        which is like this[first][prev] X X X current-page X X X [next][last]
+     *        (but as when we're near the end of near the beginning) "currentPage"
+     *        is not neceserally in the middle, we need to keep trace of the first
+     *        number to display (as it's not alway currentPage - 3
+     */
     int firstDisplayedPage;
+    /**
+     * @brief same than firstDisplayedPage but for the last displayed page
+     *        number
+     *
+     */
     int lastDisplayedPage;
+
+
     bool atBeginning;
     bool atEnd;
 
@@ -56,41 +93,50 @@ struct Paginations : public Helpers {
          * Constructor
          */
         Paginations(
-            int offset, 
-            int size,
-            int max,
+            const results::Paginable &paginatedResult,
             std::string _baseUrl,
             std::string _lang
+            
         ) :
-            offset(offset),
-            size(size),
-            max(max),
-            currentPage(1),
-            lastOffset(0),
-            nextOffset(0),
-            firstDisplayedPage(0),
-            atBeginning(0),
-            atEnd(0)
+            currentPage(paginatedResult.currentPage),
+            pageNormalSize(paginatedResult.pageNormalSize),
+            totalNbrElements(paginatedResult.totalNbrElements)
         {
             baseUrl = _baseUrl;
             lang = _lang;
-            if (size == 0) {
-                return;
+
+            // typically this will arrive when I forget to set the 
+            // page size in the model ...
+            if (pageNormalSize <= 0) {
+                // TODO replace this by a log
+                std::cerr << "[ERROR]A page can't have a zero or less size ..." << std::endl;
+                return ;
             }
-            //TODO comment this 
-            prevOffset = 1 + offset - size;
-            nextOffset = 1 + offset + size;
-            lastOffset = 1 + max - (max%size);
 
-            currentPage = offset/size + 1;
-            
-            int maxPage = ceil((double)max /(double)size);
-            int paginationSize = std::min(6, maxPage-1);
-            int maxPrevPages = std::min(paginationSize, currentPage-1);
-            int maxNextPages = std::min(paginationSize, maxPage-currentPage);
+            lastPage = ceil((double)totalNbrElements/(double)pageNormalSize) - 1;
+            atEnd = currentPage >= lastPage;
+            atBeginning = currentPage <= 0;
 
-            int minPrevPages = std::min((int)ceil((double)paginationSize/2.0), maxPrevPages);
-            int minNextPages = std::min((int)floor((double)paginationSize/2.0), maxNextPages);
+            // 6 = max number of page "number" we display in the pagination header
+            // 
+            //               __________6___________
+            //              |                      |
+            // [first][prev]  X X X currentPage X X [next][loast] 
+    
+            int paginationSize = std::min(6, lastPage ); // TODO magic number
+
+            int maxPrevPages = std::min(paginationSize, currentPage );
+            int maxNextPages = std::min(paginationSize, lastPage - currentPage);
+
+            int minPrevPages = std::min(
+                (int)ceil((double)paginationSize/2.0),
+                maxPrevPages
+            );
+
+            int minNextPages = std::min(
+                (int)floor((double)paginationSize/2.0),
+                maxNextPages
+            );
 
             int dispPrevPages;
             int dispNextPages;
@@ -104,15 +150,28 @@ struct Paginations : public Helpers {
 
             firstDisplayedPage = currentPage - dispPrevPages;
             lastDisplayedPage  = currentPage + dispNextPages;
-            
-            atEnd = (offset + size) >= max;
-            atBeginning = currentPage <= 1 ; 
 
+            nextPage = currentPage +1 ;
+            prevPage = currentPage -1 ;
+
+            /* DEBUG BLOCK
+            std::cout << "[DEBUG] pagination: " << std::endl
+                << "\tcurrentPage : " << currentPage << std::endl
+                << "\tpageNormalSize : " << pageNormalSize << std::endl
+                << "\ttotalNbrElements  : " << totalNbrElements  << std::endl
+                << "\tprevPage : " << prevPage << std::endl
+                << "\tnextPage : " << nextPage << std::endl
+                << "\tlastPage : " << lastPage << std::endl
+
+                << "\tfirstDisplayedPage : " << firstDisplayedPage << std::endl
+                << "\tlastDisplayedPage : " << lastDisplayedPage << std::endl
+
+
+                 << "\tatBeginning : " << atBeginning << std::endl
+                 << "\tatEnd : " << atEnd << std::endl;
+            */
         }
 
-        int offsetPage(int pageNumber) {
-            return (pageNumber -1)*size + 1;
-        }
 };
 
 } // end of namespace helpers

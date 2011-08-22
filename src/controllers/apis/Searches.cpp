@@ -60,8 +60,7 @@ void Searches::simple () {
     }
 
     
-    unsigned int size = 10;//atoi(sizeStr.c_str());
-    unsigned int offset = 0;//atoi(offsetStr.c_str()) - 1;
+    unsigned int currentPage = 0;//atoi(sizeStr.c_str());
 
 	contents::SearchesShowResult c;
 	contents::helpers::Sentences shc;
@@ -71,7 +70,7 @@ void Searches::simple () {
     shc.lang = c.lang;
     c.queryStr = query;
     c.queryLang = fromLang;
-    c.paginationSize = size;
+    c.paginationSize = 10; //TODO MAGIC NUMBER
     shc.currentUserHelper = c.usersHelper;
 
     std::cout << "[DEBUG]" <<  query <<
@@ -82,8 +81,7 @@ void Searches::simple () {
         query,
         fromLang,
         toLang,
-        size,
-        offset
+        currentPage
     );
     
     c.shc = shc;

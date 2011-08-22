@@ -27,6 +27,8 @@
 #include "generics/Languages.h"
 #include "models/Sentences.h"
 
+#define PAGE_SIZE 10
+
 namespace models {
 
 /**
@@ -178,6 +180,60 @@ bool OfUser::is_sentence_owner(
     isSentOwnedBy.reset();
 
     return isOwned;
+}
+
+/**
+ *
+ */
+results::PagiSentences OfUser::sentences_of(
+    const std::string &username,
+    const int page
+) {
+
+    cppdb::statement getSentencesOfUserCount = sqliteDb.prepare(
+        "SELECT count(*) AS total "
+        "    FROM sentence_users INNER JOIN users ON id = user_id "
+        "    WHERE username = ? "
+    );
+    getSentencesOfUserCount.bind(username);
+
+
+    int maxsize = getSentencesOfUserCount.row().get<int>("total");
+    results::PagiSentences pagiSentences(
+        std::min(maxsize, PAGE_SIZE)
+    );
+
+    pagiSentences.currentPage = page;
+    pagiSentences.totalNbrElements = maxsize;
+    pagiSentences.pageNormalSize = PAGE_SIZE;
+
+    cppdb::statement getSentencesOfUser = sqliteDb.prepare(
+        "SELECT sentence_id "
+        "    FROM sentence_users INNER JOIN users ON id = user_id "
+        "    WHERE username = ? "
+        "    LIMIT ? OFFSET ? "
+    );
+
+
+    getSentencesOfUser.bind(username);
+    getSentencesOfUser.bind(PAGE_SIZE);
+    getSentencesOfUser.bind(PAGE_SIZE * page);
+
+    cppdb::result res = getSentencesOfUser.query();
+    models::Sentences sentencesModel;
+    
+    int i = 0;
+    while (res.next()) {
+
+        pagiSentences[i] = sentencesModel.get_by_id(
+            res.get<int>("sentence_id"),
+            3 //TODO magic number: max depth for search results
+            //langsToKeep
+        );
+        i++;
+    }
+
+    return pagiSentences;
 }
 
 

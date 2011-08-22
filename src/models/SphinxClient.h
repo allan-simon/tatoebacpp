@@ -72,13 +72,13 @@ class SphinxClient {
         /**
         * @brief 
         *
-        * @param query  Query to send to sphinx
-        * @param from   Language in which we're searching ("und" to search
-        *               in every language
-        * @param to     Filter only having result in that language ("und" for
-        *               no filter)
-        * @param size   Number of max results wanted
-        * @param offset Offset (used for pagination)
+        * @param query       Query to send to sphinx
+        * @param from        Language in which we're searching ("und" to search
+        *                    in every languages)
+        * @param to          Filter only having result in that language ("und"
+                             for no filter)
+        * @param currentPage The page of results we're requesting
+        * @param pageSize    The maximun number of results in one page 
         *
         * @return       List of sentences group that match the query
         */
@@ -86,8 +86,8 @@ class SphinxClient {
             const std::string &query,
             const std::string &from,
             const std::string &to,
-            const int size,
-            const int offset
+            const int currentPage,
+            const int pageSize
         );
 
         

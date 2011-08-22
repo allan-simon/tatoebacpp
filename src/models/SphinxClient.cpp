@@ -87,13 +87,13 @@ results::Searches SphinxClient::search(
     const std::string &query,
     const std::string &from,
     const std::string &to,
-    const int size = 10,
-    const int offset = 0
+    const int currentPage = 0,
+    const int pageSize = 10 //TODO magic number
 ) {
     sphinx_set_limits(
         client,
-        offset, 
-        size, 
+        currentPage*pageSize, 
+        pageSize, 
         500, // we don't need to go as far as 1000 results 
         0 // default value for so called cutoff (i don't know what it does)
     );
@@ -101,7 +101,7 @@ results::Searches SphinxClient::search(
     sphinx_reset_filters(client);
     if (to.compare("und") != 0) {
         
-        const sphinx_int64_t translatedInFilter[1] ={Languages::get_instance()->get_id_from_iso(to)};
+        const sphinx_int64_t translatedInFilter[1] = {Languages::get_instance()->get_id_from_iso(to)};
         sphinx_add_filter(
             client,
             "translatedin",
@@ -130,7 +130,7 @@ results::Searches SphinxClient::search(
             (int)sphinx_get_id (res, i)
         );
     }
-    matchedIds.maxsize = res->total;
+    matchedIds.totalNbrElements = res->total;
 
     return matchedIds;
 }

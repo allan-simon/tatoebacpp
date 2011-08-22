@@ -16,16 +16,14 @@
 <% template main_content() %>
     <div class="module">
         <% c++ contents::helpers::Paginations phc( %>
-        <% c++ content.users.offset, %>
-        <% c++ content.users.size(), %>
-        <% c++ content.users.maxsize, %>
+        <% c++ content.users, %>
         <% c++ content.baseUrl, %>
         <% c++ content.lang %>
         <% c++ ); %>
 
         <h3>
              <!-- TODO i18n this -->
-             (Total: <% users.maxsize %> User(s))
+             (Total: <% users.totalNbrElements %> User(s))
         </h3>
 
         <% foreach user in users%>

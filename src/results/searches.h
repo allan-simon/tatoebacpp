@@ -26,38 +26,13 @@
 #ifndef TATOEBA_RESULTS_SEARCHES_H 
 #define TATOEBA_RESULTS_SEARCHES_H  
 
-#include <vector>
+
+#include "pagination.h"
 
 namespace results {
 
-/**
- * @struct Searches
- * Used to store the ids of the sentence that match a search query
- */
-struct Searches : public std::vector<int> {
-    /**
-     * offset, mainly used in pagination, if we want to skip the offset th
-     * results
-     */
-    int offset;
-    /**
-     * used with pagination, we will retrieve at most maxsize elements
-     */
-    int maxsize;
-    public:
-        /**
-         * Constructor
-         */
-        Searches(): offset(0), maxsize(0) {};
-        /**
-         * Constructor with a preallocated size
-         */
-        Searches(int size) :
-            std::vector<int>(size),
-            offset(0),
-            maxsize(0)
-            {};
-};
+typedef PagiVector<int> Searches;
+
 
 } // end of namespace
 

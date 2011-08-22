@@ -218,18 +218,16 @@
     <% end template %>
 
 
-    <% template sentences_list(std::string title, int size) %>
+    <% template sentences_list(std::string title) %>
         <% c++ contents::helpers::Paginations phc( %>
-        <% c++ content.sentences.offset, %>
-        <% c++ size, %>
-        <% c++ content.sentences.maxsize, %>
+        <% c++ content.sentences, %>
         <% c++ content.baseUrl, %>
         <% c++ content.lang %>
         <% c++ ); %>
 
         <h3>
             <% title %>
-             (Total: <% sentences.maxsize %> Sentence(s))
+             (Total: <% sentences.totalNbrElements %> Sentence(s))
         </h3>
         
         <% c++ pagination_helper ph(out(), phc); %> 

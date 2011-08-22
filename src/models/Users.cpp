@@ -232,15 +232,18 @@ results::PagiUsers Users::get_all_users(
     results::PagiUsers pagiUsers;
     cppdb::statement getUsers = sqliteDb.prepare(
         "SELECT id, username, email, image "
-        "FROM users LIMIT 20 OFFSET ? "
+        "FROM users LIMIT ? OFFSET ? "
     );
 
     cppdb::statement getUsersCount = sqliteDb.prepare(
         "SELECT count(*) as total FROM users "
     );
 
-    pagiUsers.maxsize = getUsersCount.row().get<int>("total");
+    pagiUsers.pageNormalSize = USERS_PER_PAGE;
+    pagiUsers.currentPage = page;
+    pagiUsers.totalNbrElements = getUsersCount.row().get<int>("total");
 
+    getUsers.bind(USERS_PER_PAGE);
     getUsers.bind(page * USERS_PER_PAGE);
     cppdb::result res = getUsers.query();
     

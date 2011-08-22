@@ -5,7 +5,9 @@
 <% skin %>
 <% view pagination_helper uses helpers::Paginations %>
     <% template pagination() %>
-        <% c++ if (content.size >= content.max) return; %>
+        // we don't need to display the pagination div
+        // if we have only one page
+        <% c++ if (content.pageNormalSize >= content.totalNbrElements) return; %>
         <!-- TODO  remove this inline css -->
        <style type="text/css"> 
        .paginationnumbers li {
@@ -25,7 +27,7 @@
                     </li>
                     <% c++ out() << " " ;%>
                     <li class="prev" >
-                        <a href="<% url "{1}?offset={2}&size={3}" using baseUrl, prevOffset, size %>" >
+                        <a href="<% url "{1}?page={2}" using baseUrl, prevPage %>" >
                             prev
                         </a>
                     </li>
@@ -35,18 +37,18 @@
 
                 <% c++ for (int i = content.firstDisplayedPage ; i < content.currentPage ; ++i) { %>
                     <li class="number" >
-                        <a href="<% url "{1}" using baseUrl %>?offset=<% c++ out() << content.offsetPage(i); %>&size=<% size %>" >
+                        <a href="<% url "{1}" using baseUrl %>?page=<% c++ out() << i; %>" >
                             <% c++ out() << i; %>
                         </a>
                     </li> 
                     <% c++ out() << " " ;%>
                 <% c++ } %>
 
-                <li class="number currentPage" ><% currentPage %></li>
+                <li class="number currentPage" ><%= currentPage | raw %></li>
 
                 <% c++ for (int i = content.currentPage + 1; i <= content.lastDisplayedPage ; ++i) { %>
                     <li class="number" >
-                        <a href="<% url "{1}" using baseUrl %>?offset=<% c++ out() << content.offsetPage(i); %>&size=<% size %>" >
+                        <a href="<% url "{1}" using baseUrl %>?page=<% c++ out() << i; %>" >
                             <% c++ out() << i; %>
                         </a>
                     </li> 
@@ -56,13 +58,13 @@
                 <% if not atEnd %>
                     <li class="next">
 
-                        <a href="<% url "{1}?offset={2}&size={3}" using baseUrl, nextOffset, size %>" >
+                        <a href="<% url "{1}?page={2}" using baseUrl, nextPage %>" >
                             next
                         </a>
                     </li>
                     <% c++ out() << " " ;%>
                     <li class="last">
-                        <a class="last" href="<% url "{1}?offset={2}&size={3}" using baseUrl, lastOffset, size %>" >
+                        <a class="last" href="<% url "{1}?page={2}" using baseUrl, lastPage %>" >
                             last
                         </a>
                     </li>

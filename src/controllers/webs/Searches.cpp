@@ -6,6 +6,9 @@
 
 #include <cppcms/filters.h>
 
+
+#define WEB_SEARCH_PAGE_SIZE 10
+
 namespace controllers {
 namespace webs {
 /**
@@ -64,18 +67,14 @@ void Searches::show_result(
     std::string fromLang,
     std::string toLang
 ) {
-    // TODO replace by page instead of offset/size
-    unsigned int offset = 1;
-    unsigned int size = 10;
+    unsigned int page = 0;
 
     if (request().request_method() == "GET") {
         cppcms::http::request::form_type getData = request().get();
         cppcms::http::request::form_type::const_iterator it;
        
-        GET_INT_FIELD(offset, "offset");
-        GET_INT_FIELD(size, "size");
+        GET_INT_FIELD(page, "page");
     }
-    offset -= 1;
 
 
 	contents::SearchesShowResult c;
@@ -87,7 +86,6 @@ void Searches::show_result(
     shc.lang = c.lang;
     c.queryStr = query;
     c.queryLang = fromLang;
-    c.paginationSize = size;
 
     shc.currentUserHelper = c.usersHelper;
 
@@ -95,8 +93,7 @@ void Searches::show_result(
         query,
         fromLang,
         toLang,
-        size,
-        offset,
+        page,
         get_current_user_spoken_langs()
     );
     

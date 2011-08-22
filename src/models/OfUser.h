@@ -123,6 +123,19 @@ class OfUser : public SqliteModel {
         std::string get_owner_name_of_sentence(
             const int sentenceId
         );
+
+        /**
+         * @brief Return a paginated list of sentences owned by a given user
+         *
+         * @param username Name of the user we want the sentences of
+         * @param page     Page number requested (0 = first one)
+         *
+         * @return A paginated vector of sentences and their translations
+         */
+        results::PagiSentences sentences_of(
+            const std::string &username,
+            const int page
+        );
 };
 
 } // end of namespace models

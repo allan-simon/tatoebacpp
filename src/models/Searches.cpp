@@ -2,6 +2,8 @@
 #include "models/Sentences.h"
 
 
+#define SEARCH_PAGE_SIZE 10
+
 namespace models {
 
 /**
@@ -26,7 +28,6 @@ results::PagiSentences Searches::advance(
         query,
         fromLang,
         toLang,
-        10,
         0,
         langsToKeep
     );
@@ -35,8 +36,7 @@ results::PagiSentences Searches::advance(
     const std::string &query,
     const std::string &fromLang,
     const std::string &toLang,
-    const int size,
-    const int offset,
+    const int currentPage,
     const std::vector<std::string> &langsToKeep
 ) {
     /*
@@ -51,8 +51,8 @@ results::PagiSentences Searches::advance(
         query,
         fromLang,
         toLang,
-        size,
-        offset
+        currentPage,
+        SEARCH_PAGE_SIZE
     );
     
     
@@ -68,8 +68,9 @@ results::PagiSentences Searches::advance(
             langsToKeep
         );
     }
-    pagiSentences.offset = offset;
-    pagiSentences.maxsize = resultIds.maxsize;
+    pagiSentences.pageNormalSize = SEARCH_PAGE_SIZE;
+    pagiSentences.currentPage = currentPage;
+    pagiSentences.totalNbrElements = resultIds.totalNbrElements;
     return pagiSentences;
 }
 

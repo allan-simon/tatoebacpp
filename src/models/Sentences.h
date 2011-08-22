@@ -91,7 +91,7 @@ class Sentences {
          * get a sentence with a given ID and all its translations
          */
         results::Sentence get_by_id(
-            int id,
+            const int id,
             const int depth,
             const std::vector<std::string> &langsToKeep = std::vector<std::string>()
         );

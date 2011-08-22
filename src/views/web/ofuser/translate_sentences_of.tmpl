@@ -1,13 +1,13 @@
-<%c++ #include "contents/searches.h" %>
+<%c++ #include "contents/of_user.h" %>
 <% skin %>
-<% view searches_show_result uses contents::SearchesShowResult extends master %>
-<% template title() %><% gt "Search Result"  %><% end template %>
+<% view of_user_translate_sentences_of uses contents::of_user::TranslateSentencesOf extends master %>
+<% template title() %><% gt "Translate sentences of"  %><% end template %>
 
 <% template main_content() %>
     <div class="module">
         <% if not shc.empty() %>
             <% c++ sentences_helper sh(out(), content.shc); %>
-            <% c++ sh.sentences_list("Search results"); %> 
+            <% c++ sh.sentences_list("Translate sentences"); %> 
         <% else %>
             No Result
         <% end %>
@@ -19,7 +19,6 @@
     </div>
 
 <% end %>
-
 
 
 <% end view %>

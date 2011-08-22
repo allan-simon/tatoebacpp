@@ -93,7 +93,7 @@ inline bool Controller::is_logged() {
 }
 
 
-inline void Controller::go_to_sentence(int sentenceId) {
+void Controller::go_to_sentence(int sentenceId) {
     std::ostringstream oss;
     oss << sentenceId;
 
@@ -107,7 +107,7 @@ inline void Controller::go_to_sentence(int sentenceId) {
 /**
  *
  */
-inline void Controller::go_to_sentence(std::string sentenceId) {
+void Controller::go_to_sentence(std::string sentenceId) {
 
     response().set_redirect_header(
         "/" + get_interface_lang() +

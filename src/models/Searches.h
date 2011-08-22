@@ -61,8 +61,9 @@ class Searches {
         *
         * @param toLang      To restrict the result to sentences which have
         *                    a translation in that language
-        * @param size        The maximun number of result we want
-        * @param offset      The number of results to skip
+        * @param currentPage As the result are displayed on several page
+                             this variable permits to know which page, we're
+                             requesting 
         * @param langsTokeep The results sentences will keep only the
         *                    translations in one of these languages
         *
@@ -72,9 +73,9 @@ class Searches {
             const std::string &query,
             const std::string &fromLang,
             const std::string &toLang,
-            const int size,
-            const int offset,
-            const std::vector<std::string> &langsToKeep = std::vector<std::string>()
+            const int currentPage,
+            const std::vector<std::string> &langsToKeep =
+                std::vector<std::string>()
         );
 
 

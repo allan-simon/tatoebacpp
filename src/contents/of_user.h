@@ -17,54 +17,43 @@
  *
  *
  * @category Tatoebacpp
- * @package  Results
+ * @package  Contents
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
 
-#ifndef TATOEBACPP_RESULTS_PAGINATION_H
-#define TATOEBACPP_RESULTS_PAGINATION_H
 
-#include <vector>
-namespace results { 
+#ifndef TATOEBA_CONTENTS_OF_USER_H
+#define TATOEBA_CONTENTS_OF_USER_H
+
+#include "contents/helpers/sentences.h"
+#include "contents/content.h"
 
 
-    /**
-     * @brief Class a collection of result is supposed to inherit from
-     *        to be used with pagination
-     */
-    class Paginable {
-        public: 
-            int currentPage;
-            int pageNormalSize;
-            int totalNbrElements;
-     
-            Paginable():
-                currentPage(0),
-                pageNormalSize(0),
-                totalNbrElements(0)
-            {};
-    };
+namespace contents {
+namespace of_user {
 
+/**
+ * @brief Content used in OfUser::translate_sentences_of
+ */
+struct TranslateSentencesOf : public BaseContent {
 
     /**
-     * @brief A generic vector class that implements paginable
+     * @brief content helper needed to display the group of sentences
      */
-    template <class T> class PagiVector :
-        public std::vector<T>,
-        public Paginable
-    {
+    helpers::Sentences shc;
+    
+    /**
+     * @brief Name of the user we're displaying the sentences of
+     */
+    std::string username;
+    
 
-        public: 
-            PagiVector<T>(): std::vector<T>(), Paginable(){};
+};
 
-            PagiVector<T>(int size) :
-                std::vector<T>(size),
-                Paginable()
-            {};
-    };
+} // end of namespace of_user
+} // end of namespace contents
 
-}
 
 #endif
