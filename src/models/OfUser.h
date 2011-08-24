@@ -129,12 +129,18 @@ class OfUser : public SqliteModel {
          *
          * @param username Name of the user we want the sentences of
          * @param page     Page number requested (0 = first one)
+         * @param simpleSentenceOnly Whether to load only the sentences without their
+         *                 translation
          *
          * @return A paginated vector of sentences and their translations
+         *
+         * @since Around 20 August 2011
+         *
          */
         results::PagiSentences sentences_of(
             const std::string &username,
-            const int page
+            const int page,
+            const bool simpleSentenceOnly = false
         );
 };
 

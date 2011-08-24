@@ -104,11 +104,9 @@ class OfUser : public Controller {
          *
          * @since 17 August 2011
          */
-        /*
         void sentences_of(
             std::string username
         );
-        */
 
         /**
          * @brief Get all the sentences owned by a given user

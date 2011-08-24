@@ -94,6 +94,24 @@ results::Sentence Sentences::get_by_id(
         return results::Sentence();
     }
 }
+
+/**
+ *
+ */
+results::Sentence Sentences::simple_get_by_id(
+    int id
+) {
+    TatoDb *tatoDb = GET_DB_POINTER();
+    TatoItem *item = tato_db_item_find(tatoDb, id);
+
+    if (item != NULL) { 
+        return simple_sentence_from_item(item);
+    } else {
+        return results::Sentence();
+    }
+}
+
+
 /**
  *
  */
@@ -437,6 +455,24 @@ void Sentences::edit_lang(
 }
 
 
+/**
+ *
+ */
+results::Sentence Sentences::simple_sentence_from_item(
+    TatoItem* item
+) {
+    results::Sentence sentence(
+        item->id,
+        item->str,
+        item->lang->code,
+        item->flags
+    );
+    
+    return sentence; 
+}
+
+
+
 
 /**
  *
@@ -453,14 +489,15 @@ results::Sentence Sentences::sentence_from_item(
         item->lang->code,
         item->flags
     );
+    if (!sentence.exists()) {
+        return sentence;
+    }
     
     sentence.set_owner_name(
         OfUser().get_owner_name_of_sentence(item->id)
     );
 
-    if (!sentence.exists()) {
-        return sentence;
-    }
+
     //TODO reintroduce metas
     //models::Metas metasModel;
     //sentence.metas = metasModel.get_all_metas_of_sentence(item); 

@@ -249,6 +249,21 @@ int Controller::get_depth() {
 }
 
 
+/**
+ *
+ */
+unsigned int Controller::get_page() {
+    int page = 0;
+    if (request().request_method() == "GET") {
+        cppcms::http::request::form_type getData = request().get();
+        cppcms::http::request::form_type::const_iterator it;
+       
+        GET_INT_FIELD(page, "page");
+    }
+    return page;
+}
+
+
 
 } // End namespace webs
 } // End namespace controllers

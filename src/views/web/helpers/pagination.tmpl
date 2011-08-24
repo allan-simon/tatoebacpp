@@ -5,8 +5,6 @@
 <% skin %>
 <% view pagination_helper uses helpers::Paginations %>
     <% template pagination() %>
-        // we don't need to display the pagination div
-        // if we have only one page
         <% c++ if (content.pageNormalSize >= content.totalNbrElements) return; %>
         <!-- TODO  remove this inline css -->
        <style type="text/css"> 

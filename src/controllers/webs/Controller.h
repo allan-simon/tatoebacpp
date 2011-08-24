@@ -148,6 +148,15 @@ class Controller : public controllers::generics::Controller {
         int get_current_user_id();
 
         /**
+         * @brief to use inside paginated action, to get the current page
+         *
+         * @return The page number, 0 for the first one
+         *
+         * @since 24 August 2011
+         */
+        unsigned int get_page();
+
+        /**
          * @brief Get all the iso code of the languages a user studies/speas
          * 
          * @return A vector of all the iso codes

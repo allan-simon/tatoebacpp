@@ -95,6 +95,21 @@ class Sentences {
             const int depth,
             const std::vector<std::string> &langsToKeep = std::vector<std::string>()
         );
+
+        /**
+         * @brief Simply get the sentence with the given id, without extra
+         *        information
+         *
+         * @param id The id of the sentence we want to retrieve
+         *
+         * @return The given sentence or an empty sentence if the given id is
+         *         linked to no sentence
+         *
+         * @since  24 August 2011
+         */
+        results::Sentence simple_get_by_id(
+            const int id
+        );
         /**
          * Return the id of a random existing sentence
          */
@@ -243,11 +258,25 @@ class Sentences {
         );
 
         /**
+         * @brief Return the results::Sentence object constructed with a given
+         *        TatoItem struct, the object will have only the minimal set of
+         *        information (text, sentences) (no translation/owner)
+         *
+         * @param Item The TatoItem to convert into a sentence object
+         *
+         * @return The sentence under the form of a results::Sentence object
+         * 
+         * @since 24 August 2011
+         */
+        results::Sentence simple_sentence_from_item(
+            TatoItem* item
+        );
+
+        /**
          * Will traverse the graph of translations starting from
          * the node item until ,maxDepth and will pack linked item
          * in translations according to their distance from the start
          *
-         * @TODO add something to filter the languages that are kept
          */
         void pack_translations(
             TatoItem* item,

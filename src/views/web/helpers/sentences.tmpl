@@ -77,7 +77,7 @@
     <% end template %>
 
     <% template main_sentence(results::Sentence &sentence) %>
-        <div class="sentence mainSentence">
+        <div class="sentence mainSentence" >
             <a
                 class="infoIcon"
                 href="<% url "/sentences/show/{1}" using sentence.get_id() %>"
@@ -242,6 +242,41 @@
             <% end %>
         <% end foreach %>
     <% end template %>
+
+    <% template simple_sentences_list() %>
+        <% c++ contents::helpers::Paginations phc( %>
+        <% c++ content.sentences, %>
+        <% c++ content.baseUrl, %>
+        <% c++ content.lang %>
+        <% c++ ); %>
+        <% c++ pagination_helper ph(out(), phc); %> 
+ 
+        <h4>
+             <% gt "(Total: {1} Sentence(s))" using sentences.totalNbrElements %>
+        </h4>
+               
+
+        <% c++ ph.pagination(); %>
+
+
+        <% foreach sentence in sentences %>
+            <% item %>
+            <div class="sentence mainSentence">
+
+                <% include sentence_lang(sentence.get_language_code()) %>
+                <div class="sentenceContent">
+                    <a
+                        class="text"
+                        href="<% url "/sentences/show/{1}" using sentence.get_id() %>"
+                    >
+                        <%= sentence.string() | raw %>
+                    </a> 
+                </div>
+            </div>
+            <% end %>
+        <% end foreach %>
+    <% end template %>
+
 
 
 

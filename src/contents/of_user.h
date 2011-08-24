@@ -52,6 +52,12 @@ struct TranslateSentencesOf : public BaseContent {
 
 };
 
+/**
+ * @brief Content used in OfUser::sentences_of
+ */
+struct SentencesOf : public TranslateSentencesOf {};
+
+
 } // end of namespace of_user
 } // end of namespace contents
 

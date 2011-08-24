@@ -187,7 +187,8 @@ bool OfUser::is_sentence_owner(
  */
 results::PagiSentences OfUser::sentences_of(
     const std::string &username,
-    const int page
+    const int page,
+    const bool simpleSentenceOnly
 ) {
 
     cppdb::statement getSentencesOfUserCount = sqliteDb.prepare(
@@ -199,9 +200,7 @@ results::PagiSentences OfUser::sentences_of(
 
 
     int maxsize = getSentencesOfUserCount.row().get<int>("total");
-    results::PagiSentences pagiSentences(
-        std::min(maxsize, PAGE_SIZE)
-    );
+    results::PagiSentences pagiSentences;
 
     pagiSentences.currentPage = page;
     pagiSentences.totalNbrElements = maxsize;
@@ -223,15 +222,31 @@ results::PagiSentences OfUser::sentences_of(
     models::Sentences sentencesModel;
     
     int i = 0;
-    while (res.next()) {
 
-        pagiSentences[i] = sentencesModel.get_by_id(
-            res.get<int>("sentence_id"),
-            3 //TODO magic number: max depth for search results
-            //langsToKeep
-        );
-        i++;
+    if (simpleSentenceOnly) {
+        while (res.next()) {
+
+            pagiSentences.push_back(
+                sentencesModel.simple_get_by_id(
+                    res.get<int>("sentence_id")
+                )
+            );
+            i++;
+        }
+    } else {
+        while (res.next()) {
+
+            pagiSentences.push_back(
+                sentencesModel.get_by_id(
+                    res.get<int>("sentence_id"),
+                    3 //TODO magic number for depth of translation
+                    //langsToKeep
+                )
+            );
+            i++;
+        }
     }
+    getSentencesOfUser.reset();
 
     return pagiSentences;
 }

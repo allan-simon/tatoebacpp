@@ -38,6 +38,7 @@ OfUser::OfUser(cppcms::service &serv) : Controller(serv) {
 
   	//disp->assign("/sentences-of/(.*)", &OfUser::sentences_of, this, 1);
   	disp->assign("/translate-sentences-of/(.*)", &OfUser::translate_sentences_of, this, 1);
+  	disp->assign("/sentences-of/(.*)", &OfUser::sentences_of, this, 1);
   	disp->assign("/adopt-sentence/(\\d+)", &OfUser::adopt_sentence, this, 1);
   	disp->assign("/abandon-sentence/(\\d+)", &OfUser::abandon_sentence, this, 1);
 
@@ -54,6 +55,32 @@ OfUser::~OfUser() {
 /**
  *
  */
+void OfUser::sentences_of(
+    std::string username
+) {
+    contents::of_user::SentencesOf c;
+    init_content(c);
+
+    c.username = username;
+    c.shc.baseUrl = "/of-user/sentences-of/" + username;
+    c.shc.lang = c.lang;
+    c.shc.currentUserHelper = c.usersHelper;
+
+    unsigned int page = get_page();
+
+    c.shc.sentences = ofUsersModel->sentences_of(
+        username,
+        page,
+        true // we don't want to load the translations
+    );
+
+    render("of_user_sentences_of", c);
+}
+
+
+/**
+ *
+ */
 void OfUser::translate_sentences_of(
     std::string username
 ) {
@@ -61,37 +88,17 @@ void OfUser::translate_sentences_of(
     contents::of_user::TranslateSentencesOf c;
     init_content(c);
 
-    unsigned int page = 0;
-    std::string  sentencesIn;
+    unsigned int page = get_page();
 
-    if (request().request_method() == "GET") {
-        cppcms::http::request::form_type getData = request().get();
-        cppcms::http::request::form_type::const_iterator it;
-       
-        GET_FIELD(sentencesIn, "in");
-        GET_INT_FIELD(page, "page");
-    }
 
     c.shc.baseUrl = "/of-user/translate-sentences-of/" + username;
     c.shc.lang = c.lang;
     c.shc.currentUserHelper = c.usersHelper;
 
-    if (sentencesIn.empty()) {
-
-        c.shc.sentences = ofUsersModel->sentences_of(
-            username,
-            page
-        );
-    } else {
-        /*
-        c.baseUrl += "?in=" sentencesIn
-        c.sentences = ofUsersModel->sentences_of(
-            username,
-            page,
-            sentencesIn
-        );
-        */
-    }
+    c.shc.sentences = ofUsersModel->sentences_of(
+        username,
+        page
+    );
 
     render("of_user_translate_sentences_of", c);
 }
