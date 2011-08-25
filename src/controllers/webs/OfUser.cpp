@@ -28,6 +28,9 @@
 #include "contents/of_user.h"
 
 #include "models/OfUser.h"
+#include "generics/Languages.h"
+
+#include "contents/forms/generics/filter_lang.h"
 
 namespace controllers {
 namespace webs {
@@ -38,7 +41,11 @@ OfUser::OfUser(cppcms::service &serv) : Controller(serv) {
 
   	//disp->assign("/sentences-of/(.*)", &OfUser::sentences_of, this, 1);
   	disp->assign("/translate-sentences-of/(.*)", &OfUser::translate_sentences_of, this, 1);
+  	disp->assign("/translate-sentences-of-in/(.*)/(\\w+)", &OfUser::translate_sentences_of_in, this, 1, 2);
+  	disp->assign("/translate-sentences-of-in_treat/(.*)", &OfUser::translate_sentences_of_in_treat, this, 1);
   	disp->assign("/sentences-of/(.*)", &OfUser::sentences_of, this, 1);
+  	disp->assign("/sentences-of-in/(.*)/(\\w+)", &OfUser::sentences_of_in, this, 1, 2);
+  	disp->assign("/sentences-of-in_treat/(.*)", &OfUser::sentences_of_in_treat, this, 1);
   	disp->assign("/adopt-sentence/(\\d+)", &OfUser::adopt_sentence, this, 1);
   	disp->assign("/abandon-sentence/(\\d+)", &OfUser::abandon_sentence, this, 1);
 
@@ -77,6 +84,70 @@ void OfUser::sentences_of(
     render("of_user_sentences_of", c);
 }
 
+/**
+ *
+ */
+void OfUser::sentences_of_in(
+    std::string username,
+    std::string inLanguage
+) {
+    contents::of_user::SentencesOfIn c(inLanguage);
+    init_content(c);
+
+    c.username = username;
+    c.inLanguage = Languages::get_instance()->get_name_from_iso( 
+        inLanguage
+    );
+    c.shc.baseUrl = "/of-user/sentences-of-in/" + username;
+    c.shc.lang = c.lang;
+    c.shc.currentUserHelper = c.usersHelper;
+
+    unsigned int page = get_page();
+
+    c.shc.sentences = ofUsersModel->sentences_of_in(
+        username,
+        Languages::get_instance()->get_id_from_iso(inLanguage),
+        page,
+        true // we don't want to load the translations
+    );
+
+    render("of_user_sentences_of_in", c);
+}
+
+
+/**
+ *
+ */
+void OfUser::sentences_of_in_treat(
+    std::string username
+) {
+
+    forms::generics::FilterLang form;
+    form.load(context());
+    if(!form.validate()) {
+        go_back_to_previous_page();
+    }
+
+    std::string filteredLang = form.filterLang.selected_id();
+    if (filteredLang == "mul") {
+
+        response().set_redirect_header(
+            "/" + get_interface_lang() +
+            "/of-user/sentences-of"
+            "/" + username 
+        );
+    } else {
+        response().set_redirect_header(
+            "/" + get_interface_lang() +
+            "/of-user/sentences-of-in"
+            "/" + username +
+            "/" + filteredLang
+        );
+    }
+}
+
+
+
 
 /**
  *
@@ -90,7 +161,7 @@ void OfUser::translate_sentences_of(
 
     unsigned int page = get_page();
 
-
+    c.username = username;
     c.shc.baseUrl = "/of-user/translate-sentences-of/" + username;
     c.shc.lang = c.lang;
     c.shc.currentUserHelper = c.usersHelper;
@@ -102,6 +173,69 @@ void OfUser::translate_sentences_of(
 
     render("of_user_translate_sentences_of", c);
 }
+
+/**
+ *
+ */
+void OfUser::translate_sentences_of_in(
+    std::string username,
+    std::string inLanguage
+) {
+    contents::of_user::TranslateSentencesOfIn c(inLanguage);
+    init_content(c);
+
+    c.username = username;
+    c.inLanguage = Languages::get_instance()->get_name_from_iso( 
+        inLanguage
+    );
+    c.shc.baseUrl = "/of-user/sentences-of-in/" + username;
+    c.shc.lang = c.lang;
+    c.shc.currentUserHelper = c.usersHelper;
+
+    unsigned int page = get_page();
+
+    c.shc.sentences = ofUsersModel->sentences_of_in(
+        username,
+        Languages::get_instance()->get_id_from_iso(inLanguage),
+        page
+    );
+
+    render("of_user_translate_sentences_of_in", c);
+}
+
+
+
+/**
+ *
+ */
+void OfUser::translate_sentences_of_in_treat(
+    std::string username
+) {
+
+    forms::generics::FilterLang form;
+    form.load(context());
+    if(!form.validate()) {
+        go_back_to_previous_page();
+    }
+
+    std::string filteredLang = form.filterLang.selected_id();
+    if (filteredLang == "mul") {
+
+        response().set_redirect_header(
+            "/" + get_interface_lang() +
+            "/of-user/translate-sentences-of"
+            "/" + username 
+        );
+    } else {
+        response().set_redirect_header(
+            "/" + get_interface_lang() +
+            "/of-user/translate-sentences-of-in"
+            "/" + username +
+            "/" + filteredLang
+        );
+    }
+}
+
 
 /**
  *

@@ -1,7 +1,9 @@
 <%c++ #include "contents/of_user.h" %>
 <% skin %>
-<% view of_user_translate_sentences_of uses contents::of_user::TranslateSentencesOf extends master %>
-<% template title() %><% gt "Translate sentences of {1}" using username  %><% end template %>
+<% view of_user_translate_sentences_of_in uses contents::of_user::TranslateSentencesOfIn extends master %>
+<% template title() %>
+    <% gt "Translate sentences of {1} in {2}" using username, inLanguage %>
+<% end template %>
 
 <% template main_content() %>
     <div class="module">
@@ -9,7 +11,7 @@
             <% c++ sentences_helper sh(out(), content.shc); %>
             <% c++ sh.sentences_list("Translate sentences"); %> 
         <% else %>
-            No Result
+            <% gt "This user owns no sentence in this language" %>
         <% end %>
     </div>
 <% end %>

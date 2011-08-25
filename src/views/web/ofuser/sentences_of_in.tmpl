@@ -1,16 +1,16 @@
 <%c++ #include "contents/of_user.h" %>
 <% skin %>
-<% view of_user_sentences_of uses contents::of_user::SentencesOf extends master %>
-<% template title() %><% gt "Sentences of {1}" using username %><% end template %>
+<% view of_user_sentences_of_in uses contents::of_user::SentencesOfIn extends master %>
+<% template title() %><% gt "Sentences of {1} in {2}" using username, inLanguage %><% end template %>
 
 <% template main_content() %>
     <div class="module">
-        <h3><% gt "Sentences of {1}" using username %><h3>
+        <h3><% gt "Sentences of {1} in {2}" using username, inLanguage %><h3>
         <% if not shc.empty() %>
             <% c++ sentences_helper sh(out(), content.shc); %>
             <% c++ sh.simple_sentences_list(); %> 
         <% else %>
-            <% gt "This user owns no sentences" %>
+            <% gt "This user owns no sentence in this language" %>
         <% end %>
     </div>
 <% end %>
@@ -38,7 +38,6 @@
         </form>
 
     </div>
-
 
 <% end %>
 

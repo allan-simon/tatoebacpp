@@ -252,4 +252,78 @@ results::PagiSentences OfUser::sentences_of(
 }
 
 
+/**
+ *
+ */
+results::PagiSentences OfUser::sentences_of_in(
+    const std::string &username,
+    const int langId,
+    const int page,
+    const bool simpleSentenceOnly
+) {
+
+    cppdb::statement getSentencesOfUserCount = sqliteDb.prepare(
+        "SELECT count(*) AS total "
+        "    FROM sentence_users INNER JOIN users ON id = user_id "
+        "    WHERE username = ? AND lang_id = ?"
+    );
+    getSentencesOfUserCount.bind(username);
+    getSentencesOfUserCount.bind(langId);
+
+
+    int maxsize = getSentencesOfUserCount.row().get<int>("total");
+    results::PagiSentences pagiSentences;
+
+    pagiSentences.currentPage = page;
+    pagiSentences.totalNbrElements = maxsize;
+    pagiSentences.pageNormalSize = PAGE_SIZE;
+
+    cppdb::statement getSentencesOfUser = sqliteDb.prepare(
+        "SELECT sentence_id "
+        "    FROM sentence_users INNER JOIN users ON id = user_id "
+        "    WHERE username = ? and lang_id = ? "
+        "    LIMIT ? OFFSET ? "
+    );
+
+
+    getSentencesOfUser.bind(username);
+    getSentencesOfUser.bind(langId);
+    getSentencesOfUser.bind(PAGE_SIZE);
+    getSentencesOfUser.bind(PAGE_SIZE * page);
+
+    cppdb::result res = getSentencesOfUser.query();
+    models::Sentences sentencesModel;
+    
+    int i = 0;
+
+    if (simpleSentenceOnly) {
+        while (res.next()) {
+
+            pagiSentences.push_back(
+                sentencesModel.simple_get_by_id(
+                    res.get<int>("sentence_id")
+                )
+            );
+            i++;
+        }
+    } else {
+        while (res.next()) {
+
+            pagiSentences.push_back(
+                sentencesModel.get_by_id(
+                    res.get<int>("sentence_id"),
+                    3 //TODO magic number for depth of translation
+                    //langsToKeep
+                )
+            );
+            i++;
+        }
+    }
+    getSentencesOfUser.reset();
+
+    return pagiSentences;
+}
+
+
+
 }// end namespace models

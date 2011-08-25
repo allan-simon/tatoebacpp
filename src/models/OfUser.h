@@ -129,10 +129,11 @@ class OfUser : public SqliteModel {
          *
          * @param username Name of the user we want the sentences of
          * @param page     Page number requested (0 = first one)
-         * @param simpleSentenceOnly Whether to load only the sentences without their
-         *                 translation
+         * @param simpleSentenceOnly Whether to load only the sentences without 
+         *                 their translation
          *
-         * @return A paginated vector of sentences and their translations
+         * @return A paginated vector of sentences and possibly their
+         *         translations
          *
          * @since Around 20 August 2011
          *
@@ -142,6 +143,30 @@ class OfUser : public SqliteModel {
             const int page,
             const bool simpleSentenceOnly = false
         );
+
+        /**
+         * @brief Return a paginated list of sentences owned by a given user in
+         *               a given lang
+         *
+         * @param username Name of the user we want the sentences of
+         * @param langId   Will return only the sentences in this language
+         * @param page     Page number requested (0 = first one)
+         * @param simpleSentenceOnly Whether to load only the sentences without
+         *                 their translation
+         *
+         * @return A paginated vector of sentences and possibly their
+         *         translations
+         *
+         * @since Around 24 August 2011
+         *
+         */
+        results::PagiSentences sentences_of_in(
+            const std::string &username,
+            const int langId,
+            const int page,
+            const bool simpleSentenceOnly = false
+        );
+
 };
 
 } // end of namespace models

@@ -109,16 +109,75 @@ class OfUser : public Controller {
         );
 
         /**
+         * @brief same as OfUser::sentences_of but only sentences in a
+         *        specific language
+         *
+         * @param username   Name of the user we want the sentences of
+         * @param inLanguage Will keep only the sentenc in this language
+         *                   (iso 639-3 code)
+         *
+         * @since 24 August 2011
+         */
+        void sentences_of_in(
+            std::string username,
+            std::string inLanguage
+        );
+
+        /**
+         * @brief Display nothing, only treat the filter by language form
+         *        and redirect to the correct page
+         *
+         * @param username Name of the user we're going to filter the
+         *                 sentences of   
+         *
+         * @since 24 August 2011
+         */
+        void sentences_of_in_treat(
+            std::string username
+        );
+
+        /**
          * @brief Get all the sentences owned by a given user
          *        (paginated, lang filtered), and their translations
          *
          * @param username Name of the user we want the sentences of
-         *
+         -*
          * @since 21 August 2011
          */
         void translate_sentences_of(
             std::string username
         );
+
+        /**
+         * @brief same as OfUser::translate_sentences_of but only sentences in
+         *        a specific language
+         *
+         * @param username   Name of the user we want to translate the sentences
+         *                   of
+         * @param inLanguage Will keep only the sentenc in this language
+         *                   (iso 639-3 code)
+         *
+         * @since 24 August 2011
+         */
+        void translate_sentences_of_in(
+            std::string username,
+            std::string inLanguage
+        );
+
+
+        /**
+         * @brief Display nothing, only treat the filter by language form
+         *        and redirect to the correct page
+         *
+         * @param username Name of the user we're going to filter the
+         *                 sentences of   
+         *
+         * @since 24 August 2011
+         */
+        void translate_sentences_of_in_treat(
+            std::string username
+        );
+
 
 
 };

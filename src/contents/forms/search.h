@@ -65,6 +65,7 @@ namespace forms {
 
             query.name("query");
 
+            //TODO replace und by mul
             sentencesLang.add("Any","und");
             translatedInLang.add("Any","und");
 
