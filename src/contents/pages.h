@@ -47,6 +47,12 @@ struct Pages : public BaseContent {
 struct PagesHomepage : public Pages {
     helpers::Sentences shc;
     results::SentencesStats sentencesStats;
+    /**
+     * @brief store the total number of sentences in tatoeba
+     *
+     * @since 26 August 2011
+     */
+    unsigned int totalNbrSentences;
 };
 
 /**

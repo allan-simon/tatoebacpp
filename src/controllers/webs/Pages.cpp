@@ -46,7 +46,8 @@ Pages::Pages(cppcms::service& serv) : controllers::webs::Controller(serv) {
 void Pages::homepage() {
     contents::PagesHomepage c;
     init_content(c);
-    c.sentencesStats = TatoDB::get_instance("")->get_sentences_stats();
+    c.totalNbrSentences = TatoDB::get_instance("")->get_total_nbr_sentences();
+    c.sentencesStats = TatoDB::get_instance("")->get_top_five();
 
     models::Sentences sentencesModel;
 	contents::helpers::Sentences shc(

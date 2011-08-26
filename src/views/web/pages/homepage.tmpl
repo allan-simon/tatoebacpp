@@ -8,6 +8,7 @@
         <% c++ homepage_modules hm(out(), content); %>
         <% c++ hm.join_us() ;%>
     <% end if %>
+    <% include top_five_lang_module() %>
 <% end template %>
 
 
@@ -40,9 +41,11 @@
     </div>
 <% end template %>
 
+
+
 <%template top_five_lang_module() %>
     <div class="module">
-        <h2><% gt "X sentences" %></h2>
+        <h2><% gt "{1} sentences" using totalNbrSentences %></h2>
         <div id="sentencesStats">
         <% foreach language in sentencesStats %>
             <ul>

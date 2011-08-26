@@ -33,24 +33,37 @@ void TatoDB::sphinx_dump(std::string path) {
     tato_db_sphinx_dump(tatoDb, path.c_str());
 }
 
+/**
+ *
+ */
+unsigned int TatoDB::get_total_nbr_sentences() {
+
+    return tato_tree_int_size(tatoDb->items);
+}
 
 /**
  *
  */
-results::SentencesStats TatoDB::get_sentences_stats() {
+results::SentencesStats TatoDB::get_top_five() {
     results::SentencesStats sentencesStats;
+
     TatoTreeStrNode *iter = NULL;
 	TATO_TREE_STR_FOREACH(tatoDb->langs, iter) {
         TatoItemLang* lang = (TatoItemLang*)iter->value;
+
         std::string langCode(lang->code);
+
         sentencesStats.insert(
             std::pair<int, std::string>(
+                // number of sentences
                 tato_tree_str_size(lang->index),
+                // in which language
                 langCode
             ) 
         );
 	}
     // TODO
+
     results::SentencesStats topFive;
     results::SentencesStats::iterator it = sentencesStats.begin();
     results::SentencesStats::const_iterator end = sentencesStats.end();
@@ -64,6 +77,25 @@ results::SentencesStats TatoDB::get_sentences_stats() {
         );
     }
 
+    return topFive;
+}
+
+
+
+
+results::SentencesStats TatoDB::get_sentences_stats() {
+    results::SentencesStats sentencesStats;
+    TatoTreeStrNode *iter = NULL;
+	TATO_TREE_STR_FOREACH(tatoDb->langs, iter) {
+        TatoItemLang* lang = (TatoItemLang*)iter->value;
+        std::string langCode(lang->code);
+        sentencesStats.insert(
+            std::pair<int, std::string>(
+                tato_tree_str_size(lang->index),
+                langCode
+            ) 
+        );
+	}
 
     return sentencesStats;
 }

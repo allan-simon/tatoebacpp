@@ -27,7 +27,12 @@
 
 #include <map>
 
+struct BiggerFirstComp {
+    bool operator()(int x,int y) {
+        return x > y;
+    }
+};
 namespace results {
-    typedef std::map<int, std::string> SentencesStats;
+    typedef std::map<int, std::string, BiggerFirstComp> SentencesStats;
 }
 #endif

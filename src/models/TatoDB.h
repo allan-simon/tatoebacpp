@@ -67,9 +67,28 @@ class TatoDB : public Singleton<TatoDB>{
         TatoDb *get_db_pointer();
 
         /**
-         * Will return a map of with the number of sentences for each language
+         * Will return a map of with the number of sentences for each languages
          */
         results::SentencesStats get_sentences_stats();
+
+        /**
+         * @brief Get the five languages that have the most sentences
+         *
+         * @return The five top languages and the number of sentences for
+         *         each of them
+         *
+         * @sinceA 26 August 2011
+         */
+        results::SentencesStats get_top_five();
+
+        /**
+         * @brief Get the total number of sentences in tatoeba
+         *
+         * @return A number, the total number of sentences
+         *
+         * @since 26 August 2011
+         */
+        unsigned int get_total_nbr_sentences();
        
         /**
          * Will dump the database in the given following xml file
