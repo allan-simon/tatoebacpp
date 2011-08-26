@@ -44,8 +44,13 @@ Pages::Pages(cppcms::service& serv) : controllers::webs::Controller(serv) {
  *
  */
 void Pages::homepage() {
-    contents::PagesHomepage c;
+    contents::pages::Homepage c;
     init_content(c);
+
+    c.anotherRandomInLang.set_langs(
+        get_current_user_spoken_langs()
+    );
+
     c.totalNbrSentences = TatoDB::get_instance("")->get_total_nbr_sentences();
     c.sentencesStats = TatoDB::get_instance("")->get_top_five();
 
@@ -66,7 +71,7 @@ void Pages::homepage() {
  *
  */
 void Pages::contribute() {
-    contents::PagesContribute c;
+    contents::pages::Contribute c;
     init_content(c);
     render("contribute", c);
 }
@@ -76,7 +81,7 @@ void Pages::contribute() {
  *
  */
 void Pages::terms_of_use() {
-    contents::PagesTermsOfUse c;
+    contents::pages::TermsOfUse c;
     init_content(c);
     render("termsofuse", c);
 }
@@ -86,7 +91,7 @@ void Pages::terms_of_use() {
  *
  */
 void Pages::team_and_credits() {
-    contents::PagesTeamAndCredits c;
+    contents::pages::TeamAndCredits c;
     init_content(c);
     render("teamandcredits", c);
 }

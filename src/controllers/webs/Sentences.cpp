@@ -26,6 +26,7 @@
 #include "Controller.h"
 #include "Sentences.h"
 #include "contents/sentences.h"
+#include "contents/forms/generics/filter_lang.h"
 
 #include "models/Sentences.h"
 
@@ -44,6 +45,7 @@ Sentences::Sentences(cppcms::service &serv) : Controller(serv) {
   	disp->assign("/show/(\\d+)", &Sentences::show, this, 1);
   	disp->assign("/show-random", &Sentences::show_random, this);
   	disp->assign("/show-random-in/(\\w+)", &Sentences::show_random_in, this, 1);
+  	disp->assign("/show-random-in_treat", &Sentences::show_random_in_treat, this);
 
   	disp->assign("/add", &Sentences::add, this);
   	disp->assign("/add_treat", &Sentences::add_treat, this);
@@ -125,6 +127,37 @@ void Sentences::show_random() {
         )
     );
 }
+
+/**
+ *
+ */
+void Sentences::show_random_in_treat() {
+
+    forms::generics::FilterLang form;
+    form.set_langs();
+    form.load(context());
+    if(!form.validate()) {
+        go_back_to_previous_page();
+    }
+
+    std::string inLang = form.filterLang.selected_id();
+    if (inLang == "mul") {
+     
+        go_to_sentence(
+            sentencesModel->get_random_id(
+                get_current_user_spoken_langs()
+            )
+        );
+
+    } else {
+    
+        go_to_sentence(
+            sentencesModel->get_random_id(inLang)
+        );
+
+    }
+}
+
 
 
 /**

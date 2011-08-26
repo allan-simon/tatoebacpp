@@ -82,6 +82,15 @@ class Sentences : public Controller {
          */
         void show_random_in(std::string isoCode);
 
+        //TODO DOC
+        /**
+         * @brief Display nothing, treat a "show another random sentence in"
+         *        form. and redirect to the adequate page
+         *
+         * @since 26 August 2011
+         */
+        void show_random_in_treat();
+
 
         /**
          * Display a form to add a new sentence

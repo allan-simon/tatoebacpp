@@ -64,16 +64,6 @@ struct SentencesOfBase : public BaseContent {
      */
     forms::generics::FilterLang filterLang;
 
-    /**
-     * @brief Constructor
-     * 
-     * @param selectedLang The default language selected for the filtering
-     *
-     * @since 24 August 2011
-     */
-    SentencesOfBase(const std::string& selectedLang = "mul"):
-        filterLang(selectedLang)
-    {};
 };
 
 /**
@@ -84,10 +74,6 @@ struct SentencesOfBase : public BaseContent {
  */
 struct SentencesOfInBase : public SentencesOfBase {
     std::string inLanguage;
-    SentencesOfInBase(const std::string& selectedLang = "mul"):
-        SentencesOfBase(selectedLang)
-    {};
-
 };
 
 
@@ -112,16 +98,6 @@ struct SentencesOf : public SentencesOfBase {};
  */
 struct TranslateSentencesOfIn : public SentencesOfInBase {
 
-    /**
-     * @brief Constructor
-     * 
-     * @param selectedLang The default language selected for the filtering
-     *
-     * @since 24 August 2011
-     */
-    TranslateSentencesOfIn(const std::string& selectedLang = "mul"):
-        SentencesOfInBase(selectedLang)
-    {};
 };
 
 /**
@@ -131,16 +107,6 @@ struct TranslateSentencesOfIn : public SentencesOfInBase {
  */
 struct SentencesOfIn : public SentencesOfInBase {
 
-    /**
-     * @brief Constructor
-     * 
-     * @param selectedLang The default language selected for the filtering
-     *
-     * @since 24 August 2011
-     */
-    SentencesOfIn(const std::string& selectedLang = "mul"):
-        SentencesOfInBase(selectedLang)
-    {};
 };
 
 

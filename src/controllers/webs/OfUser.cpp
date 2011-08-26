@@ -67,6 +67,7 @@ void OfUser::sentences_of(
 ) {
     contents::of_user::SentencesOf c;
     init_content(c);
+    c.filterLang.set_langs();
 
     c.username = username;
     c.shc.baseUrl = "/of-user/sentences-of/" + username;
@@ -91,9 +92,10 @@ void OfUser::sentences_of_in(
     std::string username,
     std::string inLanguage
 ) {
-    contents::of_user::SentencesOfIn c(inLanguage);
+    contents::of_user::SentencesOfIn c;
     init_content(c);
 
+    c.filterLang.set_langs(inLanguage);
     c.username = username;
     c.inLanguage = Languages::get_instance()->get_name_from_iso( 
         inLanguage
@@ -123,6 +125,7 @@ void OfUser::sentences_of_in_treat(
 ) {
 
     forms::generics::FilterLang form;
+    form.set_langs();
     form.load(context());
     if(!form.validate()) {
         go_back_to_previous_page();
@@ -158,6 +161,7 @@ void OfUser::translate_sentences_of(
 
     contents::of_user::TranslateSentencesOf c;
     init_content(c);
+    c.filterLang.set_langs();
 
     unsigned int page = get_page();
 
@@ -181,9 +185,10 @@ void OfUser::translate_sentences_of_in(
     std::string username,
     std::string inLanguage
 ) {
-    contents::of_user::TranslateSentencesOfIn c(inLanguage);
+    contents::of_user::TranslateSentencesOfIn c;
     init_content(c);
 
+    c.filterLang.set_langs(inLanguage);
     c.username = username;
     c.inLanguage = Languages::get_instance()->get_name_from_iso( 
         inLanguage
@@ -213,6 +218,7 @@ void OfUser::translate_sentences_of_in_treat(
 ) {
 
     forms::generics::FilterLang form;
+    form.set_langs();
     form.load(context());
     if(!form.validate()) {
         go_back_to_previous_page();

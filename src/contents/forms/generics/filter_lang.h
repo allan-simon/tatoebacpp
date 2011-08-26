@@ -52,15 +52,11 @@ struct FilterLang : public cppcms::form {
 
     /**
      * @brief Constructor
-     *
-     * @param lang Lang to be preselected, "mul" = "any" / no filtering
      */
-    FilterLang(std::string lang = "mul") {
+    FilterLang() {
 
-        Languages::get_instance()->fill_form_select(filterLang);
         //TODO i18n
         filterLang.add("Any","mul");
-        filterLang.selected_id(lang);
         filterLang.non_empty();
 
         //TODO i18n
@@ -69,6 +65,29 @@ struct FilterLang : public cppcms::form {
 
         *this + filterLang + submit;
 
+    }
+    //TODO factorize this
+    void set_langs(
+        const std::string &selectLang = "mul"
+    ) {
+        Languages::get_instance()->fill_form_select(filterLang);
+        filterLang.selected_id(selectLang);
+    }
+
+    //TODO factorize this
+    void set_langs(
+        const std::vector<std::string> &userLangs,
+        const std::string &selectLang = "mul"
+    ) {
+        if (!userLangs.empty()) {
+            Languages::get_instance()->fill_form_select(
+                filterLang,
+                userLangs
+            );
+        } else {
+            Languages::get_instance()->fill_form_select(filterLang);
+        }
+        filterLang.selected_id(selectLang);
     }
 
 };

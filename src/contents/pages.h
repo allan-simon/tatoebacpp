@@ -30,8 +30,10 @@
 #include "contents/content.h"
 #include "results/sentences_stats.h"
 #include "contents/helpers/sentences.h"
+#include "contents/forms/generics/filter_lang.h"
 
 namespace contents {
+namespace pages {
 
 /**
  * Base content for every action of Pages controller
@@ -41,10 +43,10 @@ struct Pages : public BaseContent {
 };
 
 /**
- * @struct PagesHomepage
+ * @struct Homepage
  * Content used by the homepage
  */
-struct PagesHomepage : public Pages {
+struct Homepage : public Pages {
     helpers::Sentences shc;
     results::SentencesStats sentencesStats;
     /**
@@ -53,29 +55,44 @@ struct PagesHomepage : public Pages {
      * @since 26 August 2011
      */
     unsigned int totalNbrSentences;
+    
+    /**
+     * @brief Form to be able to display an other random sentence in
+     *        a specific language
+     *
+     * @since 26 August 2011
+     */
+    forms::generics::FilterLang anotherRandomInLang;
+
+    Homepage() {
+        //TODO i18n
+        anotherRandomInLang.submit.value("Show another");
+    }
+
 };
 
 /**
- * @struct PagesContribute
+ * @struct Contribute
  * Content used by page Contribute
  */
-struct PagesContribute : public Pages {
+struct Contribute : public Pages {
 };
 
 /**
- * @struct PagesTermsOfUse
+ * @struct TermsOfUse
  * Content used by page Terms of use
  */
-struct PagesTermsOfUse : public Pages {
+struct TermsOfUse : public Pages {
 };
 
 /**
  * Content used by page Team and credits
  */
-struct PagesTeamAndCredits : public Pages {
+struct TeamAndCredits : public Pages {
 
 };
 
-} //end of namespace
+} // end of namespace pages
+} //end of namespace contents
 
 #endif

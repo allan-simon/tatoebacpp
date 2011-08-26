@@ -1,6 +1,6 @@
 <% c++ #include "contents/pages.h" %>
 <% skin %>
-<% view homepage uses contents::PagesHomepage extends master %>
+<% view homepage uses contents::pages::Homepage extends master %>
 <% template title() %><% gt "Tatoeba homepage"  %><% end template %>
 
 <% template annexe_content() %>
@@ -24,13 +24,13 @@
     </div>
     <div class="module">
         <h2>Random Sentence</h2>
-        
-        <p>
-            Show another
-            <a href="<% url "/sentences/show-random" %>" >
-                sentence
-            </a>
-        </p>
+
+        <form
+            action="<% url "/sentences/show-random-in_treat" %>" 
+            method="POST"
+        >        
+            <% form as_space anotherRandomInLang %>
+        </form>
 
         <% c++ sentences_helper sh(out(), content.shc); %>
         <% if not shc.empty() %>
