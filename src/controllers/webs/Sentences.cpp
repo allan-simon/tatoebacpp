@@ -228,12 +228,15 @@ void Sentences::add_treat() {
     }
 
     if (sentence.exists()) {
+        set_message("Sentence added.");
 
         go_to_sentence(sentence.get_id());
 
         return; 
     }
 
+    set_message("An error occured.");
+    go_back_to_previous_page();
 }
 
 
@@ -246,7 +249,11 @@ void Sentences::translate(std::string toTranslateId) {
 
     CHECK_PERMISSION_OR_GO_TO_LOGIN(); 
 	contents::helpers::Sentences shc(
-        sentencesModel->get_by_id(id, get_depth())
+        sentencesModel->get_by_id(
+            id,
+            get_depth(),
+            get_current_user_spoken_langs()
+        )
     );
 
     if (!shc.empty()) {
@@ -258,6 +265,7 @@ void Sentences::translate(std::string toTranslateId) {
         init_content(c);
         c.transSentence.set_langs(
             get_current_user_spoken_langs()
+
         );
     
         shc.lang = c.lang;
