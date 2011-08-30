@@ -78,7 +78,8 @@ namespace forms {
         };
         //TODO factorize this
         void set_langs(
-            const std::vector<std::string> &userLangs
+            const std::vector<std::string> &userLangs =
+                std::vector<std::string>()
         ) {
             if (!userLangs.empty()) {
                 Languages::get_instance()->fill_form_select(

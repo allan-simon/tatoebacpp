@@ -280,10 +280,13 @@ void Sentences::translate_treat() {
     CHECK_PERMISSION_OR_GO_TO_LOGIN();
 
 	forms::TransSentence transSentence;
+    transSentence.set_langs();
     transSentence.load(context());
 
 
     if (!transSentence.validate()) {
+
+        set_message("There's something wrong in your form");
         go_back_to_previous_page();
         return;
     }
@@ -293,6 +296,7 @@ void Sentences::translate_treat() {
 
     int userId = get_current_user_id();     
 
+    set_message("Translation Added");
     // TODO : handle if something wrong happen while saving
     try {
         results::Sentence sentence = sentencesModel->add(
