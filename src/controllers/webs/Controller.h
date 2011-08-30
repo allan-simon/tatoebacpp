@@ -155,6 +155,16 @@ class Controller : public controllers::generics::Controller {
          * @since 24 August 2011
          */
         unsigned int get_page();
+        
+                
+        /**
+         * @brief Set a message to display on the next page a user will view
+         *
+         * @param message The content of the message that will be displayed
+         *
+         * @since 30 August 2011
+         */
+        void set_message(std::string message);
 
         /**
          * @brief Get all the iso code of the languages a user studies/speas

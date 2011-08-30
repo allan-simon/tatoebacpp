@@ -38,6 +38,13 @@ namespace contents {
  */
 struct BaseContent : public cppcms::base_content {
     std::string lang;
+    /**
+     * @brief Will contain a flash message to inform the user about the
+     *        success/failure of an action.
+     *
+     * @since 30 August
+     */
+    std::string message;
     forms::SearchesSimple searchesSimple;
     helpers::Users usersHelper;
     

@@ -65,6 +65,11 @@ void Controller::init_content(contents::BaseContent& content) {
     if (session().is_set("name")) {
         content.usersHelper.username = session()["name"];
     }
+
+    if (session().is_set("message")) {
+        content.message = session()["message"];
+        session().erase("message");
+    }
 }
 
 /**
@@ -261,6 +266,15 @@ unsigned int Controller::get_page() {
         GET_INT_FIELD(page, "page");
     }
     return page;
+}
+
+/**
+ *
+ */
+
+void Controller::set_message(std::string message) {
+
+    session()["message"] = message;
 }
 
 

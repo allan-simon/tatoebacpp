@@ -70,6 +70,8 @@
 		</div>
 		<div id="container">
             <% include search_bar() %>
+            <% include message() %>
+
 			<% include body() %>
 
 		</div>
@@ -78,6 +80,20 @@
     <div id="footer_container"></div>
 </body>
 </html>
+<% end template %>
+
+/**
+ * @brief Will be used to display a message to the user, to aknowledge
+ *        from the success or failure of an action he just made
+ * 
+ * @since 30 August 2011
+ */
+<% template message() %>
+    <% if not message.empty() %>
+        <div class="message" id="flashMessage">
+            <%= message | raw %>
+        </div>
+    <% end %>
 <% end template %>
 
 <% template top_menu() %>

@@ -325,6 +325,7 @@ void Sentences::link(std::string idOneStr, std::string idTwoStr) {
         idTwo,
         get_current_user_id()
     );
+    set_message("sentences linked");
 
     go_to_sentence(idOneStr);
 }
