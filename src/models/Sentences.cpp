@@ -269,6 +269,10 @@ results::Sentence Sentences::add(
  
     if (item != NULL) {
         
+        OfUser().adopt_sentence(
+            item->id,
+            userId
+        );
         /*
         logs.insert_add_word(
             newItem->id,
