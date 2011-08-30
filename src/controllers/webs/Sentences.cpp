@@ -200,34 +200,40 @@ void Sentences::add_treat() {
     CHECK_PERMISSION_OR_GO_TO_LOGIN();
 
 	forms::AddSentence addSentence;
+    addSentence.set_langs();
     addSentence.load(context());
 
     results::Sentence sentence;
-    if (addSentence.validate()) {
-        // TODO : handle if something wrong happen while saving
-        try {
-            sentence = sentencesModel->add(
-                addSentence.sentenceLang.selected_id(),
-                addSentence.sentenceString.value(),
-                get_current_user_id()
-            );
-        } catch (const models::SentDupliException & e) {
-            //TODO display the message to the user
-            go_to_sentence(e.get_original_id());
-
-            return; 
-
-        }
-
-        if (sentence.exists()) {
-
-            go_to_sentence(sentence.get_id());
-
-            return; 
-        }
+    if (!addSentence.validate()) {
+        std::cout << "form does not validate" << std::endl;
+        go_back_to_previous_page();
+        return;
     }
 
-    go_back_to_previous_page();
+    // TODO : handle if something wrong happen while saving
+    try {
+        sentence = sentencesModel->add(
+            addSentence.sentenceLang.selected_id(),
+            addSentence.sentenceString.value(),
+            get_current_user_id()
+        );
+    } catch (const models::SentDupliException & e) {
+        //TODO i18n
+        std::cout << "already exist" << std::endl;
+        set_message("This sentence was already present");
+        go_to_sentence(e.get_original_id());
+
+        return; 
+
+    }
+
+    if (sentence.exists()) {
+
+        go_to_sentence(sentence.get_id());
+
+        return; 
+    }
+
 }
 
 
@@ -298,6 +304,7 @@ void Sentences::translate_treat() {
         translationId = sentence.get_id();
 
     } catch (const models::SentDupliException & e) {
+        set_message("This sentence already exists, we've linked to it instead.");
         //TODO display the message to the user
         translationId = e.get_original_id();
     }
@@ -344,6 +351,7 @@ void Sentences::unlink(std::string idOneStr, std::string idTwoStr) {
         idTwo,
         get_current_user_id()
     );
+    set_message("sentences unlinked");
 
     go_to_sentence(idOneStr);
 }
@@ -408,6 +416,11 @@ void Sentences::edit_text_treat() {
             get_current_user_id()
         );
     } catch (const models::SentDupliException & e) {
+
+        set_message(
+            "Your edition has made this sentence become a duplicate with"
+            " an other one. We've merged them."
+        );
         //TODO display the message to the user
         go_to_sentence(e.get_original_id());
 
@@ -476,6 +489,11 @@ void Sentences::edit_lang_treat() {
             get_current_user_id()
         );
     } catch (const models::SentDupliException & e) {
+
+        set_message(
+            "The change of language has made this sentence become a duplicate"
+            " with an other one. We've merged them."
+        );
         //TODO display the message to the user
         go_to_sentence(e.get_original_id());
 
