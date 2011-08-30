@@ -374,6 +374,11 @@ void Sentences::edit_text(
     // with the already existing one
     if (origId >= 0) {
         TatoItem *origItem = tato_db_item_find(tatoDb, origId);
+ 
+        OfUser().abandon_sentence(
+            id
+        );
+
         tato_db_item_merge_into(
             tatoDb,
             id,
@@ -432,6 +437,9 @@ void Sentences::edit_lang(
     // if the new text was already present then we merge the sentence
     // with the already existing one
     if (origId >= 0) {
+        OfUser().abandon_sentence(
+            id
+        );
         TatoItem *origItem = tato_db_item_find(tatoDb, origId);
         tato_db_item_merge_into(
             tatoDb,
