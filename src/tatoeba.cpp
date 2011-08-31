@@ -100,7 +100,6 @@ void Tatoeba::main(std::string url) {
     std::map<std::string,std::string>::const_iterator p = lang_map.find(
         std::string(matches[1])
     );
-    session().load();
     // if we known the language
     if (p != lang_map.end()) {
         //TODO replace this by something more generic
@@ -111,9 +110,7 @@ void Tatoeba::main(std::string url) {
         // if the other part of the url is random crap => 404
          
          
-        if (!dispatcher().dispatch(matches[2])) {
-            response().make_error_response(cppcms::http::response::not_found);
-        }
+        application::main(matches[2]);
     // if we don't know the lang / the lang is missing in the url
     } else {
         // we set it to english

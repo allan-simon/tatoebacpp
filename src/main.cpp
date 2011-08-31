@@ -76,8 +76,10 @@ int main(int argc,char ** argv)
     //singletons::ActionId::get_instance();
     /*instantiate the website application*/
     cout << "[NOTICE] website to be launched" << endl;
-    booster::intrusive_ptr<apps::Tatoeba> tatoApp = new apps::Tatoeba(app);
-    app.applications_pool().mount(tatoApp);
+    //booster::intrusive_ptr<apps::Tatoeba> tatoApp = new apps::Tatoeba(app);
+    app.applications_pool().mount(
+        cppcms::applications_factory<apps::Tatoeba>()
+    );
     /*launch it */
     cout << "[NOTICE] website launched" << endl;
     app.run();
