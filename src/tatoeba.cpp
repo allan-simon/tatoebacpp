@@ -98,13 +98,22 @@ void Tatoeba::main(std::string url) {
         0,
         serverName.find('.')
     );
+    std::cout << std::endl;
     std::cout << "[DEBUG] serverName: " << serverName <<std::endl;
     std::cout << "[DEBUG] subdomain: " << subdomain <<std::endl;
+    if (session().is_set("interfaceLang")) {
+        std::cout << "[DEBUG] in session: " << session()["interfaceLang"] <<std::endl;
+    } else {
+        std::cout << "[DEBUG] no session lang yet"  <<std::endl;
+    }
 
 
     // NextGen url "lang.tatoeba.org/url"
     if (Languages::get_instance()->is_interface_lang(subdomain)) {
-        if (!session().is_set("interfaceLang")) {
+        if (
+            !session().is_set("interfaceLang") ||
+            session()["interfaceLang"].empty()
+        ) {
             session()["interfaceLang"] = subdomain;
         }
         if (subdomain == session()["interfaceLang"]) {
