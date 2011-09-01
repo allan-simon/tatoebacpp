@@ -34,7 +34,8 @@ Languages::Languages() {}
  *
  */
 void Languages::init(
-    cppcms::json::array langsJson
+    cppcms::json::array langsJson,
+    cppcms::json::array interfaceLangsJson
 ) {
     cppcms::json::array::const_iterator end = langsJson.end();
 
@@ -59,6 +60,42 @@ void Languages::init(
         idToISO[langId] = isoCode;
 
     }
+
+    for (
+        cppcms::json::array::const_iterator p=interfaceLangsJson.begin();
+        p!=interfaceLangsJson.end();
+        ++p
+    ) {
+        
+
+        cppcms::json::array lang = p->array();
+        langToLocale[lang[0].str()] = lang[2].str();
+        oldLangToNew[lang[1].str()] = lang[0].str();
+    }
+}
+
+std::string Languages::get_locale_from_lang(
+    const std::string &lang
+) {
+    return langToLocale[lang];
+}
+
+std::string Languages::get_new_lang_from_old(
+    const std::string &oldLang
+) {
+    return oldLangToNew[oldLang];
+}
+
+bool Languages::is_interface_lang(
+    const std::string &interfaceLang
+) {
+    return langToLocale.find(interfaceLang) != langToLocale.end();
+}
+
+bool Languages::is_old_interface_lang(
+    const std::string &oldInterfaceLang
+) {
+    return oldLangToNew.find(oldInterfaceLang) !=  oldLangToNew.end();
 }
 
 

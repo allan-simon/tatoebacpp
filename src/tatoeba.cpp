@@ -24,19 +24,20 @@
  */
 
 
-#include <cppcms/json.h>
+#include <iostream>
+
 #include <cppcms/application.h>
 #include <cppcms/url_dispatcher.h>
 #include <cppcms/http_response.h>
+#include <cppcms/http_request.h>
 #include <cppcms/http_context.h>
 #include <cppcms/session_interface.h>
 
-#include <booster/regex.h>
 
-#include <iostream>
 
 #include "tatoeba.h"
 
+#include "generics/Languages.h"
 
 namespace apps {
 
@@ -69,25 +70,15 @@ Tatoeba::Tatoeba(cppcms::service &serv) :
     add(adminApi,"^/api/admin(.*)", 1);
     //NOTE important to add the page controller at the end
     //as its regexp is more global
-    add(pages, "(.*)", 1);
+    add(pages, "/(.*)", 1);
 
-    // TODO move this in Languages singleton
-    cppcms::json::array langs = settings().at("tatoeba.interfacelangs").array();
-    for (
-        cppcms::json::array::const_iterator p=langs.begin();
-        p!=langs.end();
-        ++p
-    ) {
-        cppcms::json::array lang = p->array();
-        lang_map[lang[0].str()]=lang[1].str();
-    }
+
 }
 
 /**
  *
  */
 
-static const booster::regex lang_regex("^/(\\w+)(/.*)?$");
 
 void Tatoeba::main(std::string url) {
     /**
@@ -95,49 +86,71 @@ void Tatoeba::main(std::string url) {
      * @todo implement the default language in order check the session, coockie
      * navigator
      */
-    booster::smatch matches;
-    booster::regex_match(url, matches, lang_regex);
-    std::map<std::string,std::string>::const_iterator p = lang_map.find(
-        std::string(matches[1])
-    );
-    // if we known the language
-    if (p != lang_map.end()) {
-        //TODO replace this by something more generic
-        // This line permit to set in which format date, number etc. will be rendered
+    std::cout << "[DEBUG] url: " << url <<std::endl;
+    if (request().server_port() == 4242 ) {
+        std::cout << "[DEBUG] local version  " <<std::endl;
         context().locale("en_US.UTF-8");
-        
-        session()["lang"] = p->first;
-        // if the other part of the url is random crap => 404
-         
-         
-        application::main(matches[2]);
-    // if we don't know the lang / the lang is missing in the url
-    } else {
-        // we set it to english
-        // TODO should be the lang provided by the web browser
-        std::string defaultLang = "eng";
-        session()["lang"] = defaultLang;
-        std::string toDispatch = "/" + matches[1] + matches[2];
+        application::main(url);
+        return;
+    }
+    std::string serverName = request().server_name();
+    std::string subdomain = serverName.substr(
+        0,
+        serverName.find('.')
+    );
+    std::cout << "[DEBUG] serverName: " << serverName <<std::endl;
+    std::cout << "[DEBUG] subdomain: " << subdomain <<std::endl;
 
-        if (url == "/") {
-            response().set_redirect_header("/" + defaultLang) ;
+
+    // NextGen url "lang.tatoeba.org/url"
+    if (Languages::get_instance()->is_interface_lang(subdomain)) {
+        if (subdomain == session()["interfaceLang"]) {
+            context().locale(
+                Languages::get_instance()->get_locale_from_lang(subdomain)
+            );
+
+            application::main(url);
+        } else {
+
+            response().set_redirect_header(
+                session()["interfaceLang"] +
+                serverName.substr(serverName.find('.')) +
+                url
+            );
+
+        }
+    // no lang inside the server name
+    } else {
+         
+        // in a url tatoeba.org/A/B/C
+        // try to see if A is an old style lang
+        size_t firstFolderEndPos = serverName.find('/',1);
+        std::string firstFolder = url.substr(
+            1,
+            firstFolderEndPos
+        );
+        if (Languages::get_instance()->is_old_interface_lang(firstFolder)) {
+            std::string newLang =Languages::get_instance()->
+                get_new_lang_from_old(firstFolder);
+            session()["interfaceLang"] = newLang;
+            response().set_redirect_header(
+                newLang + "." +
+                serverName +
+                url.substr(firstFolderEndPos)
+            );
+            return;
+        } else {
+            session()["interfaceLang"] = "en";
+            response().set_redirect_header(
+                 "en." +
+                serverName +
+                url
+            );
             return;
         }
-        //then it means that only the /lang/ was missing
-        //we try to add the language before the previous url
-        //TODO maybe we can avoid redirection if we know that
-        //the produced url will lead to nowhere
-        //but doing this :
-        //if (dispatcher().dispatch(toDispatch)) {
-        //   redirect
-        //} else { 
-        //  404
-        //}
-        //doesn't work  because dispatch actually fill the response
-        //so the header can't be written anymore
-        //so we need a function that check url without calling the handler
-        response().set_redirect_header("/" + defaultLang + toDispatch);
+         
     }
+    
 }
 
 

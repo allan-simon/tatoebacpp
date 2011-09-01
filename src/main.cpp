@@ -70,7 +70,8 @@ int main(int argc,char ** argv)
     /*load the languages*/
     Languages::get_instance();
     Languages::get_instance()->init(
-        app.settings().at("tatoeba.languages").array()
+        app.settings().at("tatoeba.languages").array(),
+        app.settings().at("tatoeba.interfacelangs").array()
     );
 
     //singletons::ActionId::get_instance();

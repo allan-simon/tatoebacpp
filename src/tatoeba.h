@@ -69,11 +69,6 @@ private:
     controllers::apis::Searches searchesApi;
     controllers::apis::Languages languagesApi;
     controllers::apis::Admin adminApi;
-    /**
-     * map containing aviable language of tatoeba
-     * @TODO move this in Languages singleton
-     */
-    std::map<std::string,std::string> lang_map; 
 
 public:
     /**

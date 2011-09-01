@@ -80,9 +80,9 @@ std::string Controller::get_interface_lang() {
     // TODO also need to check the locale send by the user navigator
     // without forgetting the navigator always send more than one locale
     // in order to have some fallbacks
-    if (session().is_set("lang")) {
+    if (session().is_set("interfaceLang")) {
 
-        return session()["lang"];
+        return session()["interfaceLang"];
     } else {
 
         return "eng";

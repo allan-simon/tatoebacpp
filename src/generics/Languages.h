@@ -35,6 +35,8 @@
 
 //TODO maybe replace all these maps by something smarter
 typedef std::map<std::string, std::string> ISOToNameMap;
+typedef std::map<std::string, std::string> InterfaceLangOldToNew;
+typedef std::map<std::string, std::string> InterfaceLangToLocale;
 typedef std::map<std::string, std::string> NameToISOMap;
 typedef std::map<int, std::string> IdToISOMap;
 typedef std::map<std::string, int> ISOToIdMap;
@@ -60,7 +62,23 @@ class Languages : public Singleton<Languages> {
          **/
         NameToISOMap nameToIso;
 
+        /**
+         * @brief map associating a lang string to a locale (for example
+         *        fr => fr_FR.UTF-8
+         *
+         * @since 1 September 2011
+         */
+        InterfaceLangToLocale langToLocale;
 
+        /**
+         * @brief map associating the tatoeba php way to store the interface
+         *        language in url to the new one, for example 
+         *        fre => fr
+         *
+         * @since 1 September 2011
+         *
+         */
+        InterfaceLangOldToNew oldLangToNew;
 
         /**
          * Map associating internal ID in the database to ISO code
@@ -74,6 +92,73 @@ class Languages : public Singleton<Languages> {
         Languages();
 
     public:
+
+        /**
+         * Initialize the singleton with the data stored in config.js 
+         * TODO DOC
+         */
+        void init(
+            cppcms::json::array langsJson,
+            cppcms::json::array interfaceLangsJson
+        );
+        //TODO DOC
+
+          
+        /**
+         * @brief Return the locale associated to a interface lang code
+         *
+         * @param lang The interface lang code
+         *
+         * @return A locale string (such as fr_FR.UTF-8)
+         *
+         * @since 1 September 2011
+         *
+         */
+        std::string get_locale_from_lang(const std::string &lang);
+  
+        /**
+         * @brief  Return the new way to represent a interface lang
+         *         associated to it's tatoeba in php way
+         *
+         * @param lang The old style lang code (for example fre)
+         *
+         * @return The new style lang (for example fr)
+         *
+         * @since 1 September 2011
+         *
+         */
+
+        std::string get_new_lang_from_old(const std::string &lang);
+  
+        /**
+         * @brief Permits to know if a given subdomain is actually an interface
+         *        lang
+         *
+         * @param subdomain The subdomain to test
+         *
+         * @return True if it represents a interface lang code, false otherwise
+         *
+         * @since 1 September 2011
+         *
+         */
+
+        bool is_interface_lang(const std::string &subdomain);
+  
+        /**
+         * @brief Permits to know if a given url folder (for example eng) is an
+         *        old style interface lang code 
+         *
+         * @param The name to test 
+         *
+         * @return True if it was an old way interface lang code, false
+         *         otherwise
+         *
+         * @since 1 September 2011
+         *
+         */
+
+        bool is_old_interface_lang(const std::string &folder);
+
         /**
          * return the map ISO code => English name
          */
@@ -85,11 +170,6 @@ class Languages : public Singleton<Languages> {
         ISOToNameMap get_name_to_iso_map();
         
 
-
-        /**
-         * Initialize the singleton with the data stored in config.js 
-         */
-        void init(cppcms::json::array langsJson);
 
         /**
          * Return the internal id associated to the ISO code of a given language
