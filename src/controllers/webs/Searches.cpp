@@ -51,7 +51,7 @@ void Searches::simple_treat() {
     
 
     response().set_redirect_header(
-        "/" + get_interface_lang() +"/searches/show-result"
+        "/searches/show-result"
         "/" + oss.str() +
         "/" + searchesSimple.sentencesLang.selected_id() +
         "/" + searchesSimple.translatedInLang.selected_id()
@@ -83,7 +83,6 @@ void Searches::show_result(
     // TODO filter this as otherwise it will produce strange result
     // if user search "../" etC.
     shc.baseUrl = "/searches/show-result/" + query + "/" + fromLang + "/" + toLang;
-    shc.lang = c.lang;
     c.queryStr = query;
     c.queryLang = fromLang;
 

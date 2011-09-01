@@ -37,7 +37,6 @@ namespace contents {
  * @struct 
  */
 struct BaseContent : public cppcms::base_content {
-    std::string lang;
     /**
      * @brief Will contain a flash message to inform the user about the
      *        success/failure of an action.

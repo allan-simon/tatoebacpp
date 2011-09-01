@@ -41,7 +41,7 @@
 #define TREAT_PAGE() \
     if (request().post().empty()) {\
         response().set_redirect_header(\
-            "/" + get_interface_lang()\
+            "/" \
         );\
         return;\
     }
@@ -99,12 +99,6 @@ class Controller : public cppcms::application {
          */
         bool check_permission();
 
-
-        /**
-         * Return the code of the language in which we should generate the
-         * interface for the requested page
-         */
-        std::string get_interface_lang();
         /* 
          * Return the id of the current user 
          * @TODO maybe move this in a dedicated class that would

@@ -76,7 +76,6 @@ void Sentences::show(std::string sentence_id) {
         sentencesModel->get_by_id(id, 5)
     );
     c.id = id;
-    shc.lang = c.lang;
     shc.currentUserHelper = c.usersHelper;
     c.shc = shc;
     
@@ -95,7 +94,6 @@ void Sentences::show_random() {
         sentencesModel->get_random(5)
     );
     c.id = shc.sentences[0].get_id();
-    shc.lang = c.lang;
     shc.currentUserHelper = c.usersHelper;
     c.shc = shc;
     
@@ -120,7 +118,6 @@ void Sentences::show_random_in(std::string isoCode) {
         sentencesModel->get_random(isoCode, 5)
     );
     c.id = shc.sentences[0].get_id();
-    shc.lang = c.lang;
     shc.currentUserHelper = c.usersHelper;
     c.shc = shc;
     
@@ -169,7 +166,6 @@ void Sentences::add_treat() {
             oss << e.get_original_id();
 
             response().set_redirect_header(
-                "/" + get_interface_lang() +
                 "/sentences/show"
                 "/" + oss.str()
             );
@@ -182,7 +178,6 @@ void Sentences::add_treat() {
             oss << sentence.get_id();
 
             response().set_redirect_header(
-                "/" + get_interface_lang() +
                 "/sentences/show"
                 "/" + oss.str()
             );
@@ -213,7 +208,6 @@ void Sentences::translate(std::string toTranslateId) {
         );
         init_content(c);
     
-        shc.lang = c.lang;
         c.shc = shc;
 
         render("sentences_translate",c);
@@ -268,7 +262,6 @@ void Sentences::translate_treat() {
     );
 
     response().set_redirect_header(
-        "/" + get_interface_lang() +
         "/sentences/show"
         "/" + translatedIdStr
     );
@@ -290,7 +283,6 @@ void Sentences::link(std::string idOneStr, std::string idTwoStr) {
     );
 
     response().set_redirect_header(
-        "/" + get_interface_lang() +
         "/sentences/show"
         "/" + idOneStr
     );
@@ -313,7 +305,6 @@ void Sentences::unlink(std::string idOneStr, std::string idTwoStr) {
     );
 
     response().set_redirect_header(
-        "/" + get_interface_lang() +
         "/sentences/show"
         "/" + idOneStr
     );
@@ -344,7 +335,6 @@ void Sentences::edit_text(std::string sentenceId) {
         );
         init_content(c);
     
-        shc.lang = c.lang;
         c.shc = shc;
 
         render("sentences_edit_text",c);
@@ -385,7 +375,6 @@ void Sentences::edit_text_treat() {
         oss << e.get_original_id();
 
         response().set_redirect_header(
-            "/" + get_interface_lang() +
             "/sentences/show"
             "/" + oss.str()
         );
@@ -394,7 +383,6 @@ void Sentences::edit_text_treat() {
     }
 
     response().set_redirect_header(
-        "/" + get_interface_lang() +
         "/sentences/show"
         "/" + idStr 
     );
@@ -422,7 +410,6 @@ void Sentences::edit_lang(std::string sentenceId) {
         );
         init_content(c);
     
-        shc.lang = c.lang;
         c.shc = shc;
 
         render("sentences_edit_lang",c);
@@ -463,7 +450,6 @@ void Sentences::edit_lang_treat() {
         oss << e.get_original_id();
 
         response().set_redirect_header(
-            "/" + get_interface_lang() +
             "/sentences/show"
             "/" + oss.str()
         );
@@ -472,7 +458,6 @@ void Sentences::edit_lang_treat() {
     }
 
     response().set_redirect_header(
-        "/" + get_interface_lang() +
         "/sentences/show"
         "/" + idStr 
     );

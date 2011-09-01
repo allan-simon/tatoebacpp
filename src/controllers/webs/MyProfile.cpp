@@ -488,7 +488,6 @@ void MyProfile::change_depth_treat() {
  */
 inline void MyProfile::go_to_profile_page() {
     response().set_redirect_header(
-        "/" + get_interface_lang() +
         "/my-profile/show"
     );
 }

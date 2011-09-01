@@ -61,7 +61,6 @@ void Pages::homepage() {
             get_current_user_spoken_langs()
         )
     );
-    shc.lang = c.lang;
     shc.currentUserHelper = c.usersHelper;
     c.shc = shc;
     render("homepage", c);

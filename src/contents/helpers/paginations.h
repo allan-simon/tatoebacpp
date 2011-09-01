@@ -94,8 +94,7 @@ struct Paginations : public Helpers {
          */
         Paginations(
             const results::Paginable &paginatedResult,
-            std::string _baseUrl,
-            std::string _lang
+            std::string _baseUrl
             
         ) :
             currentPage(paginatedResult.currentPage),
@@ -103,7 +102,6 @@ struct Paginations : public Helpers {
             totalNbrElements(paginatedResult.totalNbrElements)
         {
             baseUrl = _baseUrl;
-            lang = _lang;
 
             // typically this will arrive when I forget to set the 
             // page size in the model ...

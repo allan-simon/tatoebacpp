@@ -635,12 +635,12 @@ class url_block:
         params = []
         if m.group(3):
             params=make_format_params(m.group(4))
+
         if not params:
-            output("out()"+
-                "<< \"/\" << content.lang <<%s;"% s)
+            output("out() << \"/\" ;")
+
         else:
             output('out()'+
-                "<< \"/\" << content.lang "+
                 '<<cppcms::locale::format(%s) %% (%s);' % (s, ') % ('.join(params)))
 
 def fetch_content(content):

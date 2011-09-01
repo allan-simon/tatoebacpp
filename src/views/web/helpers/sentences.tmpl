@@ -221,8 +221,7 @@
     <% template sentences_list(std::string title) %>
         <% c++ contents::helpers::Paginations phc( %>
         <% c++ content.sentences, %>
-        <% c++ content.baseUrl, %>
-        <% c++ content.lang %>
+        <% c++ content.baseUrl %>
         <% c++ ); %>
 
         <h3>
@@ -246,8 +245,7 @@
     <% template simple_sentences_list() %>
         <% c++ contents::helpers::Paginations phc( %>
         <% c++ content.sentences, %>
-        <% c++ content.baseUrl, %>
-        <% c++ content.lang %>
+        <% c++ content.baseUrl %>
         <% c++ ); %>
         <% c++ pagination_helper ph(out(), phc); %> 
  

@@ -15,10 +15,6 @@ namespace contents {
              * @TODO write this doc
              */
             std::string baseUrl;
-            /**
-             * @TODO write this doc
-             */
-            std::string lang;
         };
     }
 }

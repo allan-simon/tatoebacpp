@@ -71,7 +71,6 @@ void OfUser::sentences_of(
 
     c.username = username;
     c.shc.baseUrl = "/of-user/sentences-of/" + username;
-    c.shc.lang = c.lang;
     c.shc.currentUserHelper = c.usersHelper;
 
     unsigned int page = get_page();
@@ -101,7 +100,6 @@ void OfUser::sentences_of_in(
         inLanguage
     );
     c.shc.baseUrl = "/of-user/sentences-of-in/" + username;
-    c.shc.lang = c.lang;
     c.shc.currentUserHelper = c.usersHelper;
 
     unsigned int page = get_page();
@@ -135,13 +133,11 @@ void OfUser::sentences_of_in_treat(
     if (filteredLang == "mul") {
 
         response().set_redirect_header(
-            "/" + get_interface_lang() +
             "/of-user/sentences-of"
             "/" + username 
         );
     } else {
         response().set_redirect_header(
-            "/" + get_interface_lang() +
             "/of-user/sentences-of-in"
             "/" + username +
             "/" + filteredLang
@@ -167,7 +163,6 @@ void OfUser::translate_sentences_of(
 
     c.username = username;
     c.shc.baseUrl = "/of-user/translate-sentences-of/" + username;
-    c.shc.lang = c.lang;
     c.shc.currentUserHelper = c.usersHelper;
 
     c.shc.sentences = ofUsersModel->sentences_of(
@@ -194,7 +189,6 @@ void OfUser::translate_sentences_of_in(
         inLanguage
     );
     c.shc.baseUrl = "/of-user/sentences-of-in/" + username;
-    c.shc.lang = c.lang;
     c.shc.currentUserHelper = c.usersHelper;
 
     unsigned int page = get_page();
@@ -228,13 +222,11 @@ void OfUser::translate_sentences_of_in_treat(
     if (filteredLang == "mul") {
 
         response().set_redirect_header(
-            "/" + get_interface_lang() +
             "/of-user/translate-sentences-of"
             "/" + username 
         );
     } else {
         response().set_redirect_header(
-            "/" + get_interface_lang() +
             "/of-user/translate-sentences-of-in"
             "/" + username +
             "/" + filteredLang

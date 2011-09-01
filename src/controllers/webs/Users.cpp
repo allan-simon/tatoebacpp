@@ -100,7 +100,7 @@ void Users::register_new_treat() {
                 form.email.value()
             )
         ) {
-            response().set_redirect_header("/" + get_interface_lang());
+            response().set_redirect_header("/");
             session()["name"] = form.username.value();
             session().save();
             //std::cout << "user name: " << session()["name"] << std::endl;
@@ -121,7 +121,7 @@ void Users::login() {
     // we store in the hidden field the page we wanted to access
     // in order to be able to redirect on it after login
 
-    std::string wantedPage = "/" + get_interface_lang();
+    std::string wantedPage = "/" ;
     
     cppcms::http::request::form_type::const_iterator p = request().get().find("from");
     cppcms::http::request::form_type::const_iterator end = request().get().end();

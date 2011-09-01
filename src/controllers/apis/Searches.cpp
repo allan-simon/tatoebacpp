@@ -67,7 +67,6 @@ void Searches::simple () {
 
     init_content(c);
 
-    shc.lang = c.lang;
     c.queryStr = query;
     c.queryLang = fromLang;
     c.paginationSize = 10; //TODO MAGIC NUMBER

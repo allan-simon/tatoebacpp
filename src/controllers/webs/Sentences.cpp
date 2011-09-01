@@ -107,7 +107,6 @@ void Sentences::show(std::string sentence_id) {
     c.id = id;
     c.oneMoreDepth = depth + 1;
 
-    shc.lang = c.lang;
     shc.currentUserHelper = c.usersHelper;
     c.shc = shc;
     
@@ -268,7 +267,6 @@ void Sentences::translate(std::string toTranslateId) {
 
         );
     
-        shc.lang = c.lang;
         c.shc = shc;
 
         render("sentences_translate",c);
@@ -391,8 +389,6 @@ void Sentences::edit_text(std::string sentenceId) {
             shc.sentences[0].string()
         );
         init_content(c);
-    
-        shc.lang = c.lang;
         c.shc = shc;
 
         render("sentences_edit_text",c);
@@ -465,7 +461,6 @@ void Sentences::edit_lang(std::string sentenceId) {
         );
         init_content(c);
     
-        shc.lang = c.lang;
         c.shc = shc;
 
         render("sentences_edit_lang",c);

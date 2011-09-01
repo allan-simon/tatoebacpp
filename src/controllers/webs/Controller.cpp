@@ -60,7 +60,6 @@ void Controller::init_content(contents::BaseContent& content) {
         get_current_user_spoken_langs()
     );
 
-    content.lang = get_interface_lang();
     //std::cout << "user name: " << session()["name"] << std::endl;
     if (session().is_set("name")) {
         content.usersHelper.username = session()["name"];
@@ -69,23 +68,6 @@ void Controller::init_content(contents::BaseContent& content) {
     if (session().is_set("message")) {
         content.message = session()["message"];
         session().erase("message");
-    }
-}
-
-/**
- *
- */
-std::string Controller::get_interface_lang() {
-    // TODO seems context.locale return always a 2 letter code
-    // TODO also need to check the locale send by the user navigator
-    // without forgetting the navigator always send more than one locale
-    // in order to have some fallbacks
-    if (session().is_set("interfaceLang")) {
-
-        return session()["interfaceLang"];
-    } else {
-
-        return "eng";
     }
 }
 
@@ -103,7 +85,6 @@ void Controller::go_to_sentence(int sentenceId) {
     oss << sentenceId;
 
     response().set_redirect_header(
-        "/" + get_interface_lang() +
         "/sentences/show"
         "/" + oss.str()
     );
@@ -115,7 +96,6 @@ void Controller::go_to_sentence(int sentenceId) {
 void Controller::go_to_sentence(std::string sentenceId) {
 
     response().set_redirect_header(
-        "/" + get_interface_lang() +
         "/sentences/show"
         "/" + sentenceId
     );
@@ -155,7 +135,7 @@ bool Controller::check_permission() {
         );
 
         response().set_redirect_header(
-            "/" + get_interface_lang() +"/users/login"
+            "/users/login"
             "?from=" + oss.str()
         );
         return false;
