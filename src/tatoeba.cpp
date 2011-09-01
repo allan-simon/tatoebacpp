@@ -104,6 +104,9 @@ void Tatoeba::main(std::string url) {
 
     // NextGen url "lang.tatoeba.org/url"
     if (Languages::get_instance()->is_interface_lang(subdomain)) {
+        if (!session().is_set("interfaceLang")) {
+            session()["interfaceLang"] = subdomain;
+        }
         if (subdomain == session()["interfaceLang"]) {
             context().locale(
                 Languages::get_instance()->get_locale_from_lang(subdomain)
@@ -113,7 +116,7 @@ void Tatoeba::main(std::string url) {
         } else {
 
             response().set_redirect_header(
-                session()["interfaceLang"] +
+                "http://" + session()["interfaceLang"] + 
                 serverName.substr(serverName.find('.')) +
                 url
             );
@@ -124,17 +127,19 @@ void Tatoeba::main(std::string url) {
          
         // in a url tatoeba.org/A/B/C
         // try to see if A is an old style lang
-        size_t firstFolderEndPos = serverName.find('/',1);
+        size_t firstFolderEndPos = url.find('/',1);
         std::string firstFolder = url.substr(
             1,
-            firstFolderEndPos
+            firstFolderEndPos -1
         );
+
+        std::cout << "[DEBUG] firstFolder: " << firstFolder <<std::endl;
         if (Languages::get_instance()->is_old_interface_lang(firstFolder)) {
             std::string newLang =Languages::get_instance()->
                 get_new_lang_from_old(firstFolder);
             session()["interfaceLang"] = newLang;
             response().set_redirect_header(
-                newLang + "." +
+                "http://" + newLang + "." +
                 serverName +
                 url.substr(firstFolderEndPos)
             );
@@ -142,7 +147,7 @@ void Tatoeba::main(std::string url) {
         } else {
             session()["interfaceLang"] = "en";
             response().set_redirect_header(
-                 "en." +
+                 "http://en." +
                 serverName +
                 url
             );
