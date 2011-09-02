@@ -56,6 +56,14 @@ class Pages : public Controller {
          * Team and Credits page
          */
         void team_and_credits();
+        //TODO doc
+
+        /**
+         * @brief Display nothing, only to treat the form which permit
+         *        to change the language of the user interface
+         * @since 2 September 2011
+         */
+        void change_interface_lang_treat();
 };
 
 } // End namespace webs

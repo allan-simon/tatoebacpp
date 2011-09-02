@@ -37,6 +37,7 @@
 typedef std::map<std::string, std::string> ISOToNameMap;
 typedef std::map<std::string, std::string> InterfaceLangOldToNew;
 typedef std::map<std::string, std::string> InterfaceLangToLocale;
+typedef std::map<std::string, std::string> InterfaceCodeToName;
 typedef std::map<std::string, std::string> NameToISOMap;
 typedef std::map<int, std::string> IdToISOMap;
 typedef std::map<std::string, int> ISOToIdMap;
@@ -80,6 +81,7 @@ class Languages : public Singleton<Languages> {
          */
         InterfaceLangOldToNew oldLangToNew;
 
+        InterfaceCodeToName interfaceCodeToName;
         /**
          * Map associating internal ID in the database to ISO code
          */
@@ -101,7 +103,6 @@ class Languages : public Singleton<Languages> {
             cppcms::json::array langsJson,
             cppcms::json::array interfaceLangsJson
         );
-        //TODO DOC
 
           
         /**
@@ -193,6 +194,17 @@ class Languages : public Singleton<Languages> {
          * @param select The cppcms select to fill
          */
         void fill_form_select(cppcms::widgets::select &select);
+
+ 
+        /**
+         * @brief Fill a html form's select with all the supported languages
+         *        for the user interface.
+         *
+         * @param select The cppcms select to fill
+         *
+         * @since 2 September 2011
+         */
+        void fill_interface_lang_select(cppcms::widgets::select &select);
 
         /**
          * @brief Fill a html form's select and fill it with all the supported

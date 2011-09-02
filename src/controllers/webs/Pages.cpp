@@ -23,12 +23,17 @@
  * @link     http://tatoeba.org
  */
 
+#include <cppcms/session_interface.h>
 #include "Controller.h"
 #include "Pages.h"
 
 #include "contents/pages.h"
 #include "models/Sentences.h"
 #include "models/TatoDB.h"
+
+#include "contents/forms/change_interface_langs.h"
+
+
 
 namespace controllers {
 namespace webs {
@@ -37,7 +42,27 @@ Pages::Pages(cppcms::service& serv) : controllers::webs::Controller(serv) {
     dispatcher().assign("", &Pages::homepage, this);
   	dispatcher().assign("/contribute", &Pages::contribute, this);
   	dispatcher().assign("/terms-of-use", &Pages::terms_of_use, this);
+  	dispatcher().assign("change-interface-lang_treat", &Pages::change_interface_lang_treat, this);
   	dispatcher().assign("/tatoeba-team-and-credits", &Pages::team_and_credits, this);
+}
+
+/**
+ *
+ */
+void Pages::change_interface_lang_treat() {
+    forms::InterfaceLang form;
+    form.set_langs();
+    form.load(context());
+    if(!form.validate()) {
+        go_back_to_previous_page();
+    }
+
+    session()["interfaceLang"] =  form.interfaceLang.selected_id();
+
+    go_back_to_previous_page();
+
+
+
 }
 
 /**

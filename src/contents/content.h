@@ -30,6 +30,7 @@
 #include "forms/search.h"
 #include "contents/Config.h"
 #include "contents/helpers/users.h"
+#include "contents/forms/change_interface_langs.h"
 
 namespace contents {
 
@@ -45,6 +46,13 @@ struct BaseContent : public cppcms::base_content {
      */
     std::string message;
     forms::SearchesSimple searchesSimple;
+
+    /**
+     * @brief Form which permits to change the user interface language
+     *
+     * @since 2 September
+     */
+    forms::InterfaceLang interfaceLang;
     helpers::Users usersHelper;
     
 };

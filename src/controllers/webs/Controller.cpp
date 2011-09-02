@@ -60,6 +60,7 @@ void Controller::init_content(contents::BaseContent& content) {
         get_current_user_spoken_langs()
     );
 
+    content.interfaceLang.set_langs();
     //std::cout << "user name: " << session()["name"] << std::endl;
     if (session().is_set("name")) {
         content.usersHelper.username = session()["name"];

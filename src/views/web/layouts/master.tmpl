@@ -100,7 +100,13 @@
 <div id="top_menu_container">
 	<div id="top_menu">
 		<div id="languageSelectionContainer">
-            <!-- TODO put here the interface langs select -->
+            <form
+                action="/change-interface-lang_treat"
+                method="POST"
+            >
+                <% form as_space interfaceLang %>
+                
+            </form>
 		</div>
         <% include user_menu() %>
         <% include navigation_menu() %>
