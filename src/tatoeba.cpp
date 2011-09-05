@@ -25,6 +25,7 @@
 
 
 #include <iostream>
+#include <string>
 
 #include <cppcms/application.h>
 #include <cppcms/url_dispatcher.h>
@@ -82,46 +83,45 @@ Tatoeba::Tatoeba(cppcms::service &serv) :
 
 void Tatoeba::main(std::string url) {
     /**
-     * @todo Choose how we write the languague in the url and implement it
-     * @todo implement the default language in order check the session, coockie
+     * @todo implement the default language in order check the session, cookie
      * navigator
      */
-    std::cout << "[DEBUG] url: " << url <<std::endl;
+    
+    // we use the port for 4242 for local development purpose
+    // TODO rather replace this by a preprocessor directive
     if (request().server_port() == 4242 ) {
         std::cout << "[DEBUG] local version  " <<std::endl;
         context().locale("en_US.UTF-8");
         application::main(url);
         return;
     }
+
     std::string serverName = request().server_name();
     std::string subdomain = serverName.substr(
         0,
         serverName.find('.')
     );
-    std::cout << std::endl;
-    std::cout << "[DEBUG] serverName: " << serverName <<std::endl;
-    std::cout << "[DEBUG] subdomain: " << subdomain <<std::endl;
-    if (session().is_set("interfaceLang")) {
-        std::cout << "[DEBUG] in session: " << session()["interfaceLang"] <<std::endl;
-    } else {
-        std::cout << "[DEBUG] no session lang yet"  <<std::endl;
-    }
 
 
     // NextGen url "lang.tatoeba.org/url"
     if (Languages::get_instance()->is_interface_lang(subdomain)) {
-        if (
-            !session().is_set("interfaceLang") ||
-            session()["interfaceLang"].empty()
-        ) {
+        if (!session().is_set("interfaceLang")) {
             session()["interfaceLang"] = subdomain;
         }
+
+        // if we're visiting a page in the same language than our session, it's fine
         if (subdomain == session()["interfaceLang"]) {
+
+            // we set the locale in which the page will be generated
             context().locale(
                 Languages::get_instance()->get_locale_from_lang(subdomain)
             );
-
+            // and we call the appropriate controller
             application::main(url);
+
+        // otherwise we're redirected to the one in our session language
+        // (it may happen if someone share a link with the interface in esperanto or so,
+        // this way, there's no unwanted changed in the language of the interface)
         } else {
 
             response().set_redirect_header(
@@ -131,38 +131,45 @@ void Tatoeba::main(std::string url) {
             );
 
         }
+
+
     // no lang inside the server name
     } else {
          
-        // in a url tatoeba.org/A/B/C
-        // try to see if A is an old style lang
         size_t firstFolderEndPos = url.find('/',1);
         std::string firstFolder = url.substr(
             1,
             firstFolderEndPos -1
         );
+        //TODO replace this by a function based on the language preferences
+        //by the navigator
+        std::string newLang = "en";
 
-        std::cout << "[DEBUG] firstFolder: " << firstFolder <<std::endl;
+        // in a url tatoeba.org/A/B/C
+        // try to see if A is an old style lang
         if (Languages::get_instance()->is_old_interface_lang(firstFolder)) {
-            std::string newLang =Languages::get_instance()->
+            
+            newLang =Languages::get_instance()->
                 get_new_lang_from_old(firstFolder);
-            session()["interfaceLang"] = newLang;
-            response().set_redirect_header(
-                "http://" + newLang + "." +
-                serverName +
-                url.substr(firstFolderEndPos)
-            );
-            return;
-        } else {
-            session()["interfaceLang"] = "en";
-            response().set_redirect_header(
-                 "http://en." +
-                serverName +
-                url
-            );
-            return;
+
+            // if the url is like tatoeba.org/oldlang then we redirect to
+            // newlang.tatoeba.org
+            if (firstFolderEndPos == std::string::npos) {
+                url = "";
+            } else {
+                url = url.substr(firstFolderEndPos);
+            }
+
         }
-         
+        
+        session()["interfaceLang"] = newLang;
+
+        response().set_redirect_header(
+            "http://" + newLang + "." +
+            serverName +
+            url
+        );
+        return;        
     }
     
 }
