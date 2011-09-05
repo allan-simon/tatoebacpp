@@ -40,6 +40,8 @@
 
 #include "generics/Languages.h"
 
+#define DEFAULT_INTERFACE_LANG "en"
+
 namespace apps {
 
 /**
@@ -143,7 +145,7 @@ void Tatoeba::main(std::string url) {
         );
         //TODO replace this by a function based on the language preferences
         //by the navigator
-        std::string newLang = "en";
+        std::string newLang = get_default_interface_lang();
 
         // in a url tatoeba.org/A/B/C
         // try to see if A is an old style lang
@@ -172,6 +174,34 @@ void Tatoeba::main(std::string url) {
         return;        
     }
     
+}
+
+/**
+ *
+ */
+std::string Tatoeba::get_default_interface_lang() {
+    
+    std::string acceptedLanguage = request().http_accept_language();
+       
+    size_t size = acceptedLanguage.size(); 
+    if (size == 0) {
+        return DEFAULT_INTERFACE_LANG;
+    }
+
+    std::string lang;
+   
+     
+    if (size == 2 || size == 3) {
+        lang = acceptedLanguage;
+    } else  {
+        lang = acceptedLanguage.substr(0,2);
+    }
+
+    if (Languages::get_instance()->is_interface_lang(lang)) {
+        return lang;
+    } 
+
+    return DEFAULT_INTERFACE_LANG;
 }
 
 

@@ -70,6 +70,18 @@ private:
     controllers::apis::Languages languagesApi;
     controllers::apis::Admin adminApi;
 
+    /**
+     * @brief Based on http header, we will try to guess the most suitable
+     *        interface language
+     *
+     * @return The interface language code
+     *
+     * @since 5 September 2011
+     *
+     * @TODO for the moment it's a very naive algo
+     */  
+    std::string get_default_interface_lang();
+
 public:
     /**
      * Constructor
@@ -84,6 +96,6 @@ public:
      * @param url : url asked by user
      */
 	void main(std::string url);
-};
+}; 
 }
 #endif
