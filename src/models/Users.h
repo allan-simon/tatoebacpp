@@ -58,7 +58,7 @@ class Users : public SqliteModel {
         /**
          * constructor
          */
-        Users(cppdb::session sqliteDb);
+        Users();
 
         /**
          * Return the id of the user having the given name
@@ -276,5 +276,5 @@ template <class T> T models::Users::get_depth(
 }
 
 
-}
+} // end of namespace models
 #endif

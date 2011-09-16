@@ -46,7 +46,7 @@ namespace models {
 /**
  *
  */
-Users::Users(cppdb::session sqliteDb) : SqliteModel(sqliteDb) {
+Users::Users() : SqliteModel() {
     // TODO ADD check for the username 
 
     // create all the prepated statement

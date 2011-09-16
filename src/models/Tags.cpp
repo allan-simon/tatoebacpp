@@ -17,26 +17,65 @@
  *
  *
  * @category Tatoebacpp
- * @package  Results
+ * @package  Models
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
+ */ 
+
+
+#include "models/Tags.h"
+
+namespace models {
+/**
+ *
  */
-#ifndef TATOEBACPP_RESULTS_SENTENCES_STATS_H
-#define TATOEBACPP_RESULTS_SENTENCES_STATS_H
+Tags::Tags():
+    SqliteModel()
+{
 
-#include <map>
-
-#ifndef BIGGER_FIRST_DEF
-#define BIGGER_FIRST_DEF
-struct BiggerFirstComp {
-    bool operator()(int x,int y) {
-        return x > y;
-    }
-};
-#endif
-
-namespace results {
-    typedef std::map<int, std::string, BiggerFirstComp> SentencesStats;
 }
-#endif
+
+/**
+ *
+ */
+Tags::~Tags() {}
+
+
+
+/**
+ *
+ */
+results::TagsList Tags::get_all() {
+
+    results::TagsList tagsList;
+
+    cppdb::statement getAllTags = sqliteDb.prepare(
+        "SELECT internal_name, name, nbrOfSentences"
+        "   FROM tags"
+        "   ORDER BY nbrOfSentences;"
+    );
+
+    cppdb::result res = getAllTags.query();
+
+    while (res.next()) {
+        results::Tag tempTag;
+        tempTag.name = res.get<std::string>("name");
+        tempTag.standardName = res.get<std::string>("internal_name");
+
+        tagsList.insert(
+            std::pair<int, results::Tag>(
+                res.get<int>("nbrOfSentences"),
+                tempTag
+            )
+        );
+    }
+    getAllTags.reset();
+
+    return tagsList;
+}
+
+} // end of namespace models
+
+
+

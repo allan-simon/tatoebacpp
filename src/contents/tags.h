@@ -17,26 +17,46 @@
  *
  *
  * @category Tatoebacpp
- * @package  Results
+ * @package  Contents
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
-#ifndef TATOEBACPP_RESULTS_SENTENCES_STATS_H
-#define TATOEBACPP_RESULTS_SENTENCES_STATS_H
 
-#include <map>
+#ifndef TATOEBA_CONTENTS_TAGS_H
+#define TATOEBA_CONTENTS_TAGS_H
 
-#ifndef BIGGER_FIRST_DEF
-#define BIGGER_FIRST_DEF
-struct BiggerFirstComp {
-    bool operator()(int x,int y) {
-        return x > y;
-    }
+#include "contents/content.h"
+#include "results/tags.h"
+
+namespace contents {
+/**
+ * @namespace contents::tags
+ * @brief contains all the Content structure used by Tags pages
+ * @since 16 September 2011
+ */
+namespace tags {
+
+
+
+/**
+ * @brief Content structure used by Tags::ViewAll page
+ * 
+ * @since 16 September 2011
+ * 
+ */
+struct ViewAll : public BaseContent {
+    /**
+     * @brief List of all the tags supported by tatoeba
+     *
+     * @since 16 September 2011
+     */
+    results::TagsList tagsList;
 };
+
+
+} // end of namespace tags
+} // end of namespace contents
+
 #endif
 
-namespace results {
-    typedef std::map<int, std::string, BiggerFirstComp> SentencesStats;
-}
-#endif

@@ -22,10 +22,10 @@
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
-#ifndef TATOEBACPP_RESULTS_SENTENCES_STATS_H
-#define TATOEBACPP_RESULTS_SENTENCES_STATS_H
 
-#include <map>
+#ifndef TATOEBACPP_RESULTS_TAGS_H
+#define TATOEBACPP_RESULTS_TAGS_H
+
 
 #ifndef BIGGER_FIRST_DEF
 #define BIGGER_FIRST_DEF
@@ -36,7 +36,18 @@ struct BiggerFirstComp {
 };
 #endif
 
+#include <map>
 namespace results {
-    typedef std::map<int, std::string, BiggerFirstComp> SentencesStats;
-}
+
+    //TODO DOC
+    struct Tag {
+        std::string name;
+        std::string standardName;
+        std::string description;
+    };
+
+    typedef std::map<int, Tag, BiggerFirstComp> TagsList;
+
+} // end namespace results
 #endif
+

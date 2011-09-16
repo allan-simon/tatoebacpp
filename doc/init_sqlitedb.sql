@@ -39,3 +39,38 @@ CREATE INDEX sentences_users_user_id_idx
 CREATE INDEX sentences_users_user_id_lang_id_idx
     ON sentence_users (user_id, lang_id);
 
+--
+--
+
+-- Table that will contain the info about a new tag that is requested by
+-- a user to be added in the list of supported tags
+-- @since 15 September 2011
+CREATE TABLE requested_tags (
+    "id"             integer primary key not null, 
+    "internal_name"  text not null,                -- internal representation of the name, url friendly, for collation etc.
+    "name"           text not null,                -- name of the tag in human readable format
+    "description"    text not null,                -- text describing the purpose of this tag
+    "user_id"        integer not null,             -- id of the user who added it
+    "created"        integer not null,             -- date when it has been added
+    "nbrOfSentences" integer not null default 0    -- number of sentences tagged with this tag
+);
+
+
+CREATE UNIQUE INDEX requested_tags_internal_name_idx
+    ON requested_tags (internal_name);
+
+-- Table that will contain the info about tags supported by the system
+-- @since 15 September 2011
+CREATE TABLE tags (
+    "id"             integer primary key not null, 
+    "internal_name"  text not null,                -- internal representation of the name, url friendly, for collation etc.
+    "name"           text not null,                -- name of the tag in human readable format
+    "description"    text not null,                -- text describing the purpose of this tag
+    "user_id"        integer not null,             -- id of the user who added it
+    "created"        integer not null,             -- date when it has been added
+    "nbrOfSentences" integer not null default 0    -- number of sentences tagged with this tag
+);
+
+CREATE UNIQUE INDEX tags_internal_name_idx
+    ON tags (internal_name);
+

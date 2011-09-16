@@ -37,8 +37,8 @@ namespace models {
 /**
  *
  */
-UsersSpokenLangs::UsersSpokenLangs(cppdb::session sqliteDb) :
-    SqliteModel(sqliteDb)
+UsersSpokenLangs::UsersSpokenLangs() :
+    SqliteModel()
 {
 }
 

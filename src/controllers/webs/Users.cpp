@@ -42,15 +42,9 @@ namespace webs {
  */
 Users::Users(cppcms::service &serv) : Controller(serv) {
 
-    usersModel = new models::Users(cppdb::session(
-        "sqlite3:db=" + Config::get_instance()->sqlite3Path
-    ));
+    usersModel = new models::Users();
 
-    usersSpokenLangsModel= new models::UsersSpokenLangs(
-        cppdb::session(
-            "sqlite3:db=" + Config::get_instance()->sqlite3Path
-        )
-    );
+    usersSpokenLangsModel= new models::UsersSpokenLangs();
 
 
     cppcms::url_dispatcher* d = &dispatcher();

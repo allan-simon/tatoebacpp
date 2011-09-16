@@ -57,7 +57,7 @@ class UsersSpokenLangs : public SqliteModel {
         /**
          * @brief Constructor
          */
-        UsersSpokenLangs(cppdb::session sqliteDb);
+        UsersSpokenLangs();
         /**
         * @brief Add a language to the list of languages spoken by a user
         *

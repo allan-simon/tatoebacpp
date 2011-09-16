@@ -184,11 +184,8 @@ std::vector<std::string> Controller::get_current_user_spoken_langs() {
     );
     // if not we regenerate it
     if (data.empty()) {
-        models::UsersSpokenLangs usersSpokenLangsModel =  models::UsersSpokenLangs(
-            cppdb::session(
-                "sqlite3:db=" + Config::get_instance()->sqlite3Path
-            )
-        );
+        models::UsersSpokenLangs usersSpokenLangsModel =
+            models::UsersSpokenLangs();
 
         isos = usersSpokenLangsModel.get_iso_code_vector(
                 username

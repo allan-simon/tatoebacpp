@@ -17,26 +17,49 @@
  *
  *
  * @category Tatoebacpp
- * @package  Results
+ * @package  Controllers
  * @author   Allan SIMON <allan.simon@supinfo.com>
  * @license  Affero General Public License
  * @link     http://tatoeba.org
  */
-#ifndef TATOEBACPP_RESULTS_SENTENCES_STATS_H
-#define TATOEBACPP_RESULTS_SENTENCES_STATS_H
 
-#include <map>
 
-#ifndef BIGGER_FIRST_DEF
-#define BIGGER_FIRST_DEF
-struct BiggerFirstComp {
-    bool operator()(int x,int y) {
-        return x > y;
-    }
-};
-#endif
+#include "Tags.h"
+#include "contents/tags.h"
 
-namespace results {
-    typedef std::map<int, std::string, BiggerFirstComp> SentencesStats;
+namespace controllers {
+namespace webs {
+/**
+ *
+ */
+Tags::Tags(cppcms::service &serv) : Controller(serv) {
+
+    tagsModel = new models::Tags();
+
+    cppcms::url_dispatcher* d = &dispatcher();
+    d->assign("/view-all$", &Tags::view_all, this);
 }
-#endif
+
+/**
+ *
+ */
+Tags::~Tags() {
+    delete tagsModel;
+}
+
+/**
+ *
+ */
+void Tags::view_all() {
+
+    contents::tags::ViewAll c;
+    init_content(c);
+    c.tagsList = tagsModel->get_all();
+
+    render("tags_view_all", c);
+}
+
+} // End namespace webs 
+} // End namespace controllers
+
+
