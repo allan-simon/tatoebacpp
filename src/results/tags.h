@@ -39,14 +39,24 @@ struct BiggerFirstComp {
 #include <map>
 namespace results {
 
-    //TODO DOC
+    /**
+     * @brief Structure to represent a tag
+     *
+     * @since 16 September 2011
+     */
     struct Tag {
         std::string name;
         std::string standardName;
         std::string description;
     };
 
-    typedef std::map<int, Tag, BiggerFirstComp> TagsList;
+    /**
+     * @brief Structure to represent a list of tags, ordered by number of
+     *  sentences
+     *
+     * @since 16 September 2011
+     */
+    typedef std::multimap<int, Tag, BiggerFirstComp> TagsList;
 
 } // end namespace results
 #endif

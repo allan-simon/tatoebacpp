@@ -4,18 +4,90 @@
 
 /**
  * @brief Page's title
+ * 
+ * @since 16 September 2011
  */
 <% template title() %>
-    <% gt "Change your password" %>
+    <% gt "All Tags" %>
+<% end template %>
+
+
+/**
+ * @brief Permit to precise the CSS files used by this page
+ *
+ * @since 19 September 2011
+ */
+<% template css() %>
+    <link
+        href="http://css.tatoeba.org/css/tags/view_all.css?1"
+        type="text/css"
+        rel="stylesheet"
+    >
+
 <% end template %>
 
 /**
  * @brief All the content that will be displayed in the main div
  *        of the page
+ * 
+ * @since 16 September 2011
  */
 <% template main_content() %>
 
+    <div class="module">
+        <h2><% gt "All Tags" %></h2>
+        <div>
+
+        <% foreach tag in tagsList %>
+            <% item %>
+            <span class="tag">
+                <a
+                    class "tagName"
+                    href="/tags/show-sentences-with-tag/<%= tag.second.standardName %>"
+                >
+                    <%= tag.second.name %> 
+                </a>
+                <span class="numSentences">(<%= tag.first %>)</span>
+            </span>
+            <% end %>
+        <% end foreach %>
+        </div>
+    </div>
 <% end template %>
+
+
+/**
+ *
+ */
+<% template annexe_content() %>
+    <div class="annexeMenu">
+        <h2><% gt "Related Links"%></h2>
+        <ul>
+            <li class="item">
+                <a href="http://blog.tatoeba.org/2010/11/tags-guidelines.html">
+                    <% gt "Tags guidelines" %>
+                </a>
+                , Trang
+            </li>
+
+            <li class="item">
+                <a href="http://a4esl.com/temporary/tatoeba/#tags">
+                    <% gt "Tags - Experimental, Example Layouts" %>
+                </a>
+                , CK
+            </li>
+
+            <li class="item">
+                <a href="http://martin.swift.is/tatoeba/tags-cleanup.html">
+                    <% gt "Tags cleanup" %>
+                </a>
+                , Swift
+            </li>
+        </ul>
+    </div>
+
+<% end template %>
+
 
 <% end view %>
 
