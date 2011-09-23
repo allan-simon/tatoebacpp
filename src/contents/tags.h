@@ -29,6 +29,9 @@
 #include "contents/content.h"
 #include "results/tags.h"
 
+#include "contents/helpers/sentences.h"
+#include "contents/forms/generics/filter_lang.h"
+
 namespace contents {
 /**
  * @namespace contents::tags
@@ -53,6 +56,37 @@ struct ViewAll : public BaseContent {
      */
     results::TagsList tagsList;
 };
+
+/**
+ * @brief Content structure used by Tags::sentences_with_tag page
+ *
+ * @since 23 September 2011
+ */
+struct SentencesWithTag : public BaseContent {
+
+    /**
+     * @brief content helper needed to display the group of sentences
+     *
+     * @since 23 September 2011
+     */
+    helpers::Sentences shc;
+    
+    /**
+     * @brief Information about the tag itself
+     *
+     * @since 23 September 2011
+     */
+    results::Tag tag;
+    
+    /**
+     * @brief Form to be able to display only sentences in a specific language
+     *
+     * @since 23 September 2011
+     */
+    forms::generics::FilterLang filterLang;
+
+};
+
 
 
 } // end of namespace tags

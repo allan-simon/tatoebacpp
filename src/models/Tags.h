@@ -28,6 +28,7 @@
 
 #include "models/SqliteModel.h"
 #include "results/tags.h"
+#include "results/sentences.h"
 
 namespace models {
 
@@ -73,6 +74,35 @@ class Tags : public SqliteModel {
          * @since 9 September 2011
          */
         results::TagsList get_all();
+
+
+        /**
+         * @brief Retrieve all the sentences with a given tag
+         *
+         * @param tagName Internal name of the tag
+         * @param page    Number of the page requested, as results are
+         *                paginated
+         *
+         * @return Paginated list of sentences
+         *
+         * @since 23 September 2011
+         */
+        results::PagiSentences sentences_with_tag(
+            const std::string &tagName,
+            const int page
+        );
+
+        /**
+         * @brief Get all the information about a given tag 
+         *
+         * @param standardName Internal name of the tag
+         *
+         * @return The tag and all its infos
+         *
+         * @since 23 September 2011
+         */
+        results::Tag get(std::string standardName);
+
 };
 
 

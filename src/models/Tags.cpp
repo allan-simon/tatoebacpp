@@ -25,6 +25,10 @@
 
 
 #include "models/Tags.h"
+#include "generics/Languages.h"
+#include "models/Sentences.h"
+
+#define PAGE_SIZE 10
 
 namespace models {
 /**
@@ -74,6 +78,89 @@ results::TagsList Tags::get_all() {
 
     return tagsList;
 }
+
+/**
+ *
+ */
+results::Tag Tags::get(std::string standardName) {
+
+    //TODO exception if tag does not exist
+    results::Tag tag;
+
+    cppdb::statement getTag = sqliteDb.prepare(
+        "SELECT internal_name, name, description"
+        "   FROM tags"
+        "   WHERE internal_name = ?;"
+    );
+    getTag.bind(standardName);
+
+    cppdb::result res = getTag.row();
+
+    tag.standardName = res.get<std::string>("internal_name");
+    tag.name = res.get<std::string>("name");
+    tag.description = res.get<std::string>("description");
+
+    getTag.reset();
+
+    return tag;
+
+}
+
+
+/**
+ *
+ */
+// TODO maybe factorize this
+results::PagiSentences Tags::sentences_with_tag(
+    const std::string &tagName,
+    const int page
+) {
+
+    cppdb::statement getSentencesWithTagCount = sqliteDb.prepare(
+        "SELECT count(*) AS total "
+        "    FROM tags_sentences INNER JOIN tags ON id = tag_id "
+        "    WHERE internal_name = ? "
+    );
+    getSentencesWithTagCount.bind(tagName);
+
+
+    int maxsize = getSentencesWithTagCount.row().get<int>("total");
+    results::PagiSentences pagiSentences;
+
+    pagiSentences.currentPage = page;
+    pagiSentences.totalNbrElements = maxsize;
+    pagiSentences.pageNormalSize = PAGE_SIZE;
+
+    cppdb::statement getSentencesWithTag = sqliteDb.prepare(
+        "SELECT sentence_id "
+        "    FROM tags_sentences INNER JOIN tags ON id = tag_id "
+        "    WHERE internal_name = ? "
+        "    LIMIT ? OFFSET ? "
+    );
+
+
+    getSentencesWithTag.bind(tagName);
+    getSentencesWithTag.bind(PAGE_SIZE);
+    getSentencesWithTag.bind(PAGE_SIZE * page);
+
+    cppdb::result res = getSentencesWithTag.query();
+    models::Sentences sentencesModel;
+
+    while (res.next()) {
+
+        pagiSentences.push_back(
+            sentencesModel.get_by_id(
+                res.get<int>("sentence_id"),
+                3 //TODO magic number for depth of translation
+                //langsToKeep
+            )
+        );
+    }
+    getSentencesWithTag.reset();
+
+    return pagiSentences;
+}
+
 
 } // end of namespace models
 

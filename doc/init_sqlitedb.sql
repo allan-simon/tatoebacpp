@@ -74,3 +74,27 @@ CREATE TABLE tags (
 CREATE UNIQUE INDEX tags_internal_name_idx
     ON tags (internal_name);
 
+-- Table that will contain info about which sentence has which tags, when
+-- the tag has been added on this sentence and by who
+--
+-- @since 20 September 2011
+    
+CREATE TABLE tags_sentences (
+    "tag_id"        integer not null,           -- id of the tag that has been added
+    "sentence_id"   integer not null,           -- on which sentence (its id)
+    "lang_id"       integer not null,           -- id of the sentence language
+    "user_id"       integer not null,           -- id of the user who has added this tag on this sentence
+    "added_time"    integer not null default 0  -- timestamp when the tag has been added
+);
+
+CREATE INDEX tags_sentences_tag_id_idx
+    ON tags_sentences(tag_id);
+
+CREATE INDEX tags_sentences_sentence_id_idx
+    ON tags_sentences(sentence_id);
+
+CREATE INDEX tags_sentences_added_time_idx
+    ON tags_sentences(added_time);
+
+CREATE UNIQUE INDEX tags_sentences_tag_id_sentence_id_idx
+    ON tags_sentences(tag_id, sentence_id);

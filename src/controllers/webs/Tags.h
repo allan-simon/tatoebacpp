@@ -73,6 +73,17 @@ class Tags : public Controller {
          * @since 16 September 2011
          */
         void view_all();
+
+
+        /**
+         * @brief Display a page containing all the sentences with a given
+         *  tag and other extra information about this tag
+         *
+         * @param tagName Internal name of the tag
+         *
+         * @since 23 September 2011
+         */
+        void sentences_with_tag(std::string tagName);
 };
 
 

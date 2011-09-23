@@ -38,6 +38,7 @@ Tags::Tags(cppcms::service &serv) : Controller(serv) {
 
     cppcms::url_dispatcher* d = &dispatcher();
     d->assign("/view-all$", &Tags::view_all, this);
+    d->assign("/sentences-with-tag/(.*)$", &Tags::sentences_with_tag, this, 1);
 }
 
 /**
@@ -58,6 +59,29 @@ void Tags::view_all() {
 
     render("tags_view_all", c);
 }
+
+/**
+ *
+ */
+void Tags::sentences_with_tag(std::string tagName) {
+
+
+    unsigned int page = get_page();
+
+    contents::tags::SentencesWithTag c;
+    init_content(c);
+    c.filterLang.set_langs();
+    c.tag = tagsModel->get(tagName);
+
+    c.shc.sentences = tagsModel->sentences_with_tag(
+        tagName,
+        page
+    );
+
+    render("tags_sentences_with_tag", c);
+
+}
+
 
 } // End namespace webs 
 } // End namespace controllers

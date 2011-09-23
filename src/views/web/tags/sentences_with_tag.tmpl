@@ -1,0 +1,45 @@
+<%c++ #include "contents/tags.h" %>
+<% skin %>
+<% view tags_sentences_with_tag uses contents::tags::SentencesWithTag extends master %>
+<% template title() %><% gt "Sentences tagged '{1}'" using tag.name %><% end template %>
+
+<% template main_content() %>
+    <div class="module">
+        <h2><% gt "Sentences tagged '{1}'" using tag.name %></h2>
+        <% if not shc.empty() %>
+            <% c++ sentences_helper sh(out(), content.shc); %>
+            <% c++ sh.sentences_list(""); %> 
+        <% else %>
+            <% gt "No sentence with this tag" %>
+        <% end %>
+    </div>
+<% end %>
+
+<% template annexe_content() %>
+
+    <div class="module">
+        <h2><% gt "Filter sentences" %></h2>
+        <form
+            action="<% url "/tags/sentences-with-tag-in_treat/{1}" using tag.standardName %>"
+            method="POST"
+            id="SentencesWithTagInFilterLangForm"
+        >
+            <% form as_p filterLang %>
+
+        </form>
+
+    </div>
+
+    <div class="module">
+        <h2><% gt "Tag's Description " %></h2>
+        
+        <p>
+            <%= tag.description %>
+        </p>
+    </div>
+
+<% end %>
+
+
+<% end view %>
+<% end skin %>
