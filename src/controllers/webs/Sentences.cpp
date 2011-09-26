@@ -95,7 +95,7 @@ void Sentences::show(std::string sentence_id) {
     }
 
 
-	contents::SentencesShow c;
+	contents::SentencesShow c(sentence_id);
     init_content(c);
 	contents::helpers::Sentences shc(
         sentencesModel->get_by_id(

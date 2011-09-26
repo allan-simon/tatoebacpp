@@ -26,6 +26,7 @@
 
 #include "Tags.h"
 #include "contents/tags.h"
+#include "contents/forms/tags/add.h"
 
 namespace controllers {
 namespace webs {
@@ -39,6 +40,7 @@ Tags::Tags(cppcms::service &serv) : Controller(serv) {
     cppcms::url_dispatcher* d = &dispatcher();
     d->assign("/view-all$", &Tags::view_all, this);
     d->assign("/sentences-with-tag/(.*)$", &Tags::sentences_with_tag, this, 1);
+    d->assign("/add_treat", &Tags::add_treat, this);
 }
 
 /**
@@ -82,6 +84,44 @@ void Tags::sentences_with_tag(std::string tagName) {
 
 }
 
+/**
+ *
+ */
+void Tags::add_treat() {
+
+    TREAT_PAGE();
+
+    CHECK_PERMISSION_OR_GO_TO_LOGIN();
+
+    forms::tags::Add form;
+    form.load(context());
+
+    if (form.validate()) {
+        int sentenceId = 0;
+        std::istringstream(form.sentenceId.value()) >> sentenceId;
+        std::string tagName = form.tag.value();
+
+        int tagId = tagsModel->get_id(tagName);
+
+        if (tagId != 0) {
+
+            tagsModel->tag_sentence(
+                sentenceId,
+                tagId,
+                get_current_user_id()
+            );
+        
+        } else {
+            set_message("This tag does not exist.");
+        }
+        //set_message("Problem while saving.")
+
+    } else { 
+        //TODO i18n this
+        set_message("The form was not correctly filled.");
+    }
+    go_back_to_previous_page();
+}
 
 } // End namespace webs 
 } // End namespace controllers

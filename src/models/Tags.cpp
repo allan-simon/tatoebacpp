@@ -24,6 +24,7 @@
  */ 
 
 
+#include <booster/posix_time.h>
 #include "models/Tags.h"
 #include "generics/Languages.h"
 #include "models/Sentences.h"
@@ -79,6 +80,30 @@ results::TagsList Tags::get_all() {
     return tagsList;
 }
 
+
+/**
+ *
+ */
+int Tags::get_id(std::string realName) {
+
+    cppdb::statement getId = sqliteDb.prepare(
+        "SELECT id"
+        "   FROM tags"
+        "   WHERE name = ?"
+        "   LIMIT 1;"
+    );
+
+    getId.bind(realName);
+
+    cppdb::result res = getId.row();
+    int id = 0;
+    if (!res.empty()) {
+        id = res.get<int>("id");
+    }
+    getId.reset();
+    return id;
+}
+
 /**
  *
  */
@@ -90,7 +115,8 @@ results::Tag Tags::get(std::string standardName) {
     cppdb::statement getTag = sqliteDb.prepare(
         "SELECT internal_name, name, description"
         "   FROM tags"
-        "   WHERE internal_name = ?;"
+        "   WHERE internal_name = ? "
+        "   LIMIT 1;"
     );
     getTag.bind(standardName);
 
@@ -161,6 +187,65 @@ results::PagiSentences Tags::sentences_with_tag(
     return pagiSentences;
 }
 
+/**
+ *
+ */ 
+bool Tags::tag_sentence(
+    int sentenceId,
+    int tagId,
+    int userId
+) {
+
+    models::Sentences sentencesModel;
+    std::string sentenceLang;
+    if (!sentencesModel.get_lang(sentenceId,sentenceLang)) {
+        return false;
+    }
+
+    cppdb::statement tagSentence = sqliteDb.prepare(
+        "INSERT INTO tags_sentences("
+        "   tag_id, sentence_id, user_id, lang_id, added_time"
+        ") VALUES("
+        "   ?,?,?,?,?"
+        ")"
+    );
+
+    tagSentence.bind(tagId);
+    tagSentence.bind(sentenceId);
+    tagSentence.bind(userId);
+
+    tagSentence.bind(
+        Languages::get_instance()->get_id_from_iso(sentenceLang)
+    );
+
+    tagSentence.bind(
+        booster::ptime::now().get_seconds()
+    );
+
+          
+    try {
+        tagSentence.exec();    
+    } catch (cppdb::cppdb_error const &e) {
+        //TODO log it
+        tagSentence.reset();
+        return false;
+    }
+
+
+    cppdb::statement incrementTagCount = sqliteDb.prepare(
+        "UPDATE tags "
+        "   SET nbrOfSentences = nbrOfSentences + 1 "
+        "   WHERE id = ?;"
+    );
+    incrementTagCount.bind(tagId);
+    incrementTagCount.exec();
+
+
+    incrementTagCount.reset();
+    tagSentence.reset();
+
+    return true;
+}
 
 } // end of namespace models
 

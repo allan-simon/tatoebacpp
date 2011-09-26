@@ -103,6 +103,34 @@ class Tags : public SqliteModel {
          */
         results::Tag get(std::string standardName);
 
+        /**
+         * @brief Get the id of a given tag
+         *
+         * @param realName Human readable name of a tag
+         *
+         * @return The id of this tag, 0 if this tag does not exist
+         *
+         * @since 26 September 2011
+         */
+        int get_id(std::string realName);
+
+
+        /**
+         * @brief Apply a tag on a sentence
+         *
+         * @param sentenceId Id of the sentence on which to apply the tag 
+         * @param tagId      Id of the tag to apply
+         * @param userId     Id of the user who applies this tag
+         *
+         * @return True if the tag is successfly apply, false otherwise
+         *
+         * @since 26 September 2011
+         */
+        bool tag_sentence(
+            int sentenceId,
+            int tagId,
+            int userId
+        );
 };
 
 

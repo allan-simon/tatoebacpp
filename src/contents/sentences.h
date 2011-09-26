@@ -29,6 +29,7 @@
 #include "contents/content.h"
 #include "contents/helpers/sentences.h"
 #include "contents/forms/add_sentence.h"
+#include "contents/forms/tags/add.h"
 #include "contents/forms/edit_text_sentence.h"
 #include "contents/forms/edit_lang_sentence.h"
 #include "contents/forms/translate_sentence.h"
@@ -57,6 +58,23 @@ namespace contents {
          * @brief max depth of translations displayed + 1
          */
         int oneMoreDepth;
+
+        /**
+         * @brief Form to add a tag on this sentence
+         *
+         * @since 23 September 2011
+         */
+        forms::tags::Add addTag;
+
+        
+        /**
+         * @brief constructor
+         *
+         * @param idStr String representation of the sentence id
+         *
+         * @since 26 September 2011
+         */
+        SentencesShow(std::string idStr = ""): addTag(idStr) {}
 
     };
 

@@ -84,6 +84,12 @@ class Tags : public Controller {
          * @since 23 September 2011
          */
         void sentences_with_tag(std::string tagName);
+
+        /**
+         *
+         * @since 23 September 2011
+         */
+        void add_treat();
 };
 
 

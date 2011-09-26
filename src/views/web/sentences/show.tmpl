@@ -53,5 +53,34 @@
 
 <% end template %>
 
+
+<% template annexe_content() %>
+<div class="module">
+
+    <h2><% gt "Tags" %></h2>
+
+    <div class="tagsListOnSentence" >
+
+
+    </div>
+
+
+    <form
+        id="TagAdd"
+        method="post"
+        action="<% url "/tags/add_treat" %>"
+    >
+            <% form as_p addTag %>
+
+    </form>
+
+    <a href="/tags/view-all">
+        <% gt "View all tags" %>
+    </a>
+</div>
+
+<% end template %>
+
+
 <% end view %>
 <% end skin %>
