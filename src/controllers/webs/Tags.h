@@ -86,10 +86,27 @@ class Tags : public Controller {
         void sentences_with_tag(std::string tagName);
 
         /**
+         * @brief Display nothing, use to treat the form to add a tag on
+         *        a sentence
          *
          * @since 23 September 2011
          */
         void add_treat();
+
+        /**
+         * @brief Display nothing, use to remove a tag on a sentence
+         *
+         * @param sentenceIdStr Id on the sentence we're going to remove a tag
+         * @param tagIdStr      Id of the tag to remove on that sentence
+         *
+         * @since 28 September 2011
+         */
+        void remove_from_sentence(
+            std::string sentenceIdStr,
+            std::string tagIdStr
+        );
+
+        
 };
 
 

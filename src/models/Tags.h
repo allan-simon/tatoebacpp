@@ -101,7 +101,7 @@ class Tags : public SqliteModel {
          *
          * @since 23 September 2011
          */
-        results::Tag get(std::string standardName);
+        results::Tag get(const std::string &standardName);
 
         /**
          * @brief Get the id of a given tag
@@ -112,7 +112,7 @@ class Tags : public SqliteModel {
          *
          * @since 26 September 2011
          */
-        int get_id(std::string realName);
+        int get_id(const std::string &realName);
 
 
         /**
@@ -127,9 +127,9 @@ class Tags : public SqliteModel {
          * @since 26 September 2011
          */
         bool tag_sentence(
-            int sentenceId,
-            int tagId,
-            int userId
+            const int sentenceId,
+            const int tagId,
+            const int userId
         );
 
 
@@ -143,7 +143,22 @@ class Tags : public SqliteModel {
          *
          * @since 27 September 2011
          */
-        results::TagsList on_sentence(int sentenceId);
+        results::TagsList on_sentence(const int sentenceId);
+
+        /**
+         * @brief Remove a tag from a sentence
+         *
+         * @param sentenceId Id of the sentence on which to remove the tag
+         * @param tagId      Id of the tag to remove
+         *
+         * @return True if the tag was correctly removed, false otherwise
+         *
+         * @since 28 September 2011
+         */
+        bool remove_from_sentence(
+            const int sentenceId,
+            const int tagId
+        );
 };
 
 

@@ -41,6 +41,7 @@ Tags::Tags(cppcms::service &serv) : Controller(serv) {
     d->assign("/view-all$", &Tags::view_all, this);
     d->assign("/sentences-with-tag/(.*)$", &Tags::sentences_with_tag, this, 1);
     d->assign("/add_treat", &Tags::add_treat, this);
+    d->assign("/remove-from-sentence/(\\d+)/(\\d+)", &Tags::remove_from_sentence, this, 1, 2);
 }
 
 /**
@@ -105,12 +106,15 @@ void Tags::add_treat() {
 
         if (tagId != 0) {
 
-            tagsModel->tag_sentence(
+            const bool success = tagsModel->tag_sentence(
                 sentenceId,
                 tagId,
                 get_current_user_id()
             );
-        
+            if (success) {
+                set_message("Tag added");        
+            }
+
         } else {
             set_message("This tag does not exist.");
         }
@@ -122,6 +126,31 @@ void Tags::add_treat() {
     }
     go_back_to_previous_page();
 }
+
+
+/**
+ *
+ */
+void Tags::remove_from_sentence(std::string sentenceIdStr, std::string tagIdStr) {
+
+    CHECK_PERMISSION_OR_GO_TO_LOGIN();
+
+	int sentenceId = atoi(sentenceIdStr.c_str());
+	int tagId = atoi(tagIdStr.c_str());
+
+    bool success = tagsModel->remove_from_sentence(
+        sentenceId,
+        tagId
+    );
+
+    if (success) { 
+        set_message("Tag removed.");
+    } else {
+        set_message("A problem occured while trying to remove the tag.");
+    }
+    go_back_to_previous_page();
+}
+
 
 } // End namespace webs 
 } // End namespace controllers

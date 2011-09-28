@@ -84,7 +84,7 @@ results::TagsList Tags::get_all() {
 /**
  *
  */
-int Tags::get_id(std::string realName) {
+int Tags::get_id(const std::string &realName) {
 
     cppdb::statement getId = sqliteDb.prepare(
         "SELECT id"
@@ -107,7 +107,7 @@ int Tags::get_id(std::string realName) {
 /**
  *
  */
-results::Tag Tags::get(std::string standardName) {
+results::Tag Tags::get(const std::string &standardName) {
 
     //TODO exception if tag does not exist
     results::Tag tag;
@@ -143,8 +143,8 @@ results::PagiSentences Tags::sentences_with_tag(
 ) {
 
     cppdb::statement getSentencesWithTagCount = sqliteDb.prepare(
-        "SELECT count(*) AS total "
-        "    FROM tags_sentences INNER JOIN tags ON id = tag_id "
+        "SELECT nbrOfSentences AS total "
+        "    FROM tags"
         "    WHERE internal_name = ? "
     );
     getSentencesWithTagCount.bind(tagName);
@@ -192,9 +192,9 @@ results::PagiSentences Tags::sentences_with_tag(
  *
  */ 
 bool Tags::tag_sentence(
-    int sentenceId,
-    int tagId,
-    int userId
+    const int sentenceId,
+    const int tagId,
+    const int userId
 ) {
 
     models::Sentences sentencesModel;
@@ -251,7 +251,7 @@ bool Tags::tag_sentence(
 /**
  *
  */
-results::TagsList Tags::on_sentence(int sentenceId) {
+results::TagsList Tags::on_sentence(const int sentenceId) {
 
     cppdb::statement getTagsOnSentence = sqliteDb.prepare(
         "SELECT"
@@ -287,6 +287,49 @@ results::TagsList Tags::on_sentence(int sentenceId) {
     getTagsOnSentence.reset();
 
     return tagsList;
+
+}
+
+/**
+ *
+ */
+bool Tags::remove_from_sentence(
+    const int sentenceId,
+    const int tagId
+) {
+
+    cppdb::statement removeTag = sqliteDb.prepare(
+        "DELETE FROM tags_sentences"
+        "   WHERE tag_id = ? AND sentence_id = ?;"
+    );
+
+    removeTag.bind(tagId);
+    removeTag.bind(sentenceId);
+
+          
+    try {
+        removeTag.exec();    
+    } catch (cppdb::cppdb_error const &e) {
+        //TODO log it
+        removeTag.reset();
+        return false;
+    }
+
+
+    cppdb::statement decrementTagCount = sqliteDb.prepare(
+        "UPDATE tags "
+        "   SET nbrOfSentences = nbrOfSentences - 1 "
+        "   WHERE id = ?;"
+    );
+    decrementTagCount.bind(tagId);
+    decrementTagCount.exec();
+
+
+    decrementTagCount.reset();
+    removeTag.reset();
+
+    return true;
+
 
 }
 
