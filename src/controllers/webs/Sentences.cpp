@@ -29,6 +29,7 @@
 #include "contents/forms/generics/filter_lang.h"
 
 #include "models/Sentences.h"
+#include "models/Tags.h"
 
 namespace controllers {
 namespace webs {
@@ -62,6 +63,7 @@ Sentences::Sentences(cppcms::service &serv) : Controller(serv) {
   	disp->assign("/link/(\\d+)/(\\d+)", &Sentences::link, this, 1, 2);
   	disp->assign("/unlink/(\\d+)/(\\d+)", &Sentences::unlink, this, 1, 2);
     sentencesModel = new models::Sentences();
+    tagsModel = new models::Tags();
 }
 
 /**
@@ -69,6 +71,7 @@ Sentences::Sentences(cppcms::service &serv) : Controller(serv) {
  */
 Sentences::~Sentences() {
     delete sentencesModel; 
+    delete tagsModel; 
 }
 
 
@@ -109,6 +112,7 @@ void Sentences::show(std::string sentence_id) {
 
     shc.currentUserHelper = c.usersHelper;
     c.shc = shc;
+    c.tags = tagsModel->on_sentence(id);
     
 
     render("sentences_show", c);

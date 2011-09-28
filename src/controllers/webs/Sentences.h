@@ -41,6 +41,7 @@ extern "C" {
 */
 namespace models {
     class Sentences;
+    class Tags;
 }
 
 namespace controllers {
@@ -55,6 +56,13 @@ class Sentences : public Controller {
          * Model class for sentences
          */
         models::Sentences *sentencesModel;
+        
+        /**
+         * @brief Model Class for tags
+         * 
+         * @since 27 September 2011
+         */
+        models::Tags *tagsModel;
 	public:
         /**
          * Constructor, will attach the url to the dispatcher

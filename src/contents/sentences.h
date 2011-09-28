@@ -34,6 +34,7 @@
 #include "contents/forms/edit_lang_sentence.h"
 #include "contents/forms/translate_sentence.h"
 
+#include "results/tags.h"
 namespace contents {
     
     /**
@@ -67,6 +68,13 @@ namespace contents {
         forms::tags::Add addTag;
 
         
+        /**
+         * @brief All tags on that sentence
+         *
+         * @since 27 September 2011
+         */
+        results::TagsList tags;        
+
         /**
          * @brief constructor
          *

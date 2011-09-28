@@ -3,6 +3,22 @@
 <% view sentences_show uses contents::SentencesShow extends master %>
 <% template title() %><% gt "Sentence show"  %><% end template %>
 
+/**
+ * @brief Permit to precise the CSS files used by this page
+ *
+ * @since 27 September 2011
+ */
+<% template css() %>
+    <link
+        href="http://css.tatoeba.org/css/sentences/show.css?1"
+        type="text/css"
+        rel="stylesheet"
+    >
+
+<% end template %>
+
+
+
 <% template main_content() %>
     <% c++ navigation(content.id - 1, content.id + 1); %>
         <div class="module">
@@ -61,7 +77,29 @@
 
     <div class="tagsListOnSentence" >
 
-
+    <% foreach tag in tags %>
+        <% item %>
+        <span class="tag">
+            <a
+                title="
+                    <%gt "User: {1}" using tag.second.userId %> 
+                    <%gt "date: {1,date=f}" using tag.second.added %>
+                "
+                class="tagName"
+                href="/tags/sentences-with-tag/<%= tag.second.standardName %>"
+            >
+                <%= tag.second.name %>
+            </a>
+            <a
+                title="<% gt "remove tag '{1}'" using tag.second.name %>"
+                class="removeTagFromSentenceButton"
+                href="/tags/remove-from-sentence/<%= id %>/<%= tag.second.id %>"
+            >
+                X
+            </a>
+        </span>
+        <% end %>
+    <% end foreach %>
     </div>
 
 

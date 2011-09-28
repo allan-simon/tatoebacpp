@@ -182,6 +182,7 @@ results::PagiSentences Tags::sentences_with_tag(
             )
         );
     }
+    getSentencesWithTagCount.reset();
     getSentencesWithTag.reset();
 
     return pagiSentences;
@@ -245,6 +246,48 @@ bool Tags::tag_sentence(
     tagSentence.reset();
 
     return true;
+}
+
+/**
+ *
+ */
+results::TagsList Tags::on_sentence(int sentenceId) {
+
+    cppdb::statement getTagsOnSentence = sqliteDb.prepare(
+        "SELECT"
+        "    id, internal_name, name, nbrOfSentences, ts.user_id, ts.added_time"
+        "    FROM tags_sentences AS ts INNER JOIN tags ON id = tag_id "
+        "    WHERE sentence_id = ? "
+    );
+
+
+    getTagsOnSentence.bind(sentenceId);
+
+    cppdb::result res = getTagsOnSentence.query();
+
+
+    results::TagsList tagsList;
+
+    while (res.next()) {
+        results::Tag tempTag;
+        tempTag.id = res.get<int>("id");
+        tempTag.name = res.get<std::string>("name");
+        tempTag.standardName = res.get<std::string>("internal_name");
+        tempTag.userId = res.get<int>("user_id");
+        tempTag.added = res.get<long long>("added_time");
+
+        tagsList.insert(
+            std::pair<int, results::Tag>(
+                res.get<int>("nbrOfSentences"),
+                tempTag
+            )
+        );
+    }
+
+    getTagsOnSentence.reset();
+
+    return tagsList;
+
 }
 
 } // end of namespace models

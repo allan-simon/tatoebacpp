@@ -131,6 +131,19 @@ class Tags : public SqliteModel {
             int tagId,
             int userId
         );
+
+
+        /**
+         * @brief Retrieve all the tags on a given sentence
+         *
+         * @param sentenceId Id of the sentence we want the tags of
+         *
+         * @return Return the list of tags on this sentence, and by who and
+         *         when they have been added
+         *
+         * @since 27 September 2011
+         */
+        results::TagsList on_sentence(int sentenceId);
 };
 
 

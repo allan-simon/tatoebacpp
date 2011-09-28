@@ -45,9 +45,12 @@ namespace results {
      * @since 16 September 2011
      */
     struct Tag {
+        int id;
         std::string name;
         std::string standardName;
         std::string description;
+        long long added;
+        int userId;
     };
 
     /**
