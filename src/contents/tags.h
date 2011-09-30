@@ -87,7 +87,20 @@ struct SentencesWithTag : public BaseContent {
 
 };
 
-
+/**
+ * @brief Content structure used by Tags::sentences_with_tag_in page
+ *
+ * @since 29 September 2011
+ */
+struct SentencesWithTagIn : public SentencesWithTag {
+    /**
+     * @brief Language in which the sentence will be filtered (in addition to
+     *        by tag filtering)
+     *
+     * @since 29 September 2011
+     */
+    std::string inLanguage;
+};
 
 } // end of namespace tags
 } // end of namespace contents

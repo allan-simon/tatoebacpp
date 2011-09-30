@@ -99,7 +99,7 @@ void OfUser::sentences_of_in(
     c.inLanguage = Languages::get_instance()->get_name_from_iso( 
         inLanguage
     );
-    c.shc.baseUrl = "/of-user/sentences-of-in/" + username;
+    c.shc.baseUrl = "/of-user/sentences-of-in/" + username + "/" + inLanguage;
     c.shc.currentUserHelper = c.usersHelper;
 
     unsigned int page = get_page();

@@ -113,7 +113,7 @@ class OfUser : public Controller {
          *        specific language
          *
          * @param username   Name of the user we want the sentences of
-         * @param inLanguage Will keep only the sentenc in this language
+         * @param inLanguage Will keep only the sentence in this language
          *                   (iso 639-3 code)
          *
          * @since 24 August 2011

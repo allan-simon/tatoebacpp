@@ -89,8 +89,31 @@ class Tags : public SqliteModel {
          */
         results::PagiSentences sentences_with_tag(
             const std::string &tagName,
-            const int page
+            const unsigned int page
         );
+
+
+        /**
+         * @brief Retrieve all the sentences with a given tag in a given lang
+         *
+         * @param tagName Internal name of the tag
+         * @param tagName Internal id of the language on which we will filter 
+         * @param page    Number of the page requested, as results are
+         *                paginated
+         *
+         * @return Paginated list of sentences
+         *
+         * @since 29 September 2011
+         */
+        results::PagiSentences sentences_with_tag_in(
+            const std::string &tagName,
+            const int langId,
+            const unsigned int page
+        );
+
+
+
+
 
         /**
          * @brief Get all the information about a given tag 

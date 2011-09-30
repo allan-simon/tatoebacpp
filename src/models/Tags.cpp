@@ -137,9 +137,66 @@ results::Tag Tags::get(const std::string &standardName) {
  *
  */
 // TODO maybe factorize this
+results::PagiSentences Tags::sentences_with_tag_in(
+    const std::string &tagName,
+    const int langId,
+    const unsigned int page
+) {
+
+    cppdb::statement getSentencesWithTagInCount = sqliteDb.prepare(
+        "SELECT count(*) AS total "
+        "    FROM tags_sentences INNER JOIN tags ON id = tag_id "
+        "    WHERE internal_name = ? AND lang_id = ?"
+    );
+    getSentencesWithTagInCount.bind(tagName);
+    getSentencesWithTagInCount.bind(langId);
+
+
+    int maxsize = getSentencesWithTagInCount.row().get<int>("total");
+    results::PagiSentences pagiSentences;
+
+    pagiSentences.currentPage = page;
+    pagiSentences.totalNbrElements = maxsize;
+    pagiSentences.pageNormalSize = PAGE_SIZE;
+
+    cppdb::statement getSentencesWithTagIn = sqliteDb.prepare(
+        "SELECT sentence_id "
+        "    FROM tags_sentences INNER JOIN tags ON id = tag_id "
+        "    WHERE internal_name = ? AND lang_id = ?"
+        "    LIMIT ? OFFSET ? "
+    );
+
+
+    getSentencesWithTagIn.bind(tagName);
+    getSentencesWithTagIn.bind(langId);
+    getSentencesWithTagIn.bind(PAGE_SIZE);
+    getSentencesWithTagIn.bind(PAGE_SIZE * page);
+
+    cppdb::result res = getSentencesWithTagIn.query();
+    models::Sentences sentencesModel;
+
+    while (res.next()) {
+
+        pagiSentences.push_back(
+            sentencesModel.get_by_id(
+                res.get<int>("sentence_id"),
+                3 //TODO magic number for depth of translation
+                //langsToKeep
+            )
+        );
+    }
+    getSentencesWithTagInCount.reset();
+    getSentencesWithTagIn.reset();
+
+    return pagiSentences;
+}
+
+/**
+ *
+ */
 results::PagiSentences Tags::sentences_with_tag(
     const std::string &tagName,
-    const int page
+    const unsigned int page
 ) {
 
     cppdb::statement getSentencesWithTagCount = sqliteDb.prepare(
@@ -187,6 +244,9 @@ results::PagiSentences Tags::sentences_with_tag(
 
     return pagiSentences;
 }
+
+
+
 
 /**
  *

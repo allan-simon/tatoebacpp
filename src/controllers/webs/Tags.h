@@ -85,6 +85,37 @@ class Tags : public Controller {
          */
         void sentences_with_tag(std::string tagName);
 
+
+        /**
+         * @brief same as Tags::sentences_with_tag but only sentences in a
+         *        specific language
+         *
+         * @param tagName    Internal name of the tag
+         * @param inLanguage Will keep only the sentence in this language
+         *                   (iso 639-3 code)
+         *
+         * @since 28 September 2011
+         */
+        void sentences_with_tag_in(
+            std::string tagName,
+            std::string inLanguage
+        );
+
+        /**
+         * @brief Display nothing, only treat the filter by language form
+         *        and redirect to the correct page
+         *
+         * @param tagName We will filter all the sentences which possess this
+         *                tag
+         *
+         * @since 29 September 2011
+         */
+        void sentences_with_tag_in_treat(
+            std::string tagName 
+        );
+
+
+
         /**
          * @brief Display nothing, use to treat the form to add a tag on
          *        a sentence

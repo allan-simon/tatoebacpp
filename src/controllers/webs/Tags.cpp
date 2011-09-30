@@ -40,6 +40,8 @@ Tags::Tags(cppcms::service &serv) : Controller(serv) {
     cppcms::url_dispatcher* d = &dispatcher();
     d->assign("/view-all$", &Tags::view_all, this);
     d->assign("/sentences-with-tag/(.*)$", &Tags::sentences_with_tag, this, 1);
+    d->assign("/sentences-with-tag-in/(.*)/(\\w+)$", &Tags::sentences_with_tag_in, this, 1, 2);
+    d->assign("/sentences-with-tag-in_treat/(.*)", &Tags::sentences_with_tag_in_treat, this, 1);
     d->assign("/add_treat", &Tags::add_treat, this);
     d->assign("/remove-from-sentence/(\\d+)/(\\d+)", &Tags::remove_from_sentence, this, 1, 2);
 }
@@ -76,6 +78,8 @@ void Tags::sentences_with_tag(std::string tagName) {
     c.filterLang.set_langs();
     c.tag = tagsModel->get(tagName);
 
+    c.shc.baseUrl = "/tags/sentences-with-tag/" + tagName;
+    c.shc.currentUserHelper = c.usersHelper;
     c.shc.sentences = tagsModel->sentences_with_tag(
         tagName,
         page
@@ -84,6 +88,71 @@ void Tags::sentences_with_tag(std::string tagName) {
     render("tags_sentences_with_tag", c);
 
 }
+/**
+ *
+ */
+void Tags::sentences_with_tag_in(
+    std::string tagName,
+    std::string inLanguage
+) {
+
+
+    unsigned int page = get_page();
+
+    contents::tags::SentencesWithTagIn c;
+    init_content(c);
+    c.filterLang.set_langs();
+    c.tag = tagsModel->get(tagName);
+
+    c.inLanguage = Languages::get_instance()->get_name_from_iso( 
+        inLanguage
+    );
+
+    c.shc.baseUrl = "/tags/sentences-with-tag-in/" + tagName + "/" + inLanguage;
+    c.shc.currentUserHelper = c.usersHelper;
+    c.shc.sentences = tagsModel->sentences_with_tag_in(
+        tagName,
+        Languages::get_instance()->get_id_from_iso(inLanguage),
+        page
+    );
+
+    render("tags_sentences_with_tag_in", c);
+
+}
+
+/**
+ *
+ */
+void Tags::sentences_with_tag_in_treat(
+    std::string tagName
+) {
+
+    forms::generics::FilterLang form;
+    form.set_langs();
+    form.load(context());
+    if(!form.validate()) {
+        go_back_to_previous_page();
+    }
+
+    std::string filteredLang = form.filterLang.selected_id();
+    if (filteredLang == "mul") {
+
+        response().set_redirect_header(
+            "/tags/sentences-with-tag"
+            "/" + tagName 
+        );
+    } else {
+        response().set_redirect_header(
+            "/tags/sentences-with-tag-in"
+            "/" + tagName +
+            "/" + filteredLang
+        );
+    }
+}
+
+
+
+
 
 /**
  *
