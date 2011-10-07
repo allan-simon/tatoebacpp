@@ -20,8 +20,4 @@ SqliteModel::SqliteModel(cppdb::session sqliteDb) : sqliteDb(sqliteDb) {
 
 }
 
-void SqliteModel::init() {
-
-}
-
 } // end of namespace models
