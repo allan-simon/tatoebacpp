@@ -36,6 +36,7 @@
 #include <cstring>
 #include "models/Sentences.h"
 #include "models/OfUser.h"
+#include "models/Tags.h"
 #include "models/SphinxClient.h"
 namespace models {
 
@@ -372,19 +373,13 @@ void Sentences::edit_text(
 	
     // if the new text was already present then we merge the sentence
     // with the already existing one
-    if (origId >= 0) {
-        TatoItem *origItem = tato_db_item_find(tatoDb, origId);
+    if (origId >= 0 && origId != id) {
  
-        OfUser().abandon_sentence(
-            id
-        );
-
-        tato_db_item_merge_into(
-            tatoDb,
+        merge(
             id,
-            origItem
+            origId
         );
-        throw SentDupliException(origItem->id);         
+        throw SentDupliException(origId);         
     } 
 
 	tato_item_lang_item_remove(item->lang, item);
@@ -406,6 +401,36 @@ void Sentences::edit_text(
 
 }
 
+
+
+/**
+ *
+ */
+void Sentences::merge(
+    const int toMergeId,
+    const int toKeepId
+) {
+
+    TatoDb *tatoDb = GET_DB_POINTER(); 
+    TatoItem *toKeepItem = tato_db_item_find(tatoDb, toKeepId);
+    tato_db_item_merge_into(
+        tatoDb,
+        toMergeId,
+        toKeepItem
+    );
+
+    Tags tagModel;
+    tagModel.merge(
+        toMergeId,
+        toKeepId
+    );
+
+    OfUser ofUser;
+    ofUser.merge(
+        toMergeId,
+        toKeepId
+    );
+}
 
 /**
  *
@@ -436,17 +461,12 @@ void Sentences::edit_lang(
 	
     // if the new text was already present then we merge the sentence
     // with the already existing one
-    if (origId >= 0) {
-        OfUser().abandon_sentence(
-            id
-        );
-        TatoItem *origItem = tato_db_item_find(tatoDb, origId);
-        tato_db_item_merge_into(
-            tatoDb,
+    if (origId >= 0 && origId != id) {
+        merge(
             id,
-            origItem
+            origId
         );
-        throw SentDupliException(origItem->id);         
+        throw SentDupliException(origId);      
     } 
 
 	tato_item_lang_item_remove(item->lang, item);

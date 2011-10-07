@@ -193,6 +193,22 @@ class Sentences {
          *
          * @todo:  use exception when the sentence id does not exist
          */
+        void merge(
+            const int toMergeId,
+            const int toKeepId
+        );
+
+        /**
+         * @brief Write the code of the lang of a given sentence in a variable
+         * 
+         * @param sentenceId   The id of the sentence to get the lang of
+         * @param sentenceLang The variable in which the code will be written
+         *
+         * @return True if something was written , false otherwise
+         * @since  17 August 2011
+         *
+         * @todo:  use exception when the sentence id does not exist
+         */
         static bool get_lang(
             int sentenceId,
             std::string &sentenceLang

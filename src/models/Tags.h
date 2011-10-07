@@ -182,6 +182,23 @@ class Tags : public SqliteModel {
             const int sentenceId,
             const int tagId
         );
+
+        /**
+         * @brief Take in charge to replace all the occurence of a sentence
+         *        by an other one 
+         *
+         * @param toMergeId The sentence id to be replaced
+         * @param toKeepId  The sentence id that will be kept
+         *
+         * @return True if the changes have been correctly made, false
+         *         otherwise
+         *
+         * @since   1 October 2011 
+         */
+        bool merge(
+            const int toMergeId,
+            const int toKeepId
+        );
 };
 
 

@@ -98,3 +98,21 @@ CREATE INDEX tags_sentences_added_time_idx
 
 CREATE UNIQUE INDEX tags_sentences_tag_id_sentence_id_idx
     ON tags_sentences(tag_id, sentence_id);
+
+-- update the count when we "remove" a tag from a sentence
+CREATE TRIGGER IF NOT EXISTS decrement_nbrofsentences_tags_trigger
+    AFTER DELETE ON tags_sentences
+    FOR EACH ROW
+    BEGIN
+        UPDATE tags SET nbrOfSentences = nbrOfSentences - 1
+            WHERE id = OLD.tag_id;
+    END;
+
+-- update the count when we add a tag on a sentence
+CREATE TRIGGER IF NOT EXISTS increment_nbrofsentences_tags_trigger
+    AFTER INSERT ON tags_sentences
+    FOR EACH ROW
+    BEGIN
+        UPDATE tags SET nbrOfSentences = nbrOfSentences + 1
+            WHERE id = NEW.tag_id;
+    END;

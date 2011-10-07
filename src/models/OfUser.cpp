@@ -324,6 +324,47 @@ results::PagiSentences OfUser::sentences_of_in(
     return pagiSentences;
 }
 
+/**
+ *
+ */
+bool OfUser::merge (
+    const int toMergeId,
+    const int toKeepId
+) {
+ 
+    cppdb::statement mergeOfUser = sqliteDb.prepare(
+        // or replace permit to handle when an update would create
+        // a record that already exist (merge two sentence that have
+        // a common tag for example)
+        "UPDATE OR REPLACE sentence_users"
+        "    SET sentence_id = ? "
+        "    WHERE sentence_id = ? ;"
+    );
+
+
+    mergeOfUser.bind(toKeepId);
+    mergeOfUser.bind(toMergeId);
+
+
+    mergeOfUser.exec();    
+   
+    try {
+        mergeOfUser.exec();    
+    } catch (cppdb::cppdb_error const &e) {
+        //TODO log it
+        std::cerr << e.what() << std::endl;
+        mergeOfUser.reset();
+        return false;
+    }
+
+  
+
+    mergeOfUser.reset();
+    return true;
+
+}
+
+
 
 
 }// end namespace models

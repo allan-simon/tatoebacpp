@@ -288,21 +288,12 @@ bool Tags::tag_sentence(
         tagSentence.exec();    
     } catch (cppdb::cppdb_error const &e) {
         //TODO log it
+        std::cerr << e.what() << std::endl;
         tagSentence.reset();
         return false;
     }
 
 
-    cppdb::statement incrementTagCount = sqliteDb.prepare(
-        "UPDATE tags "
-        "   SET nbrOfSentences = nbrOfSentences + 1 "
-        "   WHERE id = ?;"
-    );
-    incrementTagCount.bind(tagId);
-    incrementTagCount.exec();
-
-
-    incrementTagCount.reset();
     tagSentence.reset();
 
     return true;
@@ -371,26 +362,57 @@ bool Tags::remove_from_sentence(
         removeTag.exec();    
     } catch (cppdb::cppdb_error const &e) {
         //TODO log it
+        std::cerr << e.what() << std::endl;
         removeTag.reset();
         return false;
     }
 
 
-    cppdb::statement decrementTagCount = sqliteDb.prepare(
-        "UPDATE tags "
-        "   SET nbrOfSentences = nbrOfSentences - 1 "
-        "   WHERE id = ?;"
-    );
-    decrementTagCount.bind(tagId);
-    decrementTagCount.exec();
-
-
-    decrementTagCount.reset();
     removeTag.reset();
 
     return true;
 
 
+}
+
+
+/**
+ *
+ */
+bool Tags::merge (
+    const int toMergeId,
+    const int toKeepId
+) {
+ 
+    cppdb::statement mergeTagsOnSentence = sqliteDb.prepare(
+        // or replace permit to handle when an update would create
+        // a record that already exist (merge two sentence that have
+        // a common tag for example)
+        "UPDATE OR REPLACE tags_sentences"
+        "    SET sentence_id = ? "
+        "    WHERE sentence_id = ? ;"
+    );
+
+
+    mergeTagsOnSentence.bind(toKeepId);
+    mergeTagsOnSentence.bind(toMergeId);
+
+
+    mergeTagsOnSentence.exec();    
+   
+    try {
+        mergeTagsOnSentence.exec();    
+    } catch (cppdb::cppdb_error const &e) {
+        //TODO log it
+        std::cerr << e.what() << std::endl;
+        mergeTagsOnSentence.reset();
+        return false;
+    }
+
+  
+
+    mergeTagsOnSentence.reset();
+    return true;
 }
 
 } // end of namespace models
