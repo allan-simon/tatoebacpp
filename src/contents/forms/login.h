@@ -36,7 +36,7 @@ namespace forms {
      * @struct LoginUser
      * Form to log in
      */
-	struct LoginUser : public cppcms::form {
+    struct LoginUser : public cppcms::form {
         /**
          * To keep trace of the url we were in before
          * landing on the login page
@@ -46,65 +46,69 @@ namespace forms {
         /**
          * TODO write the doc
          */
-		widgets::text username;
+        widgets::text username;
         
         /**
          * TODO write the doc
          */
-		widgets::password password;
+        widgets::password password;
         
         /**
          * TODO write the doc
          */
-		widgets::checkbox rememberMe;
+        widgets::checkbox rememberMe;
         
         /**
          * TODO write the doc
          */
-		widgets::submit submit;
-		
+        widgets::submit submit;
+        
 
         /**
          * Default constructor add all the fields to the form
          * define their names etc.
          */
-		LoginUser() {
+        LoginUser() {
             previousUrl.name("previousurl");
             previousUrl.value("");
 
-			username.name("username");
-			username.message("Username : ");
-			username.attributes_string("class=\"input text\"");
+            username.name("username");
+            username.message("Username : ");
+            username.attributes_string("class=\"input text\"");
 
-			password.name("password");
-			password.message("Password : ");
+            password.name("password");
+            password.message("Password : ");
 
-			rememberMe.name("rememberMe");
-			rememberMe.message("Remember Me");
+            rememberMe.name("rememberMe");
+            rememberMe.message("Remember Me");
 
             
 
-			submit.name("submit");
-			submit.value("Log in");
+            submit.name("submit");
+            submit.value("Log in");
 
-			*this + previousUrl + username + password + rememberMe + submit;
+            add(previousUrl);
+            add(username);
+            add(password);
+            add(rememberMe);
+            add(submit);
 
-			username.non_empty();
-			password.non_empty();
-		}
-		
+            username.non_empty();
+            password.non_empty();
+        }
+        
         /**
          * To be sure that everything is correct, nothing is missing etc.
          */
-		virtual bool validate() {
-			if (! form::validate()) {
+        virtual bool validate() {
+            if (! form::validate()) {
                 // TODO complete this
-				return false;
-			}
-			return true;
-		}
-		
-	};
+                return false;
+            }
+            return true;
+        }
+        
+    };
 
 }
 #endif

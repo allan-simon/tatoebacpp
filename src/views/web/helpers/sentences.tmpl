@@ -96,7 +96,7 @@
                 <% include sentence_lang(sentence.get_language_code()) %>
             </a>
             <div class="sentenceContent">
-                <div><% sentence.string() %></div>
+                <div><%= sentence.string() %></div>
             </div>
         </div>
     <% end template%>
@@ -194,9 +194,9 @@
                     class="text"
                     href="<% url "/sentences/show/{1}" using sentence.get_id() %>"
                 >
-                    <% depth %>
+                    <%= depth %>
                     -
-                    <% sentence.string() %>
+                    <%= sentence.string() %>
                 </a>
             </div>
             <br />
@@ -209,7 +209,7 @@
     
     <% template sentence_lang(std::string lang) %>
         <img 
-            src="http://flags.tatoeba.org/img/flags/<% lang %>.png"
+            src="http://flags.tatoeba.org/img/flags/<%= lang %>.png"
             class="languageFlag "
             alt="<% c++ out() << lang; %>"
             width="30"
@@ -219,14 +219,11 @@
 
 
     <% template sentences_list(std::string title) %>
-        <% c++ contents::helpers::Paginations phc( %>
-        <% c++ content.sentences, %>
-        <% c++ content.baseUrl %>
-        <% c++ ); %>
+        <% c++ contents::helpers::Paginations phc(content.sentences,content.baseUrl);%>
 
         <h3>
-            <% title %>
-             (Total: <% sentences.totalNbrElements %> Sentence(s))
+            <%= title %>
+             (Total: <%= sentences.totalNbrElements %> Sentence(s))
         </h3>
         
         <% c++ pagination_helper ph(out(), phc); %> 
@@ -243,10 +240,7 @@
     <% end template %>
 
     <% template simple_sentences_list() %>
-        <% c++ contents::helpers::Paginations phc( %>
-        <% c++ content.sentences, %>
-        <% c++ content.baseUrl %>
-        <% c++ ); %>
+        <% c++ contents::helpers::Paginations phc(content.sentences,content.baseUrl);%>
         <% c++ pagination_helper ph(out(), phc); %> 
  
         <h4>

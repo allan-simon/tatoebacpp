@@ -45,24 +45,24 @@ namespace my_profile {
      * @TODO: i18n it
      * @TODO: override 
      */
-	struct ChangeDepth : public cppcms::form {
+    struct ChangeDepth : public cppcms::form {
         
         /**
          * @brief Will contain the new depth
          */
-		widgets::numeric<int> newDepth;
+        widgets::numeric<int> newDepth;
         
         /**
          * @brief Permit to submit the new depth
          */
-		widgets::submit submit;
-		
+        widgets::submit submit;
+        
 
         /**
          * Default constructor, add all the fields to the form
          * define their names etc.
          */
-		ChangeDepth(const int currentDepth = 0) {
+        ChangeDepth(const int currentDepth = 0) {
 
             newDepth.message(
                 cppcms::locale::translate("New depth:")
@@ -71,17 +71,18 @@ namespace my_profile {
             newDepth.range(0,MAX_DEPTH);
             newDepth.value(currentDepth);
 
-			submit.name("Change");
-			submit.value(
+            submit.name("Change");
+            submit.value(
                 cppcms::locale::translate("Change")
             );
 
-			*this + newDepth + submit;
+            add(newDepth);
+            add(submit);
 
-		}
+        }
         
-		
-	};
+        
+    };
 
 } // end of namespace my_profile
 } // end of namespace forms

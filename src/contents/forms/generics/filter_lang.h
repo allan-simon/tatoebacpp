@@ -63,7 +63,11 @@ struct FilterLang : public cppcms::form {
         submit.name("Filter");
         submit.value("Filter");
 
-        *this + filterLang + submit;
+        add(filterLang);
+        add(submit);
+
+
+
 
     }
     //TODO factorize this

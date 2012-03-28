@@ -15,14 +15,11 @@
 
 <% template main_content() %>
     <div class="module">
-        <% c++ contents::helpers::Paginations phc( %>
-        <% c++ content.users, %>
-        <% c++ content.baseUrl %>
-        <% c++ ); %>
+        <% c++ contents::helpers::Paginations phc(content.users,content.baseUrl); %>
 
         <h3>
              <!-- TODO i18n this -->
-             (Total: <% users.totalNbrElements %> User(s))
+             (Total: <%= users.totalNbrElements %> User(s))
         </h3>
 
         <% foreach user in users%>
@@ -41,14 +38,14 @@
     <div class="user"> 
         <div class="image">
             <img 
-                src="http://imgtato.sysko.fr/avatars/36/<% user.image %>.png"
-                alt="<% user.username %>"
+                src="http://imgtato.sysko.fr/avatars/36/<%= user.image %>.png"
+                alt="<%= user.username %>"
             />
         </div>
 
         <div class="username">
             <a href="<% url "/users/profile/{1}" using user.username %>" >
-                <% user.username%>
+                <%= user.username%>
             </a>
         </div>
 

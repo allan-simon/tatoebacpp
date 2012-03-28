@@ -40,7 +40,7 @@ namespace my_profile {
      *
      * @TODO: i18n it
      */
-	struct AddSpokenLang : public cppcms::form {
+    struct AddSpokenLang : public cppcms::form {
         
         /**
          * @brief Field to select the language to add
@@ -65,7 +65,7 @@ namespace my_profile {
          * Default constructor, add all the fields to the form
          * define their names etc.
          */
-		AddSpokenLang() {
+        AddSpokenLang() {
 
             Languages::get_instance()->fill_form_select(spokenLang);
             
@@ -84,15 +84,18 @@ namespace my_profile {
             isNative.name("isnative");
             isNative.message("Are you a native of this language ?");
 
-			submit.name("submit");
-			submit.value("Submit");
+            submit.name("submit");
+            submit.value("Submit");
 
-			*this + spokenLang + proeficiencyLevel + isNative + submit;
+            add(spokenLang);
+            add(proeficiencyLevel);
+            add(isNative);
+            add(submit);
 
-		}
+        }
         
-		
-	};
+        
+    };
 
 } // end of namespace my_profile
 } // end of namespace forms

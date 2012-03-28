@@ -54,7 +54,9 @@ namespace forms {
          * Constructor
          */
         EditLangSentence(std::string id = "0", std::string lang = "und") {
-            *this + sentenceId + newLang + submit;
+            add(sentenceId);
+            add(newLang);
+            add(submit);
 
 
             newLang.add("Unknown","und");

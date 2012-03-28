@@ -54,7 +54,9 @@ namespace forms {
          * Constructor
          */
         AddSentence() {
-            *this + sentenceString + sentenceLang + submit;
+            add(sentenceString);
+            add(sentenceLang);
+            add(submit);
 
             sentenceString.name("str");
 

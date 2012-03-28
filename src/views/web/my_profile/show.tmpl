@@ -13,6 +13,8 @@
 
 /**
  * @brief Load the CSS specific to this page
+ * 
+ * @TODO replace the hardcoded link
  */
 <% template css() %>
 <link
@@ -37,6 +39,7 @@
  * @brief All the information of the current user are briefly presented
  *        here
  * @todo  Add the missing information
+ * @TODO  replace the hardcoded link
  */
 <% template profile_summary_module() %>
 
@@ -48,17 +51,17 @@
         </div>
 
         <img
-            src="http://imgtato.sysko.fr/avatars/128/<% user.image %>.png"
+            src="http://imgtato.sysko.fr/avatars/128/<%= user.image %>.png"
             alt="sysko"
         />
 
         <div class="info">
-            <div class="username"><% user.username %></div>
+            <div class="username"><%= user.username %></div>
 
             <div>
                 <!-- TODO add status -->
                 <span class="field"><% gt "Name" %></span>
-                <span class="value"><% user.username %></span>
+                <span class="value"><%= user.username %></span>
             </div>
 
             <div>
@@ -75,8 +78,8 @@
                 <!-- TODO add status -->
                 <span class="field"><% gt "Homepage" %></span>
                 <span class="value">
-                    <a href="<% user.homepage %>">
-                        <% user.homepage %>
+                    <a href="<%= user.homepage %>">
+                        <%= user.homepage %>
                     </a>
                 </span>
                 <span class="edit">
@@ -95,7 +98,7 @@
                 <!-- TODO add status -->
                 <span class="field"><% gt "Depth of translations:" %></span>
                 <span class="value">
-                    <% user.depth %>
+                    <%= user.depth %>
                 </span>
                 <span class="edit">
                     <a href="<% url "/my-profile/change-depth" %>">
@@ -146,7 +149,7 @@
         <div class="content">
             <!--TODO  maybe markdown it -->
             <!-- the PRE is to avoid to code a new line to <br/> function -->
-            <pre><% user.description%></pre>
+            <pre><%= user.description%></pre>
         </div>
     </div>
 

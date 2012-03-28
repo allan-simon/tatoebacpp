@@ -15,8 +15,11 @@
     <% end template %>
 
     <% template main_sentence(results::Sentence &sentence) %>
-        <mainsentence tatoid="<% sentence.get_id()%>" lang="<% sentence.get_language_code() %>">
-                <text><% sentence.string() %></text>
+        <mainsentence
+            tatoid="<%= sentence.get_id()%>"
+            lang="<%= sentence.get_language_code() %>"
+        >
+                <text><%= sentence.string() %></text>
         </mainsentence>
     <% end template%>
 
@@ -48,10 +51,10 @@
         
     <% template generic_sentence(results::Sentence &sentence, int mainSentenceId) %>
         <sentence
-            tatoid="<% sentence.get_id() %>"
-            lang="<% sentence.get_language_code() %>"
+            tatoid="<%= sentence.get_id() %>"
+            lang="<%= sentence.get_language_code() %>"
         >
-            <text><% sentence.string()  %></text>
+            <text><%= sentence.string()  %></text>
         </sentence>
 
     <% end template %>
@@ -68,6 +71,19 @@
         </list>
     <% end template %>
 
+
+    /**
+     * TODO : move that in a pagination API helper
+     */
+    <% template sentences_list_pagination() %>
+        <pagination
+            currentpage="<%= sentences.currentPage %>"
+            pagesize="<%= sentences.pageNormalSize %>"
+            totalelements="<%= sentences.totalNbrElements %>"
+        />
+
+
+    <% end template %>
 
 
 <% end view %>

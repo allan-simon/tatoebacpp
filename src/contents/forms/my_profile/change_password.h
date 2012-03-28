@@ -38,28 +38,28 @@ namespace my_profile {
      *
      * @TODO: i18n it
      */
-	struct ChangePassword : public cppcms::form {
+    struct ChangePassword : public cppcms::form {
         
         /**
          * @brief Will contain the current password
          *        we need it to be sure someone is not hijacking the session
          */
-		cppcms::widgets::password previous;
+        cppcms::widgets::password previous;
         /**
          * @brief Will contain the new password
          */
-		cppcms::widgets::password newPassword;
+        cppcms::widgets::password newPassword;
         /**
          * @brief Will contain new password once again to be sure the user
          *        has made no typo
          */
-		cppcms::widgets::password repeatNewPassword;
+        cppcms::widgets::password repeatNewPassword;
                      
         /**
          * @brief Permit to submit the new password
          */
-		cppcms::widgets::submit submit;
-		
+        cppcms::widgets::submit submit;
+        
 
         /**
          * @brief Default constructor, add all the fields to the form
@@ -68,7 +68,7 @@ namespace my_profile {
          * @todo i18n it
          */
 
-		ChangePassword() {
+        ChangePassword() {
             previous.message("Previous password:");
             previous.name("previous");
 
@@ -78,12 +78,15 @@ namespace my_profile {
             repeatNewPassword.message("Repeat new password:");
             repeatNewPassword.name("repeatnewpassword");
 
-			submit.name("Change");
-			submit.value("Change");
+            submit.name("Change");
+            submit.value("Change");
 
-			*this + previous + newPassword + repeatNewPassword + submit;
+            add(previous);
+            add(newPassword);
+            add(repeatNewPassword);
+            add(submit);
 
-		}
+        }
             
             
         /**
@@ -94,7 +97,7 @@ namespace my_profile {
                 newPassword.value() == repeatNewPassword.value();
         }
 
-	};
+    };
 
 } // end of namespace my_profile
 } // end of namespace forms

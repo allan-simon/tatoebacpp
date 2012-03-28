@@ -41,40 +41,41 @@ namespace my_profile {
      * @TODO: override the validate function to check the homepage is a
      *        correct webpage
      */
-	struct EditHomepage : public cppcms::form {
+    struct EditHomepage : public cppcms::form {
         
         /**
          * @brief Will contain
          */
-		widgets::text homepage;
+        widgets::text homepage;
         
         /**
          * @brief Permit to submit the new homepage
          */
-		widgets::submit submit;
-		
+        widgets::submit submit;
+        
 
         /**
          * Default constructor, add all the fields to the form
          * define their names etc.
          */
-		EditHomepage(const std::string &homepageText = "") {
+        EditHomepage(const std::string &homepageText = "") {
 
-			homepage.name("homepage");
-			homepage.message("homepage: ");
+            homepage.name("homepage");
+            homepage.message("homepage: ");
             homepage.value(homepageText);
 
             
 
-			submit.name("submit");
-			submit.value("Submit");
+            submit.name("submit");
+            submit.value("Submit");
 
-			*this + homepage + submit;
+            add(homepage);
+            add(submit);
 
-		}
+        }
         
-		
-	};
+        
+    };
 
 } // end of namespace my_profile
 } // end of namespace forms

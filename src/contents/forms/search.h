@@ -36,11 +36,11 @@ namespace forms {
      * @struct SearchesSimple
      * form that permit to search for sentences
      */
-	struct SearchesSimple : public cppcms::form {
+    struct SearchesSimple : public cppcms::form {
         /**
          * Query to send to the search engine
          */
-		cppcms::widgets::text query;
+        cppcms::widgets::text query;
 
         /**
          * Language in which we want the results
@@ -57,11 +57,14 @@ namespace forms {
         /**
          * HTML submit button
          */
-		cppcms::widgets::submit submit;
-		
-		
-		SearchesSimple() {
-            *this + query + sentencesLang + translatedInLang + submit;
+        cppcms::widgets::submit submit;
+        
+        
+        SearchesSimple() {
+            add(query);
+            add(sentencesLang);
+            add(translatedInLang);
+            add(submit);
 
             query.name("query");
 
@@ -85,12 +88,12 @@ namespace forms {
         /**
          * Test if the form is correctly filled
          */
-		virtual bool validate() {
-			if (!form::validate()) {
-				return false;
-			}
-			return true;
-		}
+        virtual bool validate() {
+            if (!form::validate()) {
+                return false;
+            }
+            return true;
+        }
 
         void set_langs() {
             NameToISOMap nameToIso = Languages::get_instance()->get_name_to_iso_map();
@@ -126,8 +129,8 @@ namespace forms {
             }
 
         }
-		
-	};
+        
+    };
 
 }
 #endif

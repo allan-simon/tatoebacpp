@@ -103,17 +103,17 @@
 
     <div class="module profileSummary">    
         <img
-            src="http://imgtato.sysko.fr/avatars/128/<% user.image %>.png"
-            alt="<% user.username %>"
+            src="http://imgtato.sysko.fr/avatars/128/<%= user.image %>.png"
+            alt="<%= user.username %>"
         />
 
         <div class="info">
-            <div class="username"><% user.username %></div>
+            <div class="username"><%= user.username %></div>
 
             <div>
                 <!-- TODO add status -->
                 <span class="field"><% gt "Name" %></span>
-                <span class="value"><% user.username %></span>
+                <span class="value"><%= user.username %></span>
             </div>
 
             <div>
@@ -128,7 +128,7 @@
             <div>
                 <!-- TODO add status -->
                 <span class="field"><% gt "Homepage" %></span>
-                <span class="value"><% user.homepage %></span>
+                <span class="value"><%= user.homepage %></span>
             </div>
             <div>
                 <!-- TODO add status -->
@@ -157,7 +157,7 @@
         <div class="content">
             <!--TODO  maybe markdown it -->
             <!-- the PRE is to avoid to code a new line to <br/> function -->
-            <pre><% user.description%></pre>
+            <pre><%= user.description%></pre>
         </div>
     </div>
 

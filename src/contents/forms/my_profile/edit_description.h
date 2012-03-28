@@ -39,42 +39,43 @@ namespace my_profile {
      *
      * @todo i18n it
      */
-	struct EditDescription : public cppcms::form {
+    struct EditDescription : public cppcms::form {
         
         /**
          * @brief Will contain
          */
-		widgets::textarea description;
+        widgets::textarea description;
         
         /**
          * @brief Permit to submit the new description
          */
-		widgets::submit submit;
-		
+        widgets::submit submit;
+        
 
         /**
          * Default constructor add all the fields to the form
          * define their names etc.
          */
-		EditDescription(const std::string &descriptionText = "") {
+        EditDescription(const std::string &descriptionText = "") {
 
-			description.name("description");
-			description.message("Description : ");
+            description.name("description");
+            description.message("Description : ");
             description.value(descriptionText);
             description.rows(10);
             description.cols(66);
 
             
 
-			submit.name("submit");
-			submit.value("Log in");
+            submit.name("submit");
+            submit.value("Log in");
 
-			*this + description + submit;
+            add(description);
+            add(submit);
 
-		}
-		
-		
-	};
+        }
+        
+        
+    };
 
 } // end of namespace my_profile
 } // end of namespace forms

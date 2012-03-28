@@ -40,7 +40,7 @@ namespace my_profile {
      *
      * @TODO: i18n it
      */
-	struct EditSpokenLang : public cppcms::form {
+    struct EditSpokenLang : public cppcms::form {
         /**
          * @brief Hidden field to store the code of the language to edit
          */
@@ -83,7 +83,7 @@ namespace my_profile {
             isNative.value(langToEdit.isNative);
 
 
-		}
+        }
         
         private:
             /**
@@ -110,11 +110,14 @@ namespace my_profile {
                 submit.name("submit");
                 submit.value("Submit");
 
-                *this + spokenLang + proeficiencyLevel + isNative + submit;
+                add(spokenLang);
+                add(proeficiencyLevel);
+                add(isNative);
+                add(submit);
 
             }
-		
-	};
+        
+    };
 
 
 

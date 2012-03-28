@@ -59,7 +59,10 @@ namespace forms {
          * id : id of the sentence to be translated
          */
         TransSentence(std::string id = "0") {
-            *this + transString + transLang +  translatedId + submit;
+            add(transString);
+            add(transLang);
+            add(translatedId);
+            add(submit);
             
             translatedId.value(id);
 

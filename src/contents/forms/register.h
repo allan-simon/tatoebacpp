@@ -66,7 +66,12 @@ struct RegisterNew : public cppcms::form {
      * define their names etc.
      */
     RegisterNew() {
-        *this + username + password + email + quiz + termsOfUse + submit;
+        add(username);
+        add(password); 
+        add(email);
+        add(quiz);
+        add(termsOfUse);
+        add(submit);;
         
         username.name("username");
         password.name("password");

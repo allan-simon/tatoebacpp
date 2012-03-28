@@ -52,7 +52,9 @@ namespace forms {
          * Constructor
          */
         EditTextSentence(std::string id = "0", std::string text = "") {
-            *this + sentenceId + newString + submit;
+            add(sentenceId);
+            add(newString);
+            add(submit);
 
             newString.name("str");
             newString.value(text);

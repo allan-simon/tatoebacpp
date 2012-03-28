@@ -39,24 +39,24 @@ namespace my_profile {
      *
      * @TODO: i18n it
      */
-	struct ChangeAvatar : public cppcms::form {
+    struct ChangeAvatar : public cppcms::form {
         
         /**
          * @brief Will contain the uploaded file
          */
-		widgets::file avatar;
+        widgets::file avatar;
         
         /**
          * @brief Permit to submit the new avatar 
          */
-		widgets::submit submit;
-		
+        widgets::submit submit;
+        
 
         /**
          * Default constructor, add all the fields to the form
          * define their names etc.
          */
-		ChangeAvatar() {
+        ChangeAvatar() {
 
             avatar.filename(
                 booster::regex(".*\\.(jpg|jpeg|png|JPG|PNG)")
@@ -68,15 +68,16 @@ namespace my_profile {
 
             avatar.limits(0, 1024*1024);
             avatar.non_empty();
-			submit.name("Upload");
-			submit.value("Upload");
+            submit.name("Upload");
+            submit.value("Upload");
 
-			*this + avatar + submit;
+            add(avatar); 
+            add(submit);
 
-		}
+        }
         
-		
-	};
+        
+    };
 
 } // end of namespace my_profile
 } // end of namespace forms

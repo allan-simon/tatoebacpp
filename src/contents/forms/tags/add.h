@@ -41,14 +41,14 @@ namespace tags {
      *
      * @TODO: i18n it
      */
-	struct Add : public cppcms::form {
+    struct Add : public cppcms::form {
         
         /**
          * @brief Will contain the tag to add
          *
          * @since 23 September 2011
          */
-		widgets::text tag;
+        widgets::text tag;
 
         /**
          * @brief Hidden field that will contain the sentence id that we're
@@ -64,8 +64,8 @@ namespace tags {
          *
          * @since 23 September 2011
          */
-		widgets::submit submit;
-		
+        widgets::submit submit;
+        
 
         /**
          * @brief Default constructor, add all the fields to the form
@@ -73,25 +73,27 @@ namespace tags {
          *
          * @since 23 September 2011
          */
-		Add(std::string sentenceIdStr = ""){
+        Add(std::string sentenceIdStr = ""){
 
             sentenceId.value(sentenceIdStr);
             
-			tag.name("addtag");
+            tag.name("addtag");
             
 
-			submit.name("submit");
-			submit.value("+");
+            submit.name("submit");
+            submit.value("+");
 
             sentenceId.non_empty();
             tag.non_empty();
     
-			*this + tag + sentenceId + submit;
+            add(tag);
+            add(sentenceId);
+            add(submit);
 
-		}
+        }
         
-		
-	};
+        
+    };
 
 } // end of namespace tags
 } // end of namespace forms

@@ -61,7 +61,8 @@ struct InterfaceLang : public cppcms::form {
         submit.name("OK");
         submit.value("OK");
 
-        *this + interfaceLang + submit;
+        add(interfaceLang);
+        add(submit);
 
     }
     //TODO factorize this
