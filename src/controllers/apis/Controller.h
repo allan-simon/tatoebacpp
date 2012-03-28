@@ -30,6 +30,7 @@
 #include <cppcms/json.h>
 #include <cppcms/application.h>
 #include <cppcms/url_dispatcher.h>
+#include "controllers/generics/Controller.h"
 
 //#include "contents/content.h"
 
@@ -46,13 +47,6 @@
         return;\
     }
 
-
-#define GET_FIELD(fieldVar, fieldString) \
-    it = getData.find(fieldString);\
-    if (it != getData.end()) {\
-        fieldVar = it->second;\
-    }
-    
 
 
 namespace contents {
@@ -73,7 +67,7 @@ namespace apis {
  * TODO: make it abstract
  * 
  */
-class Controller : public cppcms::application {
+class Controller : public controllers::generics::Controller {
 	protected:
 
         /**

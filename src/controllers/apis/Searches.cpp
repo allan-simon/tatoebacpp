@@ -50,6 +50,7 @@ void Searches::simple () {
     std::string toLang = "und";
     std::string query = "";
 
+    unsigned int page = 0;//atoi(sizeStr.c_str());
     if (request().request_method() == "GET") {
         cppcms::http::request::form_type getData = request().get();
         cppcms::http::request::form_type::const_iterator it;
@@ -57,10 +58,11 @@ void Searches::simple () {
         GET_FIELD(fromLang, "from");
         GET_FIELD(toLang, "to");
         GET_FIELD(query, "query");
+
+        GET_INT_FIELD(page, "page");
     }
 
     
-    unsigned int currentPage = 0;//atoi(sizeStr.c_str());
 
 	contents::SearchesShowResult c;
 	contents::helpers::Sentences shc;
@@ -80,7 +82,7 @@ void Searches::simple () {
         query,
         fromLang,
         toLang,
-        currentPage
+        page
     );
     
     c.shc = shc;

@@ -36,7 +36,9 @@ namespace apis {
 /**
  *
  */
-Controller::Controller(cppcms::service &serv) : cppcms::application(serv) {
+Controller::Controller(cppcms::service &serv) : 
+    controllers::generics::Controller(serv)
+{
 
 
 }
