@@ -4,7 +4,6 @@
 #include <string>
 #include <set>
 #include <map>
-#include <laputa.h>
 
 
 #include "SphinxClient.h"

@@ -69,8 +69,10 @@ target_link_libraries(
     sqlite3
     #tokyodystopia
     sphinxclient
-    cv
-    highgui
+    # TODO have lighter dependencies for
+    # resizing images
+    #opencv_core
+    #opencv_highgui
 )
 
 #add_executable(

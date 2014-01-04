@@ -27,8 +27,9 @@
 #include <sstream>
 #include <vector>
 
-#include "cv.h"
-#include "highgui.h"
+// TODO #10 find something better then opencv to resize image
+//#include "cv.h"
+//#include "highgui.h"
 
 #include <cppcms/util.h>
 #include <cppcms/crypto.h>
@@ -97,43 +98,45 @@ Users::Users() : SqliteModel() {
  * @brief will resize an already opened image to fit inside a squarre
  *        while keeping the ratio, and will save the reized image
  */
-static void resize(
-    const IplImage* source,
-    const int maxSize,
-    const std::string &resizedFileName
-) {
-
-    int destWidth = 0;
-    int destHeight = 0;
-
-    if (source->width > source->height) {
-        destWidth = maxSize;
-        destHeight = source->height * ((float)maxSize/(float)source->width);
-    } else {
-        destWidth = source->width * ((float)maxSize /(float)source->height);
-        destHeight = maxSize;
-    }
-
-    // declare a destination IplImage object with correct size,
-    //depth and channels
-    IplImage *destination = cvCreateImage(
-        cvSize(
-            destWidth,
-            destHeight
-        ),
-        source->depth,
-        source->nChannels
-    );
-
-    cvResize(source, destination);
-
-    cvSaveImage(
-        resizedFileName.c_str(),
-        destination
-    );
-    cvReleaseImage(&destination);
-}
-
+// TODO #10 commented waiting to find something lighter than OpenCV to resize
+// images
+//static void resize(
+//    const IplImage* source,
+//    const int maxSize,
+//    const std::string &resizedFileName
+//) {
+//
+//    int destWidth = 0;
+//    int destHeight = 0;
+//
+//    if (source->width > source->height) {
+//        destWidth = maxSize;
+//        destHeight = source->height * ((float)maxSize/(float)source->width);
+//    } else {
+//        destWidth = source->width * ((float)maxSize /(float)source->height);
+//        destHeight = maxSize;
+//    }
+//
+//    // declare a destination IplImage object with correct size,
+//    //depth and channels
+//    IplImage *destination = cvCreateImage(
+//        cvSize(
+//            destWidth,
+//            destHeight
+//        ),
+//        source->depth,
+//        source->nChannels
+//    );
+//
+//    cvResize(source, destination);
+//
+//    cvSaveImage(
+//        resizedFileName.c_str(),
+//        destination
+//    );
+//    cvReleaseImage(&destination);
+//}
+//
 
 
 
@@ -147,22 +150,25 @@ static void resize_all_format(
     const std::string &filename,
     const std::string &newFileName
 ) {
-        IplImage *source = cvLoadImage(filename.c_str());
+        // TODO commented for the moment waiting to find something
+        // better to resize image without needing to have dependency
+        // on opencv
+        //IplImage *source = cvLoadImage(filename.c_str());
         
 
         //TODO the / is not windows friendly
-        resize(
-            source,
-            128,
-            "../ressources/img/avatars/128/" + newFileName + ".png"
-        );
-        resize(
-            source,
-            36,
-            "../ressources/img/avatars/36/" + newFileName + ".png"
-        );
+        //resize(
+        //    source,
+        //    128,
+        //    "../ressources/img/avatars/128/" + newFileName + ".png"
+        //);
+        //resize(
+        //    source,
+        //    36,
+        //    "../ressources/img/avatars/36/" + newFileName + ".png"
+        //);
 
-        cvReleaseImage(&source);
+        //cvReleaseImage(&source);
 
 }
 
