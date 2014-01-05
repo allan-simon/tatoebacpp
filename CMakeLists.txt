@@ -5,9 +5,9 @@ include_directories(
     src
 )
 
-
-include(FindPkgConfig)
-FIND_PACKAGE( OpenCV REQUIRED )
+#TODO #10 replace by a lighter graphic library
+#include(FindPkgConfig)
+#FIND_PACKAGE( OpenCV REQUIRED )
 
 
 
